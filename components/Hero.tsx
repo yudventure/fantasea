@@ -14,6 +14,9 @@ import { Judul } from "./Judul";
  *   di bawahnya tidak mengintip. Tingginya minimal 100svh (100vh untuk
  *   peramban lama), dan ukuran judul serta kartu mengikuti tinggi layar
  *   (vh) selain lebarnya, supaya isinya tetap utuh di layar pendek.
+ * - Judul dua baris di layar lebar. Baris baru dari panel tetap baris baru,
+ *   dan lebarnya cukup untuk satu baris judul tanpa patah (max 26ch, ukuran
+ *   ikut lebar layar). Judul tanpa baris baru dibagi rata (text-balance).
  * - Kartu foto lebih besar, dan kartu yang disorot pointer membesar jelas:
  *   naik, membesar, maju ke depan, bayangannya menebal, fotonya ikut
  *   mendekat. Rotasi 3D ada di <figure>, pembesaran di lapisan dalam,
@@ -32,10 +35,10 @@ const URUTAN_Z = ["z-[1]", "z-[2]", "z-[3]", "z-[2]", "z-[1]"];
 export default function Hero({ k, l }: { k: Konten; l: Locale }) {
   const h = k.hero;
   return (
-    <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[92px] supports-[height:100svh]:min-h-[100svh] sm:pt-[118px]">
+    <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[84px] supports-[height:100svh]:min-h-[100svh] sm:pt-[100px]">
       <div className="flex flex-1 flex-col justify-center">
         <div className="wrap text-center">
-          <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[16ch] text-[clamp(36px,min(8.4vw,9vh),96px)] leading-[0.95]" />
+          <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[26ch] text-balance text-[clamp(28px,min(9.6vw,9vh),96px)] leading-[0.95]" />
         </div>
 
         <div className="relative mx-auto mt-[3.5vh] flex w-full max-w-[1500px] items-end justify-center px-2 [perspective:1400px]" aria-hidden>
