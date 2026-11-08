@@ -12,7 +12,7 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 
 ## Struktur
 
-- `app/(site)/[locale]/` situs tamu (root layout sendiri, `force-dynamic`, jadi simpanan panel langsung tayang). `page.tsx` beranda, `trip/[slug]` detail trip dengan formulir permintaan.
+- `app/(site)/[locale]/` situs tamu (root layout sendiri, `force-dynamic`, jadi simpanan panel langsung tayang). `page.tsx` beranda, `trip/[slug]` detail trip dengan formulir permintaan, `homestay/[slug]` detail homestay dengan formulir menginap (tanggal masuk dan keluar).
 - `app/(admin)/admin/` panel pengelola (root layout sendiri, selalu bahasa Indonesia). UI di `components/admin/`.
 - `app/api/` route: `permintaan` (POST tamu, GET/PUT/DELETE panel), `konten`, `unggah`, `masuk`, `keluar`, `sesi`, `penyiapan`, `akun`, `health`. Foto unggahan disajikan `app/unggahan/[nama]`.
 - `lib/konten.ts` bentuk isi situs (`Konten`) dan `normalkanKonten` yang merapikan apa pun dari panel. `data/bawaan.ts` isi bawaan. `lib/server/` gudang JSON, sesi, akun, permintaan, unggahan.
@@ -25,7 +25,8 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - **Semua yang tampil di situs tamu bisa diubah dari panel**, kecuali label tetap tombol dan formulir di `messages/`. Isi baru ditambahkan ke `Konten`, `normalkanKonten`, `data/bawaan.ts`, dan editor panel sekaligus.
 - Teks dua bahasa `{ en, id }`. Yang kosong jatuh ke bahasa Inggris lalu Indonesia (`tx`).
 - Judul bagian memakai `*kata berwarna*` dan baris baru (`components/Judul.tsx`).
-- Trip, jadwal, dan titik selam bawaan bertanda `contoh: true`. Tanda itu hilang saat item diubah di panel, dan Ringkasan panel mengingatkan isi contoh yang masih tampil. Jangan menulis harga, jadwal, atau klaim bisnis baru di kode. Ulasan tidak boleh dikarang, bawaannya kosong.
+- Bagian kartu bertumpuk (`jelajah`, `components/Jelajah.tsx`) adalah pembuka homestay, Find your accommodation with us, tanpa tombol (permintaan pemilik, November 2026). Kartu homestay (`homestay` di `Konten`, `KartuHomestay`, `DaftarHomestay`) tampil di bawahnya dan rupanya sama dengan kartu trip, diatur di panel menu Homestay. Menu Homestay di header hanya muncul selama ada homestay yang tampil. Permintaan menginap tersimpan sebagai permintaan biasa dengan `jenis` homestay. Teks lama "Dive with us" di simpanan diganti otomatis (`JELAJAH_LAMA`), teks yang sudah diubah pemilik tidak.
+- Trip, jadwal, titik selam, dan homestay bawaan bertanda `contoh: true`. Homestay contoh tanpa harga (Tanya harga) dan fotonya ilustrasi. Tanda itu hilang saat item diubah di panel, dan Ringkasan panel mengingatkan isi contoh yang masih tampil. Jangan menulis harga, jadwal, atau klaim bisnis baru di kode. Ulasan tidak boleh dikarang, bawaannya kosong.
 - Kontak dan media sosial bawaan adalah contoh (permintaan pemilik, November 2026), supaya footer sudah lengkap sebelum diisi di panel Kontak. Email dan akun memakai handle usulan `fantaseadivetravel`. Nomor WhatsApp contoh `NOMOR_WA_CONTOH` (+62 800 0000 0000) sengaja tidak mungkin ada, dan `nomorWaAsli` mengosongkannya untuk formulir permintaan dan tombol ajakan, jadi data tamu tidak terkirim ke nomor itu. Ringkasan dan editor Kontak mengingatkan selama masih contoh (`kontakMasihContoh`). Simpanan panel sebelum `VERSI_KONTAK` 2 mendapat contoh untuk kolom yang kosong, sesudahnya kolom kosong berarti disembunyikan.
 - Foto bawaan `public/brand/foto` adalah ilustrasi AI dari proyek lain milik pemilik (Zanclus, Dragonet), bukan dokumentasi Fantasea.
 

@@ -35,8 +35,9 @@ export default function Footer({ k, l, menu }: { k: Konten; l: Locale; menu: Tau
         <div>
           <p className="font-aksen text-[13px] uppercase tracking-[0.2em] text-ukir">{t("footer.kontak")}</p>
           <ul className="mt-4 grid gap-3 text-[15px]">
-            {wa && <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 font-semibold text-white/85 hover:text-white"><IkonWhatsapp size={19} />{nomorTampil(kontak.whatsapp)}</a></li>}
-            {kontak.email && <li><a href={`mailto:${kontak.email}`} className="inline-flex items-center gap-2.5 font-semibold text-white/85 hover:text-white"><IkonSurel size={19} />{kontak.email}</a></li>}
+            {wa && <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex max-w-full items-center gap-2.5 font-semibold text-white/85 hover:text-white"><IkonWhatsapp size={19} className="flex-none" />{nomorTampil(kontak.whatsapp)}</a></li>}
+            {/* Alamat email panjang boleh patah di mana saja, supaya kolom kontak yang sempit (768 px) tidak menggeser halaman ke samping. */}
+            {kontak.email && <li><a href={`mailto:${kontak.email}`} className="inline-flex max-w-full items-center gap-2.5 font-semibold text-white/85 hover:text-white"><IkonSurel size={19} className="flex-none" /><span className="min-w-0 [overflow-wrap:anywhere]">{kontak.email}</span></a></li>}
             {tx(kontak.alamat, l) && (
               <li className="flex items-start gap-2.5"><IkonPin size={19} className="mt-0.5 flex-none" />
                 {kontak.peta ? <a href={kontak.peta} target="_blank" rel="noopener noreferrer" className="font-semibold text-white/85 hover:text-white">{tx(kontak.alamat, l)}</a> : <span>{tx(kontak.alamat, l)}</span>}

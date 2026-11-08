@@ -47,6 +47,19 @@
     "pesan": "Book a seat",
     "kosong": "No open trips are scheduled right now. Ask us for your own dates."
   },
+  "homestay": {
+    "dari": "From",
+    "perMalam": "per person per night",
+    "tanyaHarga": "Price on request",
+    "lihat": "View homestay",
+    "semua": "All homestays",
+    "label": "Homestay",
+    "lokasi": "Location",
+    "harga": "Price",
+    "fasilitas": "What you get",
+    "lainnya": "Other homestays",
+    "catatanContoh": "Room type, special needs, dive plans"
+  },
   "titik": {
     "kedalaman": "Depth",
     "arus": "Current",
@@ -92,7 +105,12 @@
     "emailSalah": "Please check the email address.",
     "galat": "The request was not sent. Please try again.",
     "penuh": "Full",
-    "sisa": "{n} left"
+    "sisa": "{n} left",
+    "judulHomestay": "Request this stay",
+    "leadHomestay": "Tell us your dates. We reply on WhatsApp to confirm the room and price. No payment yet.",
+    "masuk": "Check-in",
+    "keluar": "Check-out",
+    "keluarSalah": "Check-out must be after check-in."
   },
   "pesanWa": {
     "salam": "Hello Fantasea, I would like to book {trip}.",
@@ -100,7 +118,8 @@
     "tanggal": "Date {tanggal}",
     "orang": "{n} guests",
     "nama": "Name {nama}",
-    "umum": "Hello Fantasea, I would like to plan a dive trip in Raja Ampat."
+    "umum": "Hello Fantasea, I would like to plan a dive trip in Raja Ampat.",
+    "salamHomestay": "Hello Fantasea, I would like to stay at {homestay}."
   },
   "kalender": {
     "sebelum": "Previous month",

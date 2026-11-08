@@ -9,20 +9,26 @@ import { IkonKurang, IkonTambah, IkonWhatsapp } from "./Ikon";
 
 export interface PilihanJadwal { id: string; mulai: string; selesai: string; sisa: number }
 
+/** Tanggal YYYY-MM-DD ditambah n hari. */
+const tambahHari = (iso: string, n: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+
 /**
  * Formulir permintaan pesan (request to book tanpa bayar). Tamu memilih
  * tanggal open trip atau tanggal sendiri, jumlah orang, dan kontaknya.
+ * Untuk homestay (`jenis` homestay) tamu memilih tanggal masuk dan keluar.
  * Permintaan tersimpan di panel (/api/permintaan), lalu tamu bisa langsung
  * melanjutkan obrolan lewat WhatsApp dengan pesan yang sudah terisi.
  */
-export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, hariIni, wa }: {
-  tripId: string; tripNama: string; jadwal: PilihanJadwal[]; jadwalAwal: string; hariIni: string; wa: string;
+export default function FormPermintaan({ jenis = "trip", itemId, itemNama, jadwal, jadwalAwal, hariIni, wa }: {
+  jenis?: "trip" | "homestay"; itemId: string; itemNama: string; jadwal: PilihanJadwal[]; jadwalAwal: string; hariIni: string; wa: string;
 }) {
   const { t, locale } = useI18n();
-  const adaJadwal = jadwal.some((j) => j.sisa > 0);
+  const menginap = jenis === "homestay";
+  const adaJadwal = !menginap && jadwal.some((j) => j.sisa > 0);
   const [mode, setMode] = useState<"jadwal" | "sendiri">(adaJadwal ? "jadwal" : "sendiri");
   const [jadwalId, setJadwalId] = useState(jadwal.find((j) => j.id === jadwalAwal && j.sisa > 0)?.id ?? "");
   const [mulai, setMulai] = useState("");
+  const [keluar, setKeluar] = useState("");
   const [orang, setOrang] = useState(2);
   const [nama, setNama] = useState("");
   const [nomor, setNomor] = useState("");
@@ -41,6 +47,8 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
     const g: Record<string, string> = {};
     if (mode === "jadwal" && !jadwalId) g.tanggal = t("form.wajib");
     if (mode === "sendiri" && !mulai) g.tanggal = t("form.wajib");
+    if (menginap && !keluar) g.keluar = t("form.wajib");
+    else if (menginap && mulai && keluar <= mulai) g.keluar = t("form.keluarSalah");
     if (nama.trim().length < 2) g.nama = t("form.wajib");
     const angka = nomor.replace(/[^\d]/g, "");
     if (angka.length < 8 || angka.length > 16) g.nomor = nomor.trim() ? t("form.waSalah") : t("form.wajib");
@@ -59,7 +67,8 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          tripId, jadwalId: mode === "jadwal" ? jadwalId : "", mulai: mode === "sendiri" ? mulai : "",
+          ...(menginap ? { homestayId: itemId, selesai: keluar } : { tripId: itemId }),
+          jadwalId: mode === "jadwal" ? jadwalId : "", mulai: mode === "sendiri" ? mulai : "",
           orang: Math.min(orang, maksOrang), nama, whatsapp: nomor, email, catatan, bahasa: locale, situs: jebakan,
         }),
       });
@@ -75,7 +84,7 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
 
   if (hasil) {
     const tanggal = rentangTanggal(hasil.mulai, hasil.selesai, locale);
-    const pesan = [t("pesanWa.salam", { trip: tripNama }), t("pesanWa.kode", { kode: hasil.kode }), tanggal && t("pesanWa.tanggal", { tanggal }), t("pesanWa.orang", { n: orang }), t("pesanWa.nama", { nama: nama.trim() })].filter(Boolean).join("\n");
+    const pesan = [menginap ? t("pesanWa.salamHomestay", { homestay: itemNama }) : t("pesanWa.salam", { trip: itemNama }), t("pesanWa.kode", { kode: hasil.kode }), tanggal && t("pesanWa.tanggal", { tanggal }), t("pesanWa.orang", { n: orang }), t("pesanWa.nama", { nama: nama.trim() })].filter(Boolean).join("\n");
     const link = tautanWa(wa, pesan);
     return (
       <div className="rounded-card bg-white p-6 shadow-lift" role="status">
@@ -86,15 +95,15 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
         {link && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="btn btn-koral mt-5 w-full"><IkonWhatsapp size={20} />{t("form.lanjutWa")}</a>
         )}
-        <button type="button" onClick={() => { setHasil(null); setJadwalId(""); setMulai(""); }} className="btn btn-terang mt-3 w-full">{t("form.lagi")}</button>
+        <button type="button" onClick={() => { setHasil(null); setJadwalId(""); setMulai(""); setKeluar(""); }} className="btn btn-terang mt-3 w-full">{t("form.lagi")}</button>
       </div>
     );
   }
 
   return (
     <form onSubmit={ajukan} noValidate className="rounded-card bg-white p-5 shadow-lift sm:p-6">
-      <h2 className="text-[34px]">{t("form.judul")}</h2>
-      <p className="mt-2 text-[14.5px] text-ink2">{t("form.lead")}</p>
+      <h2 className="text-[34px]">{menginap ? t("form.judulHomestay") : t("form.judul")}</h2>
+      <p className="mt-2 text-[14.5px] text-ink2">{menginap ? t("form.leadHomestay") : t("form.lead")}</p>
 
       <div className="mt-5 grid gap-4">
         {adaJadwal && (
@@ -116,11 +125,19 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
             <Dropdown label={t("form.pakaiJadwal")} value={jadwalId} onChange={(v) => { setJadwalId(v); setGalat((g) => ({ ...g, tanggal: "" })); }} kosong={t("form.pilihJadwal")}
               pilihan={jadwal.map((j) => ({ nilai: j.id, label: rentangTanggal(j.mulai, j.selesai, locale), catatan: j.sisa > 0 ? t("form.sisa", { n: j.sisa }) : t("form.penuh"), mati: j.sisa <= 0 }))} />
           ) : (
-            <DatePicker value={mulai} onChange={(v) => { setMulai(v); setGalat((g) => ({ ...g, tanggal: "" })); }} min={hariIni} locale={locale} label={t("form.tanggal")}
+            <DatePicker value={mulai} onChange={(v) => { setMulai(v); if (menginap && keluar && keluar <= v) setKeluar(""); setGalat((g) => ({ ...g, tanggal: "" })); }} min={hariIni} locale={locale} label={menginap ? t("form.masuk") : t("form.tanggal")}
               teks={{ pilih: t("form.pilihTanggal"), sebelum: t("kalender.sebelum"), berikut: t("kalender.berikut"), hariIni: t("kalender.hariIni"), hapus: t("kalender.hapus") }} />
           )}
           {galat.tanggal && <p className="kolom-galat">{galat.tanggal}</p>}
         </div>
+
+        {menginap && (
+          <div>
+            <DatePicker value={keluar} onChange={(v) => { setKeluar(v); setGalat((g) => ({ ...g, keluar: "" })); }} min={tambahHari(mulai || hariIni, 1)} locale={locale} label={t("form.keluar")}
+              teks={{ pilih: t("form.pilihTanggal"), sebelum: t("kalender.sebelum"), berikut: t("kalender.berikut"), hariIni: t("kalender.hariIni"), hapus: t("kalender.hapus") }} />
+            {galat.keluar && <p className="kolom-galat">{galat.keluar}</p>}
+          </div>
+        )}
 
         <div>
           <span className="kolom-label" id="label-orang">{t("form.orang")}</span>
@@ -148,7 +165,7 @@ export default function FormPermintaan({ tripId, tripNama, jadwal, jadwalAwal, h
         </div>
         <div>
           <label htmlFor="f-catatan" className="kolom-label">{t("form.catatan")}</label>
-          <textarea id="f-catatan" className="kolom min-h-[92px]" value={catatan} onChange={(e) => setCatatan(e.target.value)} placeholder={t("form.catatanContoh")} maxLength={600} />
+          <textarea id="f-catatan" className="kolom min-h-[92px]" value={catatan} onChange={(e) => setCatatan(e.target.value)} placeholder={menginap ? t("homestay.catatanContoh") : t("form.catatanContoh")} maxLength={600} />
         </div>
         {/* Kolom jebakan untuk robot, disembunyikan dari orang. */}
         <div className="absolute -left-[9999px]" aria-hidden>

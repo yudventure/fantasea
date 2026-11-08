@@ -14,6 +14,8 @@ export interface Permintaan {
   id: string;
   /** Kode yang dilihat tamu, mis. FTS-2611-0007. */
   kode: string;
+  /** Trip (bawaan) atau homestay. Untuk homestay, tripId dan tripNama berisi id dan nama homestay. */
+  jenis?: "trip" | "homestay";
   tripId: string;
   tripNama: string;
   jadwalId: string;

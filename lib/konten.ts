@@ -44,6 +44,30 @@ export interface Trip {
   contoh?: boolean;
 }
 
+/**
+ * Homestay mitra yang ditawarkan di bawah bagian kartu bertumpuk (permintaan
+ * pemilik, November 2026). Kartunya seperti kartu trip, dan tiap homestay
+ * punya halaman sendiri dengan formulir permintaan menginap.
+ */
+export interface Homestay {
+  id: string;
+  slug: string;
+  nama: Teks;
+  /** Pulau atau kampung, mis. Pulau Kri, Selat Dampier. */
+  lokasi: Teks;
+  ringkas: Teks;
+  /** Paragraf dipisah baris kosong. */
+  deskripsi: Teks;
+  fasilitas: DaftarTeks;
+  /** Harga mulai per orang per malam dalam rupiah. 0 berarti tanya harga. */
+  hargaMulai: number;
+  /** Foto pertama jadi sampul. */
+  foto: string[];
+  tampil: boolean;
+  /** Isi contoh bawaan. Hilang begitu diubah di panel. */
+  contoh?: boolean;
+}
+
 export interface Jadwal {
   id: string;
   tripId: string;
@@ -80,15 +104,17 @@ export interface Konten {
     sosial: { instagram: string; facebook: string; tiktok: string; youtube: string };
     seo: { judul: Teks; deskripsi: Teks };
   };
-  menu: { trip: Teks; jadwal: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
+  menu: { trip: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
   hero: { judul: Teks; lead: Teks; tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
-  jelajah: KepalaBagian & { tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
+  /** Bagian kartu bertumpuk, sekarang pembuka homestay. Kartu homestay tampil di bawahnya. */
+  jelajah: KepalaBagian & { kartu: Kartu[] };
   gerbang: KepalaBagian & { foto: FotoBerketerangan[]; video: string; tag: string; warna: WarnaTag };
   bagian: { trip: KepalaBagian; jadwal: KepalaBagian; titik: KepalaBagian; ulasan: KepalaBagian; faq: KepalaBagian };
   ajakan: { judul: Teks; lead: Teks; tombol: Teks };
   footer: { tentang: Teks };
   trip: Trip[];
   jadwal: Jadwal[];
+  homestay: Homestay[];
   titik: TitikSelam[];
   ulasan: Ulasan[];
   faq: Faq[];
@@ -101,6 +127,21 @@ export interface Konten {
  * kolom kosong berarti sengaja disembunyikan.
  */
 export const VERSI_KONTAK = 2;
+
+/**
+ * Teks bawaan lama bagian kartu bertumpuk ("Dive with us"). Simpanan yang
+ * masih memuat teks ini persis diganti teks bawaan baru (penginapan), jadi
+ * permintaan pemilik tetap tayang walau panel pernah disimpan. Teks yang
+ * sudah diubah pemilik tidak disentuh.
+ */
+const JELAJAH_LAMA: KepalaBagian = {
+  label: { en: "Dive travel", id: "Dive travel" },
+  judul: { en: "Dive with us,\n*& explore the reefs*\ntogether.", id: "Menyelam bersama,\n*& jelajahi karang*\nRaja Ampat." },
+  lead: {
+    en: "A small dive travel team from Raja Ampat. We plan the boat, the homestay and the dives. You bring the curiosity.",
+    id: "Tim dive travel kecil dari Raja Ampat. Kami atur kapal, homestay, dan titik selamnya. Kamu cukup membawa rasa ingin tahu.",
+  },
+};
 
 export const JUMLAH_KARTU_HERO = 5;
 export const JUMLAH_KARTU_JELAJAH = 4;
@@ -239,6 +280,36 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     dipakai.add(s);
   }
   const idTrip = new Set(trip.map((t) => t.id));
+
+  const homestay: Homestay[] = ("homestay" in o ? arr(o.homestay) : b.homestay).map((h) => {
+    const x = obj(h);
+    const nama = teks(x.nama, undefined, 120);
+    return {
+      id: id(x.id, "h"),
+      slug: slugDari(str(x.slug, 80) || nama.en || nama.id || "homestay"),
+      nama,
+      lokasi: teks(x.lokasi, undefined, 120),
+      ringkas: teks(x.ringkas, undefined, 300),
+      deskripsi: teks(x.deskripsi, undefined, 6000),
+      fasilitas: daftarTeks(x.fasilitas),
+      hargaMulai: num(x.hargaMulai, 0, 1e11),
+      foto: arr(x.foto).map(fotoSah).filter(Boolean).slice(0, MAKS_FOTO_TRIP),
+      tampil: bool(x.tampil),
+      ...(x.contoh === true ? { contoh: true } : {}),
+    };
+  });
+  const slugHomestay = new Set<string>();
+  for (const h of homestay) {
+    let s = h.slug, n = 2;
+    while (slugHomestay.has(s)) s = `${h.slug}-${n++}`;
+    h.slug = s;
+    slugHomestay.add(s);
+  }
+  const sama = (a: Teks, c: Teks) => a.en === c.en && a.id === c.id;
+  const kepalaJelajah = kepala(jelajah, b.jelajah);
+  for (const kunci of ["label", "judul", "lead"] as const) {
+    if (sama(kepalaJelajah[kunci], JELAJAH_LAMA[kunci])) kepalaJelajah[kunci] = b.jelajah[kunci];
+  }
   const kontakLama = num(situs.versiKontak, 0, 99) < VERSI_KONTAK;
   const isiAtauBawaan = (asal: Record<string, unknown>, kunci: string, nilai: string, bawaan: string) =>
     nilai || (kunci in asal && !kontakLama ? "" : bawaan);
@@ -258,7 +329,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       seo: { judul: teks(seo.judul, b.situs.seo.judul, 90), deskripsi: teks(seo.deskripsi, b.situs.seo.deskripsi, 300) },
     },
     menu: {
-      trip: teks(menu.trip, b.menu.trip, 30), jadwal: teks(menu.jadwal, b.menu.jadwal, 30), titik: teks(menu.titik, b.menu.titik, 30),
+      trip: teks(menu.trip, b.menu.trip, 30), jadwal: teks(menu.jadwal, b.menu.jadwal, 30), homestay: teks(menu.homestay, b.menu.homestay, 30), titik: teks(menu.titik, b.menu.titik, 30),
       ulasan: teks(menu.ulasan, b.menu.ulasan, 30), faq: teks(menu.faq, b.menu.faq, 30), pesan: teks(menu.pesan, b.menu.pesan, 30),
     },
     hero: {
@@ -267,8 +338,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       kartu: kartuList(hero.kartu, JUMLAH_KARTU_HERO, b.hero.kartu),
     },
     jelajah: {
-      ...kepala(jelajah, b.jelajah),
-      tombol1: teks(jelajah.tombol1, b.jelajah.tombol1, 40), tombol2: teks(jelajah.tombol2, b.jelajah.tombol2, 40),
+      ...kepalaJelajah,
       kartu: kartuList(jelajah.kartu, JUMLAH_KARTU_JELAJAH, b.jelajah.kartu),
     },
     gerbang: {
@@ -298,6 +368,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
         ...(x.contoh === true ? { contoh: true } : {}),
       };
     }).filter((j) => j.mulai && idTrip.has(j.tripId)),
+    homestay,
     titik: ("titik" in o ? arr(o.titik) : b.titik).map((t) => {
       const x = obj(t);
       return {

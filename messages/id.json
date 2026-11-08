@@ -47,6 +47,19 @@
     "pesan": "Pesan kursi",
     "kosong": "Belum ada open trip terjadwal. Tanyakan tanggal pilihanmu ke kami."
   },
+  "homestay": {
+    "dari": "Mulai",
+    "perMalam": "per orang per malam",
+    "tanyaHarga": "Tanya harga",
+    "lihat": "Lihat homestay",
+    "semua": "Semua homestay",
+    "label": "Homestay",
+    "lokasi": "Lokasi",
+    "harga": "Harga",
+    "fasilitas": "Yang kamu dapat",
+    "lainnya": "Homestay lainnya",
+    "catatanContoh": "Jenis kamar, kebutuhan khusus, rencana selam"
+  },
   "titik": {
     "kedalaman": "Kedalaman",
     "arus": "Arus",
@@ -92,7 +105,12 @@
     "emailSalah": "Periksa lagi alamat email.",
     "galat": "Permintaan belum terkirim. Coba lagi.",
     "penuh": "Penuh",
-    "sisa": "Sisa {n}"
+    "sisa": "Sisa {n}",
+    "judulHomestay": "Pesan homestay ini",
+    "leadHomestay": "Kabari tanggalmu. Kami membalas lewat WhatsApp untuk memastikan kamar dan harga. Belum perlu bayar.",
+    "masuk": "Tanggal masuk",
+    "keluar": "Tanggal keluar",
+    "keluarSalah": "Tanggal keluar harus setelah tanggal masuk."
   },
   "pesanWa": {
     "salam": "Halo Fantasea, saya ingin memesan {trip}.",
@@ -100,7 +118,8 @@
     "tanggal": "Tanggal {tanggal}",
     "orang": "{n} orang",
     "nama": "Nama {nama}",
-    "umum": "Halo Fantasea, saya ingin merencanakan trip selam di Raja Ampat."
+    "umum": "Halo Fantasea, saya ingin merencanakan trip selam di Raja Ampat.",
+    "salamHomestay": "Halo Fantasea, saya ingin menginap di {homestay}."
   },
   "kalender": {
     "sebelum": "Bulan sebelumnya",

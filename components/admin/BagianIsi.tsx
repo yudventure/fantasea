@@ -31,12 +31,8 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         <EditorKartu judul="Kartu foto" kartu={k.hero.kartu} set={(i, f) => ubah((d) => f(d.hero.kartu[i]))} keterangan="Kartu 1 dan 5 tidak tampil di ponsel. Kartu tengah paling besar." />
       </KartuPanel>
 
-      <KartuPanel id="jelajah" judul="Bagian kedua (kartu bertumpuk)" keterangan="Teks di kiri dan empat kartu foto bertumpuk di kanan yang bisa digeser tamu. Tombol pertama membuka WhatsApp bila nomornya sudah diisi.">
+      <KartuPanel id="jelajah" judul="Bagian kedua, pembuka homestay (kartu bertumpuk)" keterangan="Teks di kiri dan empat kartu foto bertumpuk di kanan yang bisa digeser tamu. Kartu homestay tampil di bawahnya, diatur di menu Homestay.">
         <KepalaEditor b={k.jelajah} set={(f) => ubah((d) => f(d.jelajah))} />
-        <div className="grid gap-4 md:grid-cols-2">
-          <KolomDua label="Tombol pertama" value={k.jelajah.tombol1} onChange={(v) => ubah((d) => { d.jelajah.tombol1 = v; })} maks={40} />
-          <KolomDua label="Tombol kedua" value={k.jelajah.tombol2} onChange={(v) => ubah((d) => { d.jelajah.tombol2 = v; })} maks={40} />
-        </div>
         <EditorKartu judul="Kartu foto" kartu={k.jelajah.kartu} set={(i, f) => ubah((d) => f(d.jelajah.kartu[i]))} />
       </KartuPanel>
 

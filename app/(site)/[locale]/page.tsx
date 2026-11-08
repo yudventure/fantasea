@@ -7,7 +7,7 @@ import Hero from "@/components/Hero";
 import Jelajah from "@/components/Jelajah";
 import Gerbang from "@/components/Gerbang";
 import Footer from "@/components/Footer";
-import { Ajakan, DaftarFaq, DaftarTitik, DaftarTrip, DaftarUlasan, JadwalOpenTrip } from "@/components/Bagian";
+import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTitik, DaftarTrip, DaftarUlasan, JadwalOpenTrip } from "@/components/Bagian";
 
 /**
  * Beranda. Tiga bagian pertama mengikuti referensi desain (hero kartu
@@ -26,11 +26,9 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
       <Header menu={menu} pesan={pesan} jalur="" />
       <main id="isi">
         <Hero k={k} l={l} />
-        <Jelajah
-          label={tx(k.jelajah.label, l)} judul={tx(k.jelajah.judul, l)} lead={tx(k.jelajah.lead, l)}
-          tombol1={tx(k.jelajah.tombol1, l)} tombol2={tx(k.jelajah.tombol2, l)} kartu={k.jelajah.kartu}
-          hrefTombol1={hrefTanya}
-        />
+        <Jelajah id="homestay" label={tx(k.jelajah.label, l)} judul={tx(k.jelajah.judul, l)} lead={tx(k.jelajah.lead, l)} kartu={k.jelajah.kartu}>
+          <DaftarHomestay homestay={k.homestay} l={l} />
+        </Jelajah>
         <Gerbang
           label={tx(k.gerbang.label, l)} judul={tx(k.gerbang.judul, l)} lead={tx(k.gerbang.lead, l)}
           foto={k.gerbang.foto.map((f) => ({ foto: f.foto, keterangan: tx(f.keterangan, l) }))}
