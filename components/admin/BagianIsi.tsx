@@ -3,6 +3,7 @@ import { MAKS_FOTO_GERBANG, idBaru, type Konten, type KepalaBagian } from "@/lib
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
 import { KartuPanel, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
 import type { Ubah } from "./Panel";
+import { kontakMasihContoh } from "@/data/bawaan";
 
 const HINT_JUDUL = "Tulis kata berwarna di antara tanda bintang, misalnya *Raja Ampat*. Tekan Enter untuk pindah baris.";
 const kosong = { en: "", id: "" };
@@ -159,8 +160,12 @@ export function BagianUlasanFaq({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
 export function BagianKontak({ k, ubah }: { k: Konten; ubah: Ubah }) {
   const s = k.situs;
+  const contoh = kontakMasihContoh(k);
   return (
     <div className="grid gap-6">
+      {(contoh.wa && s.kontak.whatsapp || contoh.lain.length > 0) && (
+        <p className="rounded-in bg-[#FFF4DD] px-4 py-3 text-[14.5px] text-navy">Masih contoh bawaan {[contoh.wa && s.kontak.whatsapp ? "Nomor WhatsApp" : "", ...contoh.lain].filter(Boolean).join(", ")}. Ganti dengan kontak asli Fantasea, atau kosongkan kolomnya untuk menyembunyikan.</p>
+      )}
       <KartuPanel judul="Kontak" keterangan="Tampil di footer dan dipakai tombol WhatsApp di seluruh situs. Kolom kosong disembunyikan.">
         <div className="grid gap-4 md:grid-cols-2">
           <KolomTeks label="Nomor WhatsApp" hint="Dengan kode negara tanpa tanda plus, contoh 6281234567890." jenis="angka" value={s.kontak.whatsapp} onChange={(v) => ubah((d) => { d.situs.kontak.whatsapp = v.replace(/[^\d]/g, ""); })} maks={20} />

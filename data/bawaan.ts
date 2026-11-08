@@ -1,4 +1,5 @@
-import type { Konten } from "@/lib/konten";
+import { VERSI_KONTAK, type Konten } from "@/lib/konten";
+import { NOMOR_WA_CONTOH, nomorWaAsli } from "@/lib/whatsapp";
 
 /**
  * Isi bawaan situs, dipakai sebelum pemilik menyimpan apa pun dari panel dan
@@ -16,13 +17,22 @@ const F = (n: string) => `/brand/foto/${n}.webp`;
 
 export const KONTEN_BAWAAN: Konten = {
   situs: {
+    // Kontak dan media sosial contoh, tinggal diganti di panel (Kontak dan SEO).
+    // Ringkasan panel mengingatkan selama masih contoh. Handle dan domain
+    // fantaseadivetravel masih usulan di pedoman merek, belum dipastikan.
+    versiKontak: VERSI_KONTAK,
     kontak: {
-      whatsapp: "",
-      email: "",
+      whatsapp: NOMOR_WA_CONTOH,
+      email: "halo@fantaseadivetravel.com",
       alamat: { en: "Raja Ampat, Southwest Papua, Indonesia", id: "Raja Ampat, Papua Barat Daya, Indonesia" },
       peta: "",
     },
-    sosial: { instagram: "", facebook: "", tiktok: "", youtube: "" },
+    sosial: {
+      instagram: "https://www.instagram.com/fantaseadivetravel",
+      facebook: "https://www.facebook.com/fantaseadivetravel",
+      tiktok: "https://www.tiktok.com/@fantaseadivetravel",
+      youtube: "https://www.youtube.com/@fantaseadivetravel",
+    },
     seo: {
       judul: { en: "Fantasea Dive Travel, Raja Ampat dive trips", id: "Fantasea Dive Travel, trip selam Raja Ampat" },
       deskripsi: {
@@ -331,3 +341,14 @@ export const KONTEN_BAWAAN: Konten = {
     },
   ],
 };
+
+/** Kontak dan media sosial yang masih sama dengan contoh bawaan, untuk Ringkasan dan editor Kontak panel. */
+export function kontakMasihContoh(k: Konten): { wa: boolean; lain: string[] } {
+  const b = KONTEN_BAWAAN.situs;
+  const lain = [
+    k.situs.kontak.email && k.situs.kontak.email === b.kontak.email ? "Email" : "",
+    ...(([["instagram", "Instagram"], ["facebook", "Facebook"], ["tiktok", "TikTok"], ["youtube", "YouTube"]] as const)
+      .map(([kunci, nama]) => (k.situs.sosial[kunci] && k.situs.sosial[kunci] === b.sosial[kunci] ? nama : ""))),
+  ].filter(Boolean);
+  return { wa: !nomorWaAsli(k.situs.kontak.whatsapp), lain };
+}
