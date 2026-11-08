@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "beranda": "Home",
+    "bukaMenu": "Open menu",
+    "tutup": "Close",
+    "bahasa": "Language",
+    "lompat": "Skip to content"
+  },
+  "jelajah": {
+    "sebelumnya": "Show previous photo",
+    "berikutnya": "Show next photo"
+  },
+  "gerbang": {
+    "tonton": "Watch",
+    "sebelumnya": "Previous photo",
+    "berikutnya": "Next photo",
+    "keterangan": "Photo details",
+    "foto": "Show photo {n}"
+  },
+  "trip": {
+    "dari": "From",
+    "perOrang": "per person",
+    "tanyaHarga": "Price on request",
+    "lihat": "View trip",
+    "selam": "{n} dives",
+    "kategori": {
+      "selam": "Dive trip",
+      "snorkel": "Snorkel trip",
+      "liveaboard": "Liveaboard",
+      "privat": "Private trip"
+    },
+    "semua": "All trips",
+    "durasi": "Duration",
+    "jumlahSelam": "Dives",
+    "level": "Level",
+    "harga": "Price",
+    "termasuk": "What is included",
+    "belum": "Not included",
+    "jadwal": "Open trip dates",
+    "tanpaJadwal": "No open trip dates for this trip yet. Pick your own date in the form.",
+    "lainnya": "Other trips"
+  },
+  "jadwal": {
+    "sisa": "{n} seats left",
+    "sisaSatu": "1 seat left",
+    "penuh": "Full",
+    "pesan": "Book a seat",
+    "kosong": "No open trips are scheduled right now. Ask us for your own dates."
+  },
+  "titik": {
+    "kedalaman": "Depth",
+    "arus": "Current",
+    "level": "Level"
+  },
+  "ajakan": {
+    "permintaan": "Send a request"
+  },
+  "footer": {
+    "kontak": "Contact",
+    "jelajahi": "Explore",
+    "ikuti": "Follow us",
+    "hak": "© {tahun} Fantasea Dive Travel",
+    "masuk": "Team login"
+  },
+  "form": {
+    "judul": "Request this trip",
+    "lead": "Tell us your dates. We reply on WhatsApp to confirm seats and price. No payment yet.",
+    "jenisTanggal": "When do you want to go?",
+    "pakaiJadwal": "Open trip date",
+    "pakaiSendiri": "My own date",
+    "pilihJadwal": "Choose an open trip date",
+    "tanggal": "Start date",
+    "pilihTanggal": "Choose a date",
+    "orang": "Guests",
+    "kurangi": "Fewer guests",
+    "tambah": "More guests",
+    "nama": "Full name",
+    "wa": "WhatsApp number",
+    "waContoh": "+62 812 3456 7890",
+    "email": "Email (optional)",
+    "catatan": "Notes (optional)",
+    "catatanContoh": "Dive level, gear rental, food needs",
+    "kirim": "Send request",
+    "mengirim": "Sending",
+    "berhasil": "Request received",
+    "kode": "Your request code",
+    "berhasilLead": "We will contact you on WhatsApp soon. Continue the chat now to get an answer faster.",
+    "lanjutWa": "Continue on WhatsApp",
+    "lagi": "Send another request",
+    "wajib": "Please fill in this field.",
+    "waSalah": "Please check the WhatsApp number.",
+    "emailSalah": "Please check the email address.",
+    "galat": "The request was not sent. Please try again.",
+    "penuh": "Full",
+    "sisa": "{n} left"
+  },
+  "pesanWa": {
+    "salam": "Hello Fantasea, I would like to book {trip}.",
+    "kode": "Code {kode}",
+    "tanggal": "Date {tanggal}",
+    "orang": "{n} guests",
+    "nama": "Name {nama}",
+    "umum": "Hello Fantasea, I would like to plan a dive trip in Raja Ampat."
+  },
+  "kalender": {
+    "sebelum": "Previous month",
+    "berikut": "Next month",
+    "hariIni": "Today",
+    "hapus": "Clear"
+  },
+  "galat404": {
+    "label": "Error 404",
+    "judul": "Lost at sea",
+    "lead": "This page drifted away. Head back to the home page and pick a trip from there.",
+    "tombol": "Back to home"
+  }
+}

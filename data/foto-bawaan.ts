@@ -1,0 +1,21 @@
+/** Foto bawaan di public/brand/foto yang bisa dipilih di panel (ilustrasi AI, ganti dengan foto asli). */
+export const FOTO_BAWAAN = [
+  "/brand/foto/freedive.webp",
+  "/brand/foto/ikan-badut.webp",
+  "/brand/foto/kapal-penyelam.webp",
+  "/brand/foto/manta-bawah.webp",
+  "/brand/foto/manta-biru.webp",
+  "/brand/foto/manta-cahaya.webp",
+  "/brand/foto/pantai-karst.webp",
+  "/brand/foto/penyelam-biru.webp",
+  "/brand/foto/penyelam-gua.webp",
+  "/brand/foto/penyelam-karang.webp",
+  "/brand/foto/penyelam-ok.webp",
+  "/brand/foto/penyu.webp",
+  "/brand/foto/penyu-karang.webp",
+  "/brand/foto/senja-karst.webp",
+  "/brand/foto/snorkel-karst.webp",
+  "/brand/foto/snorkel-laguna.webp",
+  "/brand/foto/speedboat-laguna.webp",
+  "/brand/foto/tamu-kapal.webp",
+];

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <title>Tanda Arah: segitiga penanda Fantasea</title>
+  <!-- garis tepi tebal, sudut lancip, seperti segitiga di logo -->
+  <path fill="#1264A8" fill-rule="evenodd" d="M8 10 L94 50 L8 90 Z M24 33 L24 67 L60 50 Z"/>
+</svg>

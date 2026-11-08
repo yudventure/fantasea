@@ -1,0 +1,33 @@
+name: CI
+
+# Memastikan website tetap lolos cek tipe, cek tanda baca, dan build mode
+# server (yang dijalankan Hostinger) sebelum dirilis.
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Cek tipe
+        run: npm run typecheck
+
+      - name: Cek tanda baca dan garis pemisah
+        run: npm run cek:tanda
+
+      - name: Build mode server (Hostinger Node.js)
+        run: npm run build
+        env:
+          GIT_COMMIT: ${{ github.sha }}

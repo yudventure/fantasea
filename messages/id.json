@@ -1,0 +1,117 @@
+{
+  "nav": {
+    "beranda": "Beranda",
+    "bukaMenu": "Buka menu",
+    "tutup": "Tutup",
+    "bahasa": "Bahasa",
+    "lompat": "Lompat ke isi"
+  },
+  "jelajah": {
+    "sebelumnya": "Tampilkan foto sebelumnya",
+    "berikutnya": "Tampilkan foto berikutnya"
+  },
+  "gerbang": {
+    "tonton": "Tonton",
+    "sebelumnya": "Foto sebelumnya",
+    "berikutnya": "Foto berikutnya",
+    "keterangan": "Keterangan foto",
+    "foto": "Tampilkan foto {n}"
+  },
+  "trip": {
+    "dari": "Mulai",
+    "perOrang": "per orang",
+    "tanyaHarga": "Tanya harga",
+    "lihat": "Lihat trip",
+    "selam": "{n} kali selam",
+    "kategori": {
+      "selam": "Trip selam",
+      "snorkel": "Trip snorkeling",
+      "liveaboard": "Liveaboard",
+      "privat": "Trip privat"
+    },
+    "semua": "Semua trip",
+    "durasi": "Durasi",
+    "jumlahSelam": "Selam",
+    "level": "Level",
+    "harga": "Harga",
+    "termasuk": "Sudah termasuk",
+    "belum": "Belum termasuk",
+    "jadwal": "Tanggal open trip",
+    "tanpaJadwal": "Belum ada tanggal open trip untuk trip ini. Pilih tanggal sendiri di formulir.",
+    "lainnya": "Trip lainnya"
+  },
+  "jadwal": {
+    "sisa": "Sisa {n} kursi",
+    "sisaSatu": "Sisa 1 kursi",
+    "penuh": "Penuh",
+    "pesan": "Pesan kursi",
+    "kosong": "Belum ada open trip terjadwal. Tanyakan tanggal pilihanmu ke kami."
+  },
+  "titik": {
+    "kedalaman": "Kedalaman",
+    "arus": "Arus",
+    "level": "Level"
+  },
+  "ajakan": {
+    "permintaan": "Kirim permintaan"
+  },
+  "footer": {
+    "kontak": "Kontak",
+    "jelajahi": "Jelajahi",
+    "ikuti": "Ikuti kami",
+    "hak": "© {tahun} Fantasea Dive Travel",
+    "masuk": "Masuk tim"
+  },
+  "form": {
+    "judul": "Pesan trip ini",
+    "lead": "Kabari tanggalmu. Kami membalas lewat WhatsApp untuk memastikan kursi dan harga. Belum perlu bayar.",
+    "jenisTanggal": "Kapan ingin berangkat?",
+    "pakaiJadwal": "Tanggal open trip",
+    "pakaiSendiri": "Tanggal sendiri",
+    "pilihJadwal": "Pilih tanggal open trip",
+    "tanggal": "Tanggal berangkat",
+    "pilihTanggal": "Pilih tanggal",
+    "orang": "Jumlah orang",
+    "kurangi": "Kurangi orang",
+    "tambah": "Tambah orang",
+    "nama": "Nama lengkap",
+    "wa": "Nomor WhatsApp",
+    "waContoh": "0812 3456 7890",
+    "email": "Email (boleh kosong)",
+    "catatan": "Catatan (boleh kosong)",
+    "catatanContoh": "Level selam, sewa alat, kebutuhan makan",
+    "kirim": "Kirim permintaan",
+    "mengirim": "Mengirim",
+    "berhasil": "Permintaan diterima",
+    "kode": "Kode permintaanmu",
+    "berhasilLead": "Kami segera menghubungimu lewat WhatsApp. Lanjutkan obrolan sekarang supaya jawabannya lebih cepat.",
+    "lanjutWa": "Lanjut ke WhatsApp",
+    "lagi": "Kirim permintaan lain",
+    "wajib": "Kolom ini perlu diisi.",
+    "waSalah": "Periksa lagi nomor WhatsApp.",
+    "emailSalah": "Periksa lagi alamat email.",
+    "galat": "Permintaan belum terkirim. Coba lagi.",
+    "penuh": "Penuh",
+    "sisa": "Sisa {n}"
+  },
+  "pesanWa": {
+    "salam": "Halo Fantasea, saya ingin memesan {trip}.",
+    "kode": "Kode {kode}",
+    "tanggal": "Tanggal {tanggal}",
+    "orang": "{n} orang",
+    "nama": "Nama {nama}",
+    "umum": "Halo Fantasea, saya ingin merencanakan trip selam di Raja Ampat."
+  },
+  "kalender": {
+    "sebelum": "Bulan sebelumnya",
+    "berikut": "Bulan berikutnya",
+    "hariIni": "Hari ini",
+    "hapus": "Hapus"
+  },
+  "galat404": {
+    "label": "Galat 404",
+    "judul": "Tersesat di laut",
+    "lead": "Halaman ini hanyut entah ke mana. Kembali ke beranda lalu pilih trip dari sana.",
+    "tombol": "Kembali ke beranda"
+  }
+}

@@ -1,4 +1,14 @@
 brand/scripts/.cache/
 __pycache__/
 node_modules/
+.next/
+out/
+.env
+.env.local
+.env.*.local
+.env.production
+*.log
+*.tsbuildinfo
 .DS_Store
+# data di server (cadangan folder home), lihat lib/server/gudang.ts
+.data/

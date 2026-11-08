@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Satu tema terang, latar putih dengan abu kebiruan lembut (bukan krem). */
+:root { color-scheme: light; }
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-white text-ink font-body text-[16px] leading-[1.6] antialiased; }
+  h1, h2, h3, h4 { @apply font-display text-navy; font-weight: 900; letter-spacing: 0.004em; line-height: 0.98; text-wrap: balance; }
+  button { font: inherit; }
+  :focus-visible { outline: 3px solid #30A6DE; outline-offset: 3px; border-radius: 8px; }
+  [hidden] { display: none !important; }
+  [id] { scroll-margin-top: 88px; }
+  :where(.panel-admin .grid) { grid-template-columns: minmax(0, 1fr); }
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6; }
+  .wrap-panel { @apply w-full px-4 sm:px-6 lg:px-8; }
+
+  /* Label aksen: tulisan tangan kapital berjarak, seperti DIVE TRAVEL di logo. */
+  .aksen { @apply font-aksen uppercase tracking-[0.2em] text-[13px] text-tanda; }
+
+  /* Tombol */
+  .btn { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-pill px-6 text-[15px] font-extrabold transition active:translate-y-px; }
+  .btn-navy { @apply bg-navy text-white hover:bg-malam; }
+  .btn-terang { @apply bg-[#E9EFF3] text-navy hover:bg-[#DCE6EC]; }
+  .btn-koral { @apply bg-koral text-navy hover:brightness-[1.04]; }
+  .btn-garis { @apply text-navy ring-2 ring-inset ring-navy hover:bg-navy hover:text-white; }
+  .btn-putih { @apply bg-white text-navy hover:bg-buih; }
+  .btn-bulat { @apply grid h-11 w-11 place-items-center rounded-full bg-white text-navy shadow-card transition hover:bg-buih; }
+
+  /* Gelembung tag di atas kartu foto, seperti @nama di referensi. */
+  .gelembung { @apply relative inline-flex items-center rounded-[12px] px-3.5 py-1.5 text-[14px] font-bold leading-none text-white shadow-lift; }
+  .gelembung::after { content: ""; position: absolute; left: 18px; bottom: -6px; width: 12px; height: 12px; background: inherit; transform: rotate(45deg); border-radius: 2px; }
+  .gelembung-tanda { @apply bg-tanda; }
+  .gelembung-ukir { @apply bg-ukir text-malam; }
+  .gelembung-koral { @apply bg-koral text-navy; }
+  .gelembung-navy { @apply bg-navy; }
+
+  /* Kartu foto berbingkai putih seperti foto cetak. */
+  .foto-kartu { @apply overflow-hidden rounded-[22px] bg-white p-[5px] shadow-foto; }
+  .foto-kartu > .isi { @apply relative h-full w-full overflow-hidden rounded-[18px]; }
+
+  .pill { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-pill px-3 py-1 text-[12.5px] font-extrabold; }
+  .pill-terang { @apply bg-buih text-navy; }
+  .pill-koral { @apply bg-koral text-navy; }
+  .pill-navy { @apply bg-navy text-white; }
+  .pill-ukir { @apply bg-ukir text-malam; }
+
+  /* Kolom isian formulir tamu dan panel */
+  .kolom { @apply w-full rounded-in border border-line bg-white px-4 py-3 text-[15px] text-ink outline-none transition placeholder:text-[#8A97A8] focus:border-ukir focus:ring-4 focus:ring-ukir/20; }
+  .kolom-label { @apply mb-1.5 block text-[13.5px] font-bold text-navy; }
+  .kolom-galat { @apply mt-1.5 text-[13px] font-semibold text-[#B4441F]; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

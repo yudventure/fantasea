@@ -1,6 +1,31 @@
 # Fantasea Dive Travel
 
-Identitas merek **Fantasea Dive Travel**, penyelenggara trip selam dan snorkeling di Raja Ampat. Isinya logo dalam berbagai versi (PNG dan vektor), warna, huruf, token website, elemen grafis, template media sosial, dan buku pedoman merek.
+Website dan identitas merek **Fantasea Dive Travel**, penyelenggara trip selam dan snorkeling di Raja Ampat.
+
+## Website
+
+Next.js 15 (framework React) + TypeScript + Tailwind CSS, dengan kerangka DAMPIER: data tersimpan sebagai berkas JSON di folder data server (tanpa database), panel pengelola di `/admin`, situs tamu dua bahasa di `/en` dan `/id`.
+
+| Halaman | Isi |
+| --- | --- |
+| `/en`, `/id` | Beranda: hero kartu foto mengipas, kartu bertumpuk, galeri besar, trip, jadwal open trip, titik selam, ulasan, FAQ |
+| `/en/trip/<alamat>` | Detail trip, galeri, yang termasuk, tanggal open trip, formulir permintaan yang diteruskan ke WhatsApp |
+| `/admin` | Panel pengelola: ringkasan, permintaan tamu, trip dan harga, jadwal, titik selam, semua teks dan foto beranda, ulasan dan FAQ, kontak dan SEO, akun tim |
+| `/api/health` | Cek deploy |
+
+```bash
+npm install
+```
+
+```bash
+npm run dev
+```
+
+**Deploy ke Hostinger:** unggah `hostinger/Fantasea-Website-Hostinger.zip` di hPanel (Node.js Apps, preset Next.js), impor `hostinger/fantasea-hpanel.env`, lalu ikuti [hostinger/PANDUAN-HOSTINGER.md](./hostinger/PANDUAN-HOSTINGER.md). Aturan proyek untuk agen ada di [CLAUDE.md](./CLAUDE.md).
+
+## Identitas merek
+
+Isinya logo dalam berbagai versi (PNG dan vektor), warna, huruf, token website, elemen grafis, template media sosial, dan buku pedoman merek.
 
 > **Live the Fantasea.**
 > *Laut nyata, melampaui khayalan.*

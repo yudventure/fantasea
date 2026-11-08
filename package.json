@@ -1,0 +1,36 @@
+{
+  "name": "fantasea-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fantasea Dive Travel, Raja Ampat. Situs tamu dan panel pengelola (Next.js, kerangka DAMPIER).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "serve": "node server.js",
+    "typecheck": "tsc --noEmit",
+    "cek:tanda": "node scripts/cek-tanda-baca.mjs",
+    "cek": "npm run typecheck && npm run cek:tanda && npm run build"
+  },
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "dependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
+    "next": "15.5.28",
+    "postcss": "^8.5.23",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "server-only": "^0.0.1",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "$postcss"
+    }
+  }
+}
