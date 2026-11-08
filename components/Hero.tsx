@@ -94,7 +94,7 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
           {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
           <div className="mt-[2.6vh] flex flex-wrap items-center justify-center gap-3">
             {tx(h.tombol1, l) && <Link href="#jadwal" className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
-            {tx(h.tombol2, l) && <Link href="#titik" className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
+            {tx(h.tombol2, l) && <Link href={`/${l}/trip#titik`} className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
           </div>
         </div>
       </div>

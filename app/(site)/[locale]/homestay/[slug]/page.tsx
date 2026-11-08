@@ -54,7 +54,7 @@ export default async function HalamanHomestay({ params }: Params) {
       <main id="isi" className="pb-8">
         <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-10 pt-[92px] sm:pt-[112px]">
           <div className="wrap">
-            <Link href={`/${l}#homestay`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
+            <Link href={`/${l}/homestay`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
               <IkonPanahKiri size={16} />{t("homestay.semua")}
             </Link>
             <p className="aksen mt-6">{t("homestay.label")}</p>

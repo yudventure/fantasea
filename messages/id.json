@@ -38,7 +38,8 @@
     "belum": "Belum termasuk",
     "jadwal": "Tanggal open trip",
     "tanpaJadwal": "Belum ada tanggal open trip untuk trip ini. Pilih tanggal sendiri di formulir.",
-    "lainnya": "Trip lainnya"
+    "lainnya": "Trip lainnya",
+    "lihatSemua": "Lihat semua trip"
   },
   "jadwal": {
     "sisa": "Sisa {n} kursi",
@@ -58,7 +59,8 @@
     "harga": "Harga",
     "fasilitas": "Yang kamu dapat",
     "lainnya": "Homestay lainnya",
-    "catatanContoh": "Jenis kamar, kebutuhan khusus, rencana selam"
+    "catatanContoh": "Jenis kamar, kebutuhan khusus, rencana selam",
+    "lihatSemua": "Lihat semua homestay"
   },
   "titik": {
     "kedalaman": "Kedalaman",

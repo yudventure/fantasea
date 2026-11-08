@@ -137,6 +137,86 @@ export const KONTEN_BAWAAN: Konten = {
     lead: { en: "Tell us your dates and we will plan the rest.", id: "Kabari tanggalmu, sisanya kami yang atur." },
     tombol: { en: "Chat on WhatsApp", id: "Chat lewat WhatsApp" },
   },
+  // Halaman Trip dan Homestay (permintaan pemilik, November 2026). Edukasi
+  // selam berisi pengetahuan umum, bertanda contoh supaya diperiksa pemandu.
+  halamanTrip: {
+    kepala: {
+      label: { en: "Trips and dive sites", id: "Trip dan titik selam" },
+      judul: { en: "Every trip,\n*every reef.*", id: "Semua trip,\n*semua karang.*" },
+      lead: {
+        en: "All our dive and snorkel trips in one place, plus what to know before diving Raja Ampat and the sites we visit.",
+        id: "Semua trip selam dan snorkeling kami di satu tempat, ditambah yang perlu kamu tahu sebelum menyelam di Raja Ampat dan titik selam yang kami kunjungi.",
+      },
+    },
+    edukasi: {
+      label: { en: "Before you dive", id: "Sebelum menyelam" },
+      judul: { en: "Diving in\n*Raja Ampat.*", id: "Menyelam di\n*Raja Ampat.*" },
+      lead: {
+        en: "A few things that make your dives safer and more fun.",
+        id: "Beberapa hal yang membuat penyelamanmu lebih aman dan menyenangkan.",
+      },
+      butir: [
+        {
+          id: "e-musim", contoh: true,
+          judul: { en: "Best season", id: "Musim terbaik" },
+          isi: {
+            en: "October to April usually brings calmer seas. You can dive all year, but some sites depend on wind and waves that day.",
+            id: "Oktober sampai April biasanya lautnya lebih tenang. Menyelam bisa sepanjang tahun, tapi beberapa titik bergantung pada angin dan ombak hari itu.",
+          },
+        },
+        {
+          id: "e-arus", contoh: true,
+          judul: { en: "Currents", id: "Arus" },
+          isi: {
+            en: "The Dampier Strait is known for currents that bring big schools of fish. Your guide picks sites with the tide, and some dives use a reef hook.",
+            id: "Selat Dampier terkenal dengan arus yang membawa kawanan ikan besar. Pemandu memilih titik mengikuti pasang, dan beberapa penyelaman memakai reef hook.",
+          },
+        },
+        {
+          id: "e-sertifikat", contoh: true,
+          judul: { en: "Certification", id: "Sertifikasi" },
+          isi: {
+            en: "Scuba trips need an Open Water certificate or higher. Snorkel trips need no certificate at all.",
+            id: "Trip selam membutuhkan sertifikat Open Water atau lebih tinggi. Trip snorkeling sama sekali tidak butuh sertifikat.",
+          },
+        },
+        {
+          id: "e-air", contoh: true,
+          judul: { en: "Water and gear", id: "Suhu air dan alat" },
+          isi: {
+            en: "The water is around 27 to 30 °C. A 3 mm wetsuit is enough for most divers. Bring your own mask if you can.",
+            id: "Suhu air sekitar 27 sampai 30 °C. Wetsuit 3 mm sudah cukup untuk kebanyakan penyelam. Bawa masker sendiri kalau bisa.",
+          },
+        },
+        {
+          id: "e-etika", contoh: true,
+          judul: { en: "Reef etiquette", id: "Etika di karang" },
+          isi: {
+            en: "Do not touch or stand on coral, keep your fins off the reef, and use reef safe sunscreen. Raja Ampat is a marine protected area.",
+            id: "Jangan menyentuh atau berdiri di atas karang, jaga fin tidak mengenai karang, dan pakai tabir surya yang ramah karang. Raja Ampat adalah kawasan konservasi laut.",
+          },
+        },
+        {
+          id: "e-terbang", contoh: true,
+          judul: { en: "Before you fly", id: "Sebelum terbang" },
+          isi: {
+            en: "Leave at least 18 hours between your last dive and your flight home. Plan a relaxed last day on the island.",
+            id: "Beri jarak paling sedikit 18 jam antara selam terakhir dan penerbangan pulang. Rencanakan hari terakhir yang santai di pulau.",
+          },
+        },
+      ],
+    },
+  },
+  halamanHomestay: {
+    kepala: {
+      label: { en: "Homestays", id: "Homestay" },
+      judul: { en: "Stay close to\n*the reef.*", id: "Menginap dekat\n*karang.*" },
+      lead: {
+        en: "In high season the best homestays fill up months ahead. Pick one below and send us your dates, we will check the room for you.",
+        id: "Saat musim ramai, homestay terbaik penuh berbulan-bulan sebelumnya. Pilih salah satu di bawah dan kirim tanggalmu, kami yang memastikan kamarnya.",
+      },
+    },
+  },
   footer: {
     tentang: {
       en: "Dive and snorkel trips in Raja Ampat for small groups, with local guides.",

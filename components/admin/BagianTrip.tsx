@@ -1,13 +1,14 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { KATEGORI_TRIP, MAKS_FOTO_TRIP, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Homestay, type Jadwal, type KategoriTrip, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
+import { KATEGORI_TRIP, MAKS_FOTO_TRIP, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Edukasi, type Homestay, type Jadwal, type KategoriTrip, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
 import { rentangTanggal, rupiah } from "@/lib/format";
 import DatePicker from "@/components/DatePicker";
 import Dropdown from "@/components/Dropdown";
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
 import { KartuPanel, KolomAngka, KolomBanyakFoto, KolomDaftar, KolomDua, KolomFoto, KolomTeks, Saklar } from "./Kolom";
 import type { Ubah } from "./Panel";
+import { KepalaEditor } from "./BagianIsi";
 
 const NAMA_KATEGORI: Record<KategoriTrip, string> = { selam: "Trip selam", snorkel: "Trip snorkeling", liveaboard: "Liveaboard", privat: "Trip privat" };
 const kosong = { en: "", id: "" };
@@ -32,6 +33,32 @@ function geserDaftar<T>(daftar: T[], i: number, arah: number) {
   [daftar[i], daftar[j]] = [daftar[j], daftar[i]];
 }
 
+
+/** Kartu edukasi selam di halaman Trip. */
+function EditorEdukasi({ k, ubah }: { k: Konten; ubah: Ubah }) {
+  const e = k.halamanTrip.edukasi;
+  const ubahButir = (id: string, f: (x: Edukasi) => void) => ubah((d) => { const x = d.halamanTrip.edukasi.butir.find((b) => b.id === id); if (x) { f(x); delete x.contoh; } });
+  return (
+    <KartuPanel judul="Edukasi selam di halaman Trip" keterangan="Kartu pengetahuan selam di atas daftar titik selam. Isi bawaan bertanda Contoh, minta pemandu memeriksanya."
+      aksi={<button type="button" onClick={() => ubah((d) => { d.halamanTrip.edukasi.butir.push({ id: idBaru("e"), judul: { en: "New tip", id: "Kartu baru" }, isi: kosong }); })} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah kartu</button>}>
+      <KepalaEditor b={e} set={(f) => ubah((d) => f(d.halamanTrip.edukasi))} />
+      <ul className="grid gap-3">
+        {e.butir.map((b, i) => (
+          <li key={b.id} className="grid gap-4 rounded-card border border-line bg-soft p-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="flex flex-1 flex-wrap items-center gap-2 text-[15px] font-extrabold text-navy">{tx(b.judul, "id") || "Tanpa judul"}<TandaContoh ada={b.contoh} /></p>
+              <Geser i={i} n={e.butir.length} onGeser={(a) => ubah((d) => geserDaftar(d.halamanTrip.edukasi.butir, i, a))} />
+              <button type="button" onClick={() => ubah((d) => { d.halamanTrip.edukasi.butir = d.halamanTrip.edukasi.butir.filter((x) => x.id !== b.id); })} className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-[13px] font-bold text-[#A63A22] hover:bg-[#FBE4DD]"><IkonSampah size={16} />Hapus</button>
+            </div>
+            <KolomDua label="Judul kartu" value={b.judul} onChange={(v) => ubahButir(b.id, (x) => { x.judul = v; })} maks={80} />
+            <KolomDua label="Isi" value={b.isi} onChange={(v) => ubahButir(b.id, (x) => { x.isi = v; })} panjang maks={600} />
+          </li>
+        ))}
+      </ul>
+    </KartuPanel>
+  );
+}
+
 // ---------------------------------------------------------------------------
 
 export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
@@ -45,6 +72,11 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
   }
 
   return (
+    <div className="grid gap-6">
+    <KartuPanel judul="Halaman Trip" keterangan="Pembuka halaman /trip, berisi katalog semua trip, edukasi selam, dan titik selam. Di beranda trip tampil paling banyak 6 dengan tombol Lihat semua trip.">
+      <KepalaEditor b={k.halamanTrip.kepala} set={(f) => ubah((d) => f(d.halamanTrip.kepala))} />
+    </KartuPanel>
+    <EditorEdukasi k={k} ubah={ubah} />
     <KartuPanel judul="Trip dan harga" keterangan="Trip yang tampil di beranda dan punya halaman sendiri dengan formulir pesan. Urutan di sini sama dengan urutan di situs."
       aksi={<button type="button" onClick={tambah} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah trip</button>}>
       <ul className="grid gap-3">
@@ -92,6 +124,7 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
         ))}
       </ul>
     </KartuPanel>
+    </div>
   );
 }
 
@@ -109,6 +142,10 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
   }
 
   return (
+    <div className="grid gap-6">
+    <KartuPanel judul="Halaman Homestay" keterangan="Pembuka halaman /homestay yang memuat semua homestay. Di beranda homestay tampil paling banyak 6 dengan tombol Lihat semua homestay di atasnya.">
+      <KepalaEditor b={k.halamanHomestay.kepala} set={(f) => ubah((d) => f(d.halamanHomestay.kepala))} />
+    </KartuPanel>
     <KartuPanel judul="Homestay" keterangan="Kartu homestay di beranda, di bawah bagian Temukan penginapanmu. Tiap homestay punya halaman sendiri dengan formulir permintaan menginap. Urutan di sini sama dengan urutan di situs."
       aksi={<button type="button" onClick={tambah} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah homestay</button>}>
       {k.homestay.length === 0 && <p className="text-[14.5px] text-ink2">Belum ada homestay. Bagian kartu homestay di beranda tersembunyi sampai ada yang tampil.</p>}
@@ -149,6 +186,7 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
         ))}
       </ul>
     </KartuPanel>
+    </div>
   );
 }
 
