@@ -27,13 +27,13 @@ export default function Footer({ k, l, menu }: { k: Konten; l: Locale; menu: Tau
           {tx(k.footer.tentang, l) && <p className="mt-5 max-w-[38ch] text-[15px]">{tx(k.footer.tentang, l)}</p>}
         </div>
         <div>
-          <p className="font-aksen text-[13px] uppercase tracking-[0.2em] text-ukir">{t("footer.jelajahi")}</p>
+          <p className="font-aksen text-[17px] uppercase tracking-[0.16em] text-ukir">{t("footer.jelajahi")}</p>
           <ul className="mt-4 grid gap-2.5">
             {menu.map((m) => <li key={m.href}><Link href={m.href} className="text-[15px] font-semibold text-white/85 hover:text-white">{m.label}</Link></li>)}
           </ul>
         </div>
         <div>
-          <p className="font-aksen text-[13px] uppercase tracking-[0.2em] text-ukir">{t("footer.kontak")}</p>
+          <p className="font-aksen text-[17px] uppercase tracking-[0.16em] text-ukir">{t("footer.kontak")}</p>
           <ul className="mt-4 grid gap-3 text-[15px]">
             {wa && <li><a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex max-w-full items-center gap-2.5 font-semibold text-white/85 hover:text-white"><IkonWhatsapp size={19} className="flex-none" />{nomorTampil(kontak.whatsapp)}</a></li>}
             {/* Alamat email panjang boleh patah di mana saja, supaya kolom kontak yang sempit (768 px) tidak menggeser halaman ke samping. */}
@@ -46,7 +46,7 @@ export default function Footer({ k, l, menu }: { k: Konten; l: Locale; menu: Tau
           </ul>
           {sos.length > 0 && (
             <>
-              <p className="mt-7 font-aksen text-[13px] uppercase tracking-[0.2em] text-ukir">{t("footer.ikuti")}</p>
+              <p className="mt-7 font-aksen text-[17px] uppercase tracking-[0.16em] text-ukir">{t("footer.ikuti")}</p>
               <div className="mt-3 flex gap-2">
                 {sos.map(({ href, ikon: Ikon, nama }) => (
                   <a key={nama} href={href} target="_blank" rel="noopener noreferrer" aria-label={nama} className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/20"><Ikon size={19} /></a>

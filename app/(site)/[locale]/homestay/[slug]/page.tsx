@@ -111,8 +111,8 @@ export default async function HalamanHomestay({ params }: Params) {
         {lainnya.length > 0 && (
           <section className="wrap mt-16 sm:mt-24">
             <h2 className="text-[clamp(36px,5vw,56px)]">{t("homestay.lainnya")}</h2>
-            <div className={`mt-8 grid gap-5 ${lainnya.length > 1 ? "md:grid-cols-2" : ""}`}>
-              {lainnya.map((x) => <KartuHomestay key={x.id} h={x} l={l} lebar={lainnya.length === 1} />)}
+            <div className={`mt-8 grid gap-3 sm:gap-5 ${lainnya.length > 1 ? "grid-cols-2" : ""}`}>
+              {lainnya.map((x) => <KartuHomestay key={x.id} h={x} l={l} lebar={lainnya.length === 1} sempit={lainnya.length > 1} />)}
             </div>
           </section>
         )}

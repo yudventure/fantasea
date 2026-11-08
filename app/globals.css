@@ -21,7 +21,8 @@
   .wrap-panel { @apply w-full px-4 sm:px-6 lg:px-8; }
 
   /* Label aksen: tulisan tangan kapital berjarak, seperti DIVE TRAVEL di logo. */
-  .aksen { @apply font-aksen uppercase tracking-[0.2em] text-[13px] text-tanda; }
+  /* Label bertulisan tangan. Gochi Hand bermata huruf kecil, jadi ukurannya dibesarkan (permintaan pemilik, November 2026). */
+  .aksen { @apply font-aksen uppercase tracking-[0.16em] text-[18px] leading-snug text-tanda sm:text-[22px]; }
 
   /* Tombol */
   .btn { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-pill px-6 text-[15px] font-extrabold transition active:translate-y-px; }
