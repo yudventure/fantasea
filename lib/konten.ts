@@ -93,6 +93,9 @@ export interface TitikSelam {
   contoh?: boolean;
 }
 
+/** Satu kartu edukasi selam di halaman Trip, mis. musim terbaik atau etika di karang. */
+export interface Edukasi { id: string; judul: Teks; isi: Teks; contoh?: boolean }
+
 export interface Ulasan { id: string; nama: string; asal: string; teks: string; bintang: number; tampil: boolean }
 export interface Faq { id: string; tanya: Teks; jawab: Teks }
 
@@ -111,6 +114,13 @@ export interface Konten {
   gerbang: KepalaBagian & { foto: FotoBerketerangan[]; video: string; tag: string; warna: WarnaTag };
   bagian: { trip: KepalaBagian; jadwal: KepalaBagian; titik: KepalaBagian; ulasan: KepalaBagian; faq: KepalaBagian };
   ajakan: { judul: Teks; lead: Teks; tombol: Teks };
+  /**
+   * Halaman sendiri untuk trip dan homestay (permintaan pemilik, November
+   * 2026). Halaman Trip berisi katalog trip, edukasi selam, dan titik selam.
+   * Halaman Homestay berisi semua homestay.
+   */
+  halamanTrip: { kepala: KepalaBagian; edukasi: KepalaBagian & { butir: Edukasi[] } };
+  halamanHomestay: { kepala: KepalaBagian };
   footer: { tentang: Teks };
   trip: Trip[];
   jadwal: Jadwal[];
@@ -246,6 +256,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const o = obj(v);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
+  const halamanTrip = obj(o.halamanTrip), edukasi = obj(halamanTrip.edukasi), halamanHomestay = obj(o.halamanHomestay);
 
   const kartuList = (x: unknown, jumlah: number, bawaan: Kartu[]) =>
     Array.from({ length: jumlah }, (_, i) => kartu(arr(x)[i], bawaan[i]));
@@ -356,6 +367,17 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ulasan: kepala(obj(bagian.ulasan), b.bagian.ulasan), faq: kepala(obj(bagian.faq), b.bagian.faq),
     },
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
+    halamanTrip: {
+      kepala: kepala(obj(halamanTrip.kepala), b.halamanTrip.kepala),
+      edukasi: {
+        ...kepala(edukasi, b.halamanTrip.edukasi),
+        butir: ("butir" in edukasi ? arr(edukasi.butir) : b.halamanTrip.edukasi.butir).map((e) => {
+          const x = obj(e);
+          return { id: id(x.id, "e"), judul: teks(x.judul, undefined, 80), isi: teks(x.isi, undefined, 600), ...(x.contoh === true ? { contoh: true } : {}) };
+        }).filter((e) => e.judul.en || e.judul.id),
+      },
+    },
+    halamanHomestay: { kepala: kepala(obj(halamanHomestay.kepala), b.halamanHomestay.kepala) },
     footer: { tentang: teks(footer.tentang, b.footer.tentang, 400) },
     trip,
     jadwal: ("jadwal" in o ? arr(o.jadwal) : b.jadwal).map((j) => {

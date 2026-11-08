@@ -15,10 +15,11 @@ export async function muatSitus(l: Locale) {
   const awal = `/${l}`;
   const adaUlasan = k.ulasan.some((u) => u.tampil);
   const menu: TautanMenu[] = [
-    { href: `${awal}#trip`, label: tx(k.menu.trip, l) },
+    { href: `${awal}/trip`, label: tx(k.menu.trip, l) },
     { href: `${awal}#jadwal`, label: tx(k.menu.jadwal, l) },
-    ...(k.homestay.some((h) => h.tampil) ? [{ href: `${awal}#homestay`, label: tx(k.menu.homestay, l) }] : []),
-    { href: `${awal}#titik`, label: tx(k.menu.titik, l) },
+    ...(k.homestay.some((h) => h.tampil) ? [{ href: `${awal}/homestay`, label: tx(k.menu.homestay, l) }] : []),
+    // Titik selam pindah ke halaman Trip (permintaan pemilik, November 2026).
+    ...(k.titik.some((x) => x.tampil) ? [{ href: `${awal}/trip#titik`, label: tx(k.menu.titik, l) }] : []),
     ...(adaUlasan ? [{ href: `${awal}#ulasan`, label: tx(k.menu.ulasan, l) }] : []),
     { href: `${awal}#faq`, label: tx(k.menu.faq, l) },
   ].filter((m) => m.label);

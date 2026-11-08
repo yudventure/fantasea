@@ -38,7 +38,8 @@
     "belum": "Not included",
     "jadwal": "Open trip dates",
     "tanpaJadwal": "No open trip dates for this trip yet. Pick your own date in the form.",
-    "lainnya": "Other trips"
+    "lainnya": "Other trips",
+    "lihatSemua": "See all trips"
   },
   "jadwal": {
     "sisa": "{n} seats left",
@@ -58,7 +59,8 @@
     "harga": "Price",
     "fasilitas": "What you get",
     "lainnya": "Other homestays",
-    "catatanContoh": "Room type, special needs, dive plans"
+    "catatanContoh": "Room type, special needs, dive plans",
+    "lihatSemua": "See all homestays"
   },
   "titik": {
     "kedalaman": "Depth",

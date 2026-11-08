@@ -7,12 +7,14 @@ import Hero from "@/components/Hero";
 import Jelajah from "@/components/Jelajah";
 import Gerbang from "@/components/Gerbang";
 import Footer from "@/components/Footer";
-import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTitik, DaftarTrip, DaftarUlasan, JadwalOpenTrip } from "@/components/Bagian";
+import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTrip, DaftarUlasan, JadwalOpenTrip } from "@/components/Bagian";
 
 /**
  * Beranda. Tiga bagian pertama mengikuti referensi desain (hero kartu
  * mengipas, kartu bertumpuk, galeri besar), lalu bagian dive travel dengan
- * gaya yang sama. Semua isi dari panel pengelola.
+ * gaya yang sama. Semua isi dari panel pengelola. Titik selam pindah ke
+ * halaman Trip, dan trip serta homestay punya tombol ke halamannya sendiri
+ * (permintaan pemilik, November 2026).
  */
 export default async function Beranda({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -36,7 +38,6 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
         />
         <DaftarTrip b={k.bagian.trip} trip={k.trip} l={l} />
         <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwal} trip={k.trip} l={l} hrefTanya={hrefTanya} />
-        <DaftarTitik b={k.bagian.titik} titik={k.titik} l={l} />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />
         <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />
         <Ajakan judul={tx(k.ajakan.judul, l)} lead={tx(k.ajakan.lead, l)} tombol={waUmum ? tx(k.ajakan.tombol, l) : t("ajakan.permintaan")} href={hrefTanya} l={l} />

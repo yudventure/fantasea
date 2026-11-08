@@ -8,7 +8,7 @@ import { kontakMasihContoh } from "@/data/bawaan";
 const HINT_JUDUL = "Tulis kata berwarna di antara tanda bintang, misalnya *Raja Ampat*. Tekan Enter untuk pindah baris.";
 const kosong = { en: "", id: "" };
 
-function KepalaEditor({ b, set, tanpaLead = false }: { b: KepalaBagian; set: (f: (b: KepalaBagian) => void) => void; tanpaLead?: boolean }) {
+export function KepalaEditor({ b, set, tanpaLead = false }: { b: KepalaBagian; set: (f: (b: KepalaBagian) => void) => void; tanpaLead?: boolean }) {
   return (
     <div className="grid gap-4">
       <KolomDua label="Label kecil" value={b.label} onChange={(v) => set((x) => { x.label = v; })} maks={80} />
@@ -66,8 +66,8 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         </div>
       </KartuPanel>
 
-      <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Titik selam, Ulasan, dan FAQ.">
-        {([["trip", "Trip"], ["jadwal", "Jadwal open trip"], ["titik", "Titik selam"], ["ulasan", "Ulasan"], ["faq", "FAQ"]] as const).map(([kunci, nama]) => (
+      <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip.">
+        {([["trip", "Trip"], ["jadwal", "Jadwal open trip"], ["titik", "Titik selam (halaman Trip)"], ["ulasan", "Ulasan"], ["faq", "FAQ"]] as const).map(([kunci, nama]) => (
           <div key={kunci} className="rounded-card border border-line bg-soft p-4">
             <p className="mb-3 text-[15px] font-extrabold text-navy">{nama}</p>
             <KepalaEditor b={k.bagian[kunci]} set={(f) => ubah((d) => f(d.bagian[kunci]))} />
@@ -83,7 +83,7 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
       <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, dan kalimat tentang Fantasea di footer.">
         <div className="grid gap-4 md:grid-cols-2">
-          {([["trip", "Menu trip"], ["jadwal", "Menu open trip"], ["titik", "Menu titik selam"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di header"]] as const).map(([kunci, nama]) => (
+          {([["trip", "Menu trip (halaman Trip)"], ["jadwal", "Menu open trip"], ["homestay", "Menu homestay (halaman Homestay)"], ["titik", "Menu titik selam (halaman Trip)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
           ))}
         </div>

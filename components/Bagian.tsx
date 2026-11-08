@@ -7,7 +7,7 @@ import { getMessages } from "@/lib/i18n/messages";
 import { rupiah, potonganTanggal } from "@/lib/format";
 import { KISI_TIGA, KISI_TIGA_TEKS, tempatTiga } from "@/lib/kisi";
 import KisiKartu from "./KisiKartu";
-import { sisaKursi, tx, txDaftar, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
+import { sisaKursi, tx, txDaftar, type Edukasi, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
 import { IkonBintang, IkonJam, IkonMasker, IkonPanahKanan, IkonPin } from "./Ikon";
 import { isiJudul } from "./Judul";
 
@@ -33,6 +33,28 @@ function HargaMulai({ harga, l, label, besar = false, sempit = false }: { harga:
       <span className={`mt-1 font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"} ${sempit ? "max-sm:text-[20px]" : ""}`}>{rupiah(harga, l)}</span>
       <span className={`mt-1 text-[12.5px] font-semibold text-ink2 ${sempit ? "max-sm:text-[11.5px]" : ""}`}>{label.per}</span>
     </span>
+  );
+}
+
+/** Pembuka halaman sendiri (Trip, Homestay): label, judul besar, kalimat, di bawah header yang melayang. */
+export function KepalaHalaman({ b, l }: { b: KepalaBagian; l: Locale }) {
+  return (
+    <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-8 pt-[100px] sm:pb-12 sm:pt-[128px]">
+      <div className="wrap">
+        {tx(b.label, l) && <p className="aksen">{tx(b.label, l)}</p>}
+        <h1 className="mt-3 max-w-[16ch] text-[clamp(44px,7.4vw,88px)] leading-[0.95]">{isiJudul(tx(b.judul, l))}</h1>
+        {tx(b.lead, l) && <p className="mt-5 max-w-[58ch] text-[17px] text-ink2">{tx(b.lead, l)}</p>}
+      </div>
+    </section>
+  );
+}
+
+/** Tombol menuju halaman sendiri, di atas kisi kartu beranda (permintaan pemilik, November 2026). */
+export function TombolSemua({ href, label }: { href: string; label: string }) {
+  return (
+    <Link href={href} className="btn btn-garis min-h-[44px] flex-none px-5 text-[14px]">
+      {label}<IkonPanahKanan size={16} />
+    </Link>
   );
 }
 
@@ -89,14 +111,56 @@ function kisi<T>(daftar: T[], kartu: (x: T, p: ReturnType<typeof tempatTiga>) =>
   return { kartu: daftar.map((x, i) => <Fragment key={i}>{kartu(x, tempat[i])}</Fragment>), kelasKartu: tempat.map((p) => p.kelas) };
 }
 
+/**
+ * Trip di beranda. Paling banyak 6 kartu di semua ukuran layar, sisanya
+ * lewat Load more, dan tombol ke halaman Trip di atas kartu.
+ */
 export function DaftarTrip({ b, trip, l }: { b: KepalaBagian; trip: Trip[]; l: Locale }) {
+  const t = buatT(getMessages(l));
   const tampil = trip.filter((x) => x.tampil);
   if (!tampil.length) return null;
   return (
     <section id="trip" className="bg-soft py-16 sm:py-24">
       <div className="wrap">
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
+          <KepalaBagianSitus b={b} l={l} />
+          <TombolSemua href={`/${l}/trip`} label={t("trip.lihatSemua")} />
+        </div>
+        <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+      </div>
+    </section>
+  );
+}
+
+/** Katalog semua trip di halaman Trip. */
+export function KatalogTrip({ trip, l }: { trip: Trip[]; l: Locale }) {
+  const tampil = trip.filter((x) => x.tampil);
+  if (!tampil.length) return null;
+  return (
+    <section id="katalog" className="pb-16 sm:pb-24">
+      <div className="wrap">
+        <KisiKartu kelas={KISI_TIGA} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+      </div>
+    </section>
+  );
+}
+
+/** Kartu edukasi selam di halaman Trip. Ikonnya Tanda Arah dari merek, tanpa nomor. */
+export function DaftarEdukasi({ b, butir, l }: { b: KepalaBagian; butir: Edukasi[]; l: Locale }) {
+  if (!butir.length) return null;
+  return (
+    <section id="edukasi" className="bg-soft py-16 sm:py-24">
+      <div className="wrap">
         <KepalaBagianSitus b={b} l={l} />
-        <KisiKartu kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+        <div className={`mt-10 ${KISI_TIGA_TEKS}`}>
+          {butir.map((e, i) => (
+            <article key={e.id} className={`${tempatTiga(i, butir.length, false).kelas} rounded-card bg-white p-6 shadow-card sm:p-7`}>
+              <Image src="/brand/grafis/tanda-arah.svg" alt="" width={100} height={100} unoptimized aria-hidden className="h-8 w-8 -rotate-12" />
+              <h3 className="mt-4 text-[26px] leading-tight">{tx(e.judul, l)}</h3>
+              {tx(e.isi, l) && <p className="mt-2 text-[15.5px] text-ink2">{tx(e.isi, l)}</p>}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -121,12 +185,18 @@ export function KartuHomestay({ h, l, lebar = false, sempit = false }: { h: Home
 }
 
 /** Kisi kartu homestay di bawah bagian kartu bertumpuk. */
-export function DaftarHomestay({ homestay, l }: { homestay: Homestay[]; l: Locale }) {
+export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Homestay[]; l: Locale; beranda?: boolean }) {
+  const t = buatT(getMessages(l));
   const tampil = homestay.filter((h) => h.tampil);
   if (!tampil.length) return null;
   return (
-    <div className="wrap mt-12 sm:mt-16">
-      <KisiKartu kelas={KISI_TIGA} {...kisi(tampil, (h, p) => <KartuHomestay h={h} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+    <div className={`wrap ${beranda ? "mt-12 sm:mt-16" : ""}`}>
+      {beranda && (
+        <div className="mb-6 flex sm:justify-end">
+          <TombolSemua href={`/${l}/homestay`} label={t("homestay.lihatSemua")} />
+        </div>
+      )}
+      <KisiKartu semuaUkuran={beranda} kelas={KISI_TIGA} {...kisi(tampil, (h, p) => <KartuHomestay h={h} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
     </div>
   );
 }
@@ -181,12 +251,12 @@ export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya }: { b: KepalaBag
   );
 }
 
-export function DaftarTitik({ b, titik, l }: { b: KepalaBagian; titik: TitikSelam[]; l: Locale }) {
+export function DaftarTitik({ b, titik, l, latar = "bg-soft" }: { b: KepalaBagian; titik: TitikSelam[]; l: Locale; latar?: string }) {
   const t = buatT(getMessages(l));
   const tampil = titik.filter((x) => x.tampil);
   if (!tampil.length) return null;
   return (
-    <section id="titik" className="bg-soft py-16 sm:py-24">
+    <section id="titik" className={`${latar} py-16 sm:py-24`}>
       <div className="wrap">
         <KepalaBagianSitus b={b} l={l} />
         <KisiKartu kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => {

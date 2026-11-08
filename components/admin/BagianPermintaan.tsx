@@ -22,6 +22,7 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
     jadwal: mendatang.filter((j) => j.contoh).length,
     titik: k.titik.filter((t) => t.contoh && t.tampil).length,
     homestay: k.homestay.filter((h) => h.contoh && h.tampil).length,
+    edukasi: k.halamanTrip.edukasi.butir.filter((e) => e.contoh).length,
   };
   const kursi = mendatang.reduce((n, j) => n + sisaKursi(j), 0);
   const angka = [
@@ -44,7 +45,7 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
         ))}
       </div>
 
-      {(contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
+      {(contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay + contoh.edukasi > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
         <KartuPanel judul="Yang perlu dilengkapi sebelum promosi" keterangan="Isi berikut masih contoh bawaan, bukan data Fantasea. Ganti atau sembunyikan supaya tamu tidak salah paham.">
           <ul className="grid gap-2.5 text-[14.5px] text-navy">
             {kontakContoh.wa && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{k.situs.kontak.whatsapp ? "Nomor WhatsApp masih contoh. Footer menampilkan nomor contoh, dan permintaan tamu belum diteruskan ke WhatsApp." : "Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi."}</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
@@ -52,6 +53,7 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
             {contoh.trip > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.trip} trip contoh masih tampil dengan harga contoh.</span><button type="button" onClick={() => pindah("trip")} className="font-bold text-tanda">Ubah trip</button></li>}
             {contoh.jadwal > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.jadwal} jadwal open trip contoh masih tampil.</span><button type="button" onClick={() => pindah("jadwal")} className="font-bold text-tanda">Ubah jadwal</button></li>}
             {contoh.homestay > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.homestay} homestay contoh masih tampil. Ganti dengan homestay mitra asli beserta foto dan harganya, atau sembunyikan.</span><button type="button" onClick={() => pindah("homestay")} className="font-bold text-tanda">Ubah homestay</button></li>}
+            {contoh.edukasi > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.edukasi} kartu edukasi selam di halaman Trip masih contoh. Minta pemandu memeriksa isinya.</span><button type="button" onClick={() => pindah("trip")} className="font-bold text-tanda">Periksa edukasi</button></li>}
             {contoh.titik > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.titik} titik selam contoh. Minta pemandu memeriksa kedalaman, arus, dan level.</span><button type="button" onClick={() => pindah("titik")} className="font-bold text-tanda">Periksa titik</button></li>}
             {fotoBawaan > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-buih px-4 py-3"><span>{fotoBawaan} foto beranda masih ilustrasi bawaan. Ganti dengan foto trip Fantasea.</span><button type="button" onClick={() => pindah("beranda")} className="font-bold text-tanda">Ganti foto</button></li>}
           </ul>
