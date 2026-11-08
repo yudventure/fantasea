@@ -3,6 +3,7 @@ import { useState } from "react";
 import { hariIniWit, jadwalMendatang, sisaKursi, tx, type Konten } from "@/lib/konten";
 import { rentangTanggal, tanggalPanjang } from "@/lib/format";
 import { tautanWa } from "@/lib/whatsapp";
+import { kontakMasihContoh } from "@/data/bawaan";
 import type { Permintaan, StatusPermintaan } from "@/lib/server/permintaan";
 import { IkonSampah, IkonWhatsapp } from "@/components/Ikon";
 import { KartuPanel } from "./Kolom";
@@ -28,6 +29,7 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
     { label: "Open trip mendatang", nilai: mendatang.length, ke: "jadwal" as const },
     { label: "Kursi masih kosong", nilai: kursi, ke: "jadwal" as const },
   ];
+  const kontakContoh = kontakMasihContoh(k);
   const fotoBawaan = [k.hero.kartu, k.jelajah.kartu].flat().filter((c) => c.foto.startsWith("/brand/")).length + k.gerbang.foto.filter((f) => f.foto.startsWith("/brand/")).length;
 
   return (
@@ -41,10 +43,11 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
         ))}
       </div>
 
-      {(contoh.trip + contoh.jadwal + contoh.titik > 0 || !k.situs.kontak.whatsapp || fotoBawaan > 0) && (
+      {(contoh.trip + contoh.jadwal + contoh.titik > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
         <KartuPanel judul="Yang perlu dilengkapi sebelum promosi" keterangan="Isi berikut masih contoh bawaan, bukan data Fantasea. Ganti atau sembunyikan supaya tamu tidak salah paham.">
           <ul className="grid gap-2.5 text-[14.5px] text-navy">
-            {!k.situs.kontak.whatsapp && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi.</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
+            {kontakContoh.wa && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{k.situs.kontak.whatsapp ? "Nomor WhatsApp masih contoh. Footer menampilkan nomor contoh, dan permintaan tamu belum diteruskan ke WhatsApp." : "Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi."}</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
+            {kontakContoh.lain.length > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{kontakContoh.lain.join(", ")} di footer masih alamat contoh fantaseadivetravel. Ganti dengan akun asli atau kosongkan.</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
             {contoh.trip > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.trip} trip contoh masih tampil dengan harga contoh.</span><button type="button" onClick={() => pindah("trip")} className="font-bold text-tanda">Ubah trip</button></li>}
             {contoh.jadwal > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.jadwal} jadwal open trip contoh masih tampil.</span><button type="button" onClick={() => pindah("jadwal")} className="font-bold text-tanda">Ubah jadwal</button></li>}
             {contoh.titik > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.titik} titik selam contoh. Minta pemandu memeriksa kedalaman, arus, dan level.</span><button type="button" onClick={() => pindah("titik")} className="font-bold text-tanda">Periksa titik</button></li>}

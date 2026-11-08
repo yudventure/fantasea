@@ -6,6 +6,7 @@ import { hariIniWit, sisaKursi, tx, txDaftar } from "@/lib/konten";
 import { bacaKonten } from "@/lib/server/konten";
 import { muatSitus } from "@/lib/server/situs";
 import { rentangTanggal } from "@/lib/format";
+import { nomorWaAsli } from "@/lib/whatsapp";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GaleriTrip from "@/components/GaleriTrip";
@@ -130,7 +131,7 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
               jadwal={jadwalTrip.map((j) => ({ id: j.id, mulai: j.mulai, selesai: j.selesai, sisa: sisaKursi(j) }))}
               jadwalAwal={jadwalAwal}
               hariIni={hariIniWit()}
-              wa={k.situs.kontak.whatsapp}
+              wa={nomorWaAsli(k.situs.kontak.whatsapp)}
             />
           </aside>
         </div>

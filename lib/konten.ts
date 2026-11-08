@@ -74,6 +74,8 @@ export interface Faq { id: string; tanya: Teks; jawab: Teks }
 
 export interface Konten {
   situs: {
+    /** Penanda simpanan. Di bawah VERSI_KONTAK berarti disimpan sebelum kontak contoh ada. */
+    versiKontak: number;
     kontak: { whatsapp: string; email: string; alamat: Teks; peta: string };
     sosial: { instagram: string; facebook: string; tiktok: string; youtube: string };
     seo: { judul: Teks; deskripsi: Teks };
@@ -91,6 +93,14 @@ export interface Konten {
   ulasan: Ulasan[];
   faq: Faq[];
 }
+
+/**
+ * Sejak versi 2 isi bawaan memuat kontak dan media sosial contoh. Simpanan
+ * yang lebih lama menyimpan kolom itu kosong karena dulu bawaannya kosong,
+ * jadi kolom kosongnya diisi contoh sekali. Sesudah disimpan dari panel,
+ * kolom kosong berarti sengaja disembunyikan.
+ */
+export const VERSI_KONTAK = 2;
 
 export const JUMLAH_KARTU_HERO = 5;
 export const JUMLAH_KARTU_JELAJAH = 4;
@@ -229,21 +239,22 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     dipakai.add(s);
   }
   const idTrip = new Set(trip.map((t) => t.id));
+  const kontakLama = num(situs.versiKontak, 0, 99) < VERSI_KONTAK;
+  const isiAtauBawaan = (asal: Record<string, unknown>, kunci: string, nilai: string, bawaan: string) =>
+    nilai || (kunci in asal && !kontakLama ? "" : bawaan);
+  const sosialSah = (kunci: keyof Konten["situs"]["sosial"]) => isiAtauBawaan(sosial, kunci, tautan(sosial[kunci]), b.situs.sosial[kunci]);
+  const emailMentah = str(kontak.email, 120).trim();
 
   return {
     situs: {
+      versiKontak: VERSI_KONTAK,
       kontak: {
-        whatsapp: str(kontak.whatsapp, 30).replace(/[^\d]/g, "") || ("whatsapp" in kontak ? "" : b.situs.kontak.whatsapp),
-        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str(kontak.email, 120).trim()) ? str(kontak.email, 120).trim() : "email" in kontak ? "" : b.situs.kontak.email,
+        whatsapp: isiAtauBawaan(kontak, "whatsapp", str(kontak.whatsapp, 30).replace(/[^\d]/g, ""), b.situs.kontak.whatsapp),
+        email: isiAtauBawaan(kontak, "email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailMentah) ? emailMentah : "", b.situs.kontak.email),
         alamat: teks(kontak.alamat, b.situs.kontak.alamat, 300),
         peta: "peta" in kontak ? tautan(kontak.peta) : b.situs.kontak.peta,
       },
-      sosial: {
-        instagram: "instagram" in sosial ? tautan(sosial.instagram) : b.situs.sosial.instagram,
-        facebook: "facebook" in sosial ? tautan(sosial.facebook) : b.situs.sosial.facebook,
-        tiktok: "tiktok" in sosial ? tautan(sosial.tiktok) : b.situs.sosial.tiktok,
-        youtube: "youtube" in sosial ? tautan(sosial.youtube) : b.situs.sosial.youtube,
-      },
+      sosial: { instagram: sosialSah("instagram"), facebook: sosialSah("facebook"), tiktok: sosialSah("tiktok"), youtube: sosialSah("youtube") },
       seo: { judul: teks(seo.judul, b.situs.seo.judul, 90), deskripsi: teks(seo.deskripsi, b.situs.seo.deskripsi, 300) },
     },
     menu: {

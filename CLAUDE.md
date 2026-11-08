@@ -26,6 +26,7 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - Teks dua bahasa `{ en, id }`. Yang kosong jatuh ke bahasa Inggris lalu Indonesia (`tx`).
 - Judul bagian memakai `*kata berwarna*` dan baris baru (`components/Judul.tsx`).
 - Trip, jadwal, dan titik selam bawaan bertanda `contoh: true`. Tanda itu hilang saat item diubah di panel, dan Ringkasan panel mengingatkan isi contoh yang masih tampil. Jangan menulis harga, jadwal, atau klaim bisnis baru di kode. Ulasan tidak boleh dikarang, bawaannya kosong.
+- Kontak dan media sosial bawaan adalah contoh (permintaan pemilik, November 2026), supaya footer sudah lengkap sebelum diisi di panel Kontak. Email dan akun memakai handle usulan `fantaseadivetravel`. Nomor WhatsApp contoh `NOMOR_WA_CONTOH` (+62 800 0000 0000) sengaja tidak mungkin ada, dan `nomorWaAsli` mengosongkannya untuk formulir permintaan dan tombol ajakan, jadi data tamu tidak terkirim ke nomor itu. Ringkasan dan editor Kontak mengingatkan selama masih contoh (`kontakMasihContoh`). Simpanan panel sebelum `VERSI_KONTAK` 2 mendapat contoh untuk kolom yang kosong, sesudahnya kolom kosong berarti disembunyikan.
 - Foto bawaan `public/brand/foto` adalah ilustrasi AI dari proyek lain milik pemilik (Zanclus, Dragonet), bukan dokumentasi Fantasea.
 
 ## Gaya (wajib, juga di panel)

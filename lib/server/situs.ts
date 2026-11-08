@@ -3,7 +3,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { buatT } from "@/lib/i18n/t";
 import { getMessages } from "@/lib/i18n/messages";
 import { hariIniWit, jadwalMendatang, tx, type Konten } from "@/lib/konten";
-import { tautanWa } from "@/lib/whatsapp";
+import { nomorWaAsli, tautanWa } from "@/lib/whatsapp";
 import { envText } from "@/lib/env";
 import { bacaKonten } from "./konten";
 import type { TautanMenu } from "@/components/Header";
@@ -22,7 +22,8 @@ export async function muatSitus(l: Locale) {
     { href: `${awal}#faq`, label: tx(k.menu.faq, l) },
   ].filter((m) => m.label);
   const pesan: TautanMenu = { href: `${awal}#trip`, label: tx(k.menu.pesan, l) };
-  const waUmum = tautanWa(k.situs.kontak.whatsapp, t("pesanWa.umum"));
+  // Nomor contoh tidak dipakai tombol ajakan, supaya tamu tidak diarahkan ke nomor yang tidak ada.
+  const waUmum = tautanWa(nomorWaAsli(k.situs.kontak.whatsapp), t("pesanWa.umum"));
   const jadwal = jadwalMendatang(k.jadwal, hariIniWit());
   return { k, t, menu, pesan, waUmum, jadwal };
 }
