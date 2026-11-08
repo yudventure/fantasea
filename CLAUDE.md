@@ -40,8 +40,8 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 
 - Warna hanya dari `tailwind.config.ts` (sama dengan `brand/token/tokens.json`). Koral Senja hanya untuk ajakan pesan dan harga, teks di atasnya navy.
 - Judul `font-display` (Londrina Solid), label `.aksen` (Gochi Hand kapital berjarak), isi `font-body` (Nunito).
-- Header memakai logo utama lengkap, tidak dipisah (permintaan pemilik, November 2026). Di puncak halaman header tanpa latar, begitu digulir latarnya putih tembus pandang dan logonya mengecil (`components/Header.tsx`). Latar dan blurnya di lapisan anak `absolute inset-0`, bukan di `<header>`. Logo latar gelap di footer.
-- Hero beranda selalu tepat satu layar di semua ukuran, bagian berikutnya tidak mengintip (`min-h` 100svh, judul dan kartu ikut tinggi layar). Kartu foto yang disorot pointer membesar jelas (`components/Hero.tsx`). Setelah mengubah hero, periksa di beberapa ukuran layar dari 375x667 sampai 2560x1440.
+- Header memakai logo utama lengkap, tidak dipisah (permintaan pemilik, November 2026). Di puncak halaman header tanpa latar dan logonya sedang (sekitar 105 px lebar, bukan lebih besar), begitu digulir latarnya putih tembus pandang dan logonya mengecil (`components/Header.tsx`). Tanpa tombol Pesan trip di pojok kanan atas, tombol pesan ada di menu ponsel, hero, dan halaman trip. Latar dan blurnya di lapisan anak `absolute inset-0`, bukan di `<header>`. Logo latar gelap di footer.
+- Hero beranda selalu tepat satu layar di semua ukuran, bagian berikutnya tidak mengintip (`min-h` 100svh, judul dan kartu ikut tinggi layar). Judul hero dua baris, baris baru dari panel tetap baris baru dan tiap baris tidak patah (lebar 26ch, ukuran huruf ikut lebar dan tinggi layar). Kartu foto yang disorot pointer membesar jelas (`components/Hero.tsx`). Setelah mengubah hero, periksa di beberapa ukuran layar dari 375x667 sampai 2560x1440.
 
 ## Deploy dan environment
 

@@ -10,11 +10,13 @@ import { IkonMenu, IkonTutup } from "./Ikon";
 export interface TautanMenu { href: string; label: string }
 
 /**
- * Header ala referensi: logo utama di kiri, menu di kanan, tombol bahasa dan
- * tombol pesan. Permintaan pemilik, November 2026: logo utama utuh (bukan
- * tanda manta dengan nama terpisah), dan di puncak halaman header tanpa
- * latar. Latar putih tembus pandang baru muncul saat halaman digulir, dan
- * logonya mengecil. Header melayang (fixed) di atas hero, jadi bagian pertama
+ * Header ala referensi: logo utama di kiri, menu dan tombol bahasa di kanan.
+ * Permintaan pemilik, November 2026: logo utama utuh (bukan tanda manta
+ * dengan nama terpisah), di puncak halaman header tanpa latar, latar putih
+ * tembus pandang baru muncul saat halaman digulir dan logonya mengecil.
+ * Permintaan berikutnya: logo di puncak tidak terlalu besar, dan tanpa tombol
+ * Pesan trip di pojok kanan atas (tombol pesan tetap ada di menu ponsel, hero,
+ * dan halaman trip). Header melayang (fixed) di atas hero, jadi bagian pertama
  * tiap halaman memberi ruang di atasnya.
  * `jalur` adalah alamat halaman tanpa kode bahasa, untuk tombol EN / ID.
  */
@@ -47,7 +49,7 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
       <div className={`wrap relative flex items-center gap-4 transition-[padding] duration-300 ${gulir ? "py-1.5" : "py-3"}`}>
         <Link href={`/${locale}`} className="flex flex-none items-center" aria-label="Fantasea Dive Travel">
           <Image src="/brand/logo/fantasea-logo-utama.png" alt="Fantasea Dive Travel" width={1617} height={1004} priority unoptimized
-            className={`w-auto transition-[height] duration-300 ${gulir ? "h-[52px] sm:h-[60px]" : "h-[64px] sm:h-[88px]"}`} />
+            className={`w-auto transition-[height] duration-300 ${gulir ? "h-[46px] sm:h-[52px]" : "h-[54px] sm:h-[64px]"}`} />
         </Link>
 
         <nav className="ml-auto hidden items-center gap-1 lg:flex" aria-label="Menu">
@@ -65,7 +67,6 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
               </Link>
             ))}
           </div>
-          <Link href={pesan.href} className="btn btn-navy hidden min-h-[42px] px-5 text-[14px] sm:inline-flex">{pesan.label}</Link>
           <button type="button" onClick={() => setBuka(true)} className="btn-bulat lg:hidden" aria-label={t("nav.bukaMenu")} aria-expanded={buka}>
             <IkonMenu size={22} />
           </button>
@@ -77,7 +78,7 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
           <button type="button" aria-label={t("nav.tutup")} className="absolute inset-0 bg-malam/40" onClick={() => setBuka(false)} />
           <div className="absolute inset-x-3 top-3 rounded-[26px] bg-white p-5 shadow-lift">
             <div className="flex items-center justify-between">
-              <Image src="/brand/logo/fantasea-logo-utama.png" alt="Fantasea Dive Travel" width={1617} height={1004} unoptimized className="h-[56px] w-auto" />
+              <Image src="/brand/logo/fantasea-logo-utama.png" alt="Fantasea Dive Travel" width={1617} height={1004} unoptimized className="h-[50px] w-auto" />
               <button type="button" onClick={() => setBuka(false)} className="btn-bulat" aria-label={t("nav.tutup")}><IkonTutup size={22} /></button>
             </div>
             <nav className="mt-4 grid gap-1" aria-label="Menu">
