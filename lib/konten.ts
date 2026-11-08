@@ -115,6 +115,12 @@ export interface Konten {
   bagian: { trip: KepalaBagian; jadwal: KepalaBagian; titik: KepalaBagian; ulasan: KepalaBagian; faq: KepalaBagian };
   ajakan: { judul: Teks; lead: Teks; tombol: Teks };
   /**
+   * Bagian Liveaboard di beranda, di antara open trip dan FAQ (permintaan
+   * pemilik, November 2026). Trip berkategori liveaboard tampil di sini
+   * sebagai kartu, dan tidak diulang di daftar trip beranda.
+   */
+  liveaboard: KepalaBagian & { tampil: boolean; foto: string; tag: string; warna: WarnaTag; butir: DaftarTeks; tombol: Teks };
+  /**
    * Halaman sendiri untuk trip dan homestay (permintaan pemilik, November
    * 2026). Halaman Trip berisi katalog trip, edukasi selam, dan titik selam.
    * Halaman Homestay berisi semua homestay.
@@ -256,6 +262,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const o = obj(v);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
+  const liveaboard = obj(o.liveaboard);
   const halamanTrip = obj(o.halamanTrip), edukasi = obj(halamanTrip.edukasi), halamanHomestay = obj(o.halamanHomestay);
 
   const kartuList = (x: unknown, jumlah: number, bawaan: Kartu[]) =>
@@ -367,6 +374,15 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ulasan: kepala(obj(bagian.ulasan), b.bagian.ulasan), faq: kepala(obj(bagian.faq), b.bagian.faq),
     },
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
+    liveaboard: {
+      ...kepala(liveaboard, b.liveaboard),
+      tampil: bool(liveaboard.tampil, b.liveaboard.tampil),
+      foto: "foto" in liveaboard ? fotoSah(liveaboard.foto) : b.liveaboard.foto,
+      tag: "tag" in liveaboard ? str(liveaboard.tag, 40).trim() : b.liveaboard.tag,
+      warna: warna(liveaboard.warna, b.liveaboard.warna),
+      butir: "butir" in liveaboard ? daftarTeks(liveaboard.butir) : b.liveaboard.butir,
+      tombol: teks(liveaboard.tombol, b.liveaboard.tombol, 40),
+    },
     halamanTrip: {
       kepala: kepala(obj(halamanTrip.kepala), b.halamanTrip.kepala),
       edukasi: {

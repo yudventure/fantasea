@@ -71,6 +71,8 @@ function periksaKode(berkas) {
       if (ts.isJsxAttribute(p) && ATRIBUT_BUKAN_TEKS.has(p.name.getText(sumber))) return true;
       if (ts.isCallExpression(p) && /^(console\.|fetch$|new URL|require$)/.test(p.expression.getText(sumber))) return true;
       if (ts.isPropertyAssignment(p) && p.name === node) return true;
+      // Variabel SKRIP_* berisi kode JavaScript untuk peramban (mis. SKRIP_AWAL di lib/gulir-awal.ts), bukan teks yang tampil.
+      if (ts.isVariableDeclaration(p) && /^SKRIP_/.test(p.name.getText(sumber))) return true;
       if (ts.isJsxAttribute(p) || ts.isJsxElement(p) || ts.isJsxSelfClosingElement(p)) break;
     }
     return false;

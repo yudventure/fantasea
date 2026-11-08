@@ -53,8 +53,8 @@ const ARAH = [
 
 function HiasanHero() {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <Image src="/brand/grafis/ukir-sayap.svg" alt="" width={993} height={835} unoptimized
+    <div aria-hidden data-paralaks="0.3" className="pointer-events-none absolute inset-0 overflow-hidden will-change-transform">
+      <Image src="/brand/grafis/ukir-sayap.svg" alt="" width={993} height={835} unoptimized priority
         className="absolute left-1/2 top-[17%] w-[170vw] max-w-none -translate-x-1/2 opacity-[0.07] sm:top-[4%] sm:w-[min(1180px,150vw)]" />
       {PULAU.map((k, i) => <Image key={i} src="/brand/grafis/pulau-segi.svg" alt="" width={300} height={300} unoptimized className={`absolute ${k}`} />)}
       {ARAH.map((a, i) => <Image key={i} src={`/brand/grafis/${a.src}.svg`} alt="" width={100} height={100} unoptimized className={`absolute opacity-[0.16] ${a.kelas}`} />)}
@@ -68,13 +68,14 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
     <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[84px] supports-[height:100svh]:min-h-[100svh] sm:pt-[100px]">
       <HiasanHero />
       <div className="relative flex flex-1 flex-col justify-center">
-        <div className="wrap text-center">
+        <div className="wrap hero-masuk text-center">
           <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[26ch] text-balance text-[clamp(28px,min(9.6vw,9vh),96px)] leading-[0.95]" />
         </div>
 
         <div className="relative mx-auto mt-[3.5vh] flex w-full max-w-[1500px] items-end justify-center px-2 [perspective:1400px]" aria-hidden>
           {h.kartu.map((c, i) => (
             <figure key={i} className={`group relative -mx-3 m-0 w-[min(38vw,26vh)] max-w-[330px] flex-none sm:-mx-5 sm:w-[min(21vw,31vh)] ${URUTAN_Z[i]} ${GAYA[i]} hover:z-20`}>
+              <div className="hero-kartu" style={{ "--tunda": `${180 + i * 90}ms` } as React.CSSProperties}>
               <div className="relative transition-transform duration-500 ease-out group-hover:-translate-y-3 group-hover:scale-[1.15] motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 motion-reduce:group-hover:scale-100">
                 {c.foto && (
                   <div className="foto-kartu aspect-[4/5] transition-shadow duration-500 group-hover:shadow-[0_36px_64px_-18px_rgba(19,31,51,.6)]">
@@ -86,11 +87,12 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
                 )}
                 {c.tag && <Gelembung teks={c.tag} warna={c.warna} className={`absolute -top-4 ${i < 2 ? "left-2" : "right-2"} z-[4] -rotate-3`} />}
               </div>
+              </div>
             </figure>
           ))}
         </div>
 
-        <div className="wrap mt-[4.5vh] text-center">
+        <div className="wrap hero-masuk mt-[4.5vh] text-center" style={{ "--tunda": "620ms" } as React.CSSProperties}>
           {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
           <div className="mt-[2.6vh] flex flex-wrap items-center justify-center gap-3">
             {tx(h.tombol1, l) && <Link href="#jadwal" className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
