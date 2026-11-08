@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n/context";
 export default function TidakAda() {
   const { t, locale } = useI18n();
   return (
-    <main className="grid min-h-[80vh] place-items-center px-4 py-16">
+    <main className="grid min-h-[80vh] place-items-center px-4 pb-16 pt-28">
       <div className="grid max-w-[920px] items-center gap-10 md:grid-cols-2">
         <Image src="/brand/logo/fantasea-manta.png" alt="" width={993} height={835} unoptimized className="mx-auto w-[260px] -rotate-6 md:w-[340px]" />
         <div>

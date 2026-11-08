@@ -7,7 +7,7 @@ Ada dua cara memasangnya. Keduanya memakai menu **Deployment** di hPanel dengan 
 | | A. Unggah ZIP | B. Sambungkan GitHub |
 | --- | --- | --- |
 | Berkas | `hostinger/Fantasea-Website-Hostinger.zip` | repo `yudventure/fantasea`, branch `main` |
-| Memperbarui situs | unggah ZIP baru | otomatis setiap push ke `main` |
+| Memperbarui situs | unggah ZIP baru | otomatis setiap push, lihat Deploy otomatis dari GitHub |
 | Cocok untuk | percobaan pertama | pemakaian sehari-hari |
 
 ## 1. Buat aplikasi Node.js
@@ -57,6 +57,31 @@ Kunci penyiapan bukan kata sandi masuk dan jangan dikirim lewat chat. Setelah me
 2. Karena belum ada akun, tampil **Siapkan akun pemilik**. Isi kunci penyiapan (nilai `FANTASEA_KUNCI`), nama, email, dan kata sandi paling sedikit 10 huruf.
 3. Setelah masuk, buka **Ringkasan**. Daftar **Yang perlu dilengkapi sebelum promosi** menunjukkan isi contoh yang masih tampil, misalnya nomor WhatsApp, trip, harga, jadwal, titik selam, dan foto ilustrasi.
 4. Anggota tim ditambahkan dari menu **Akun**.
+
+## Deploy otomatis dari GitHub
+
+Setiap push ke branch selain `main` di GitHub dicek dulu (tipe, tanda baca, build). Yang lulus langsung digabung ke `main`, lalu Hostinger membangun ulang situsnya dan GitHub memeriksa `/api/health`. Hasilnya tampil di tab **Actions** repo dengan tiga cek berurutan, **build**, **merge**, dan **deploy**.
+
+Langkah sekali pasang.
+
+1. Hubungkan GitHub di Hostinger sekali (Websites, Node.js Apps, **Import Git repository**), supaya Hostinger bisa membaca repo `yudventure/fantasea`. Situs yang sekarang dari ZIP tidak perlu dihapus, deploy otomatis memindahkannya ke repo branch `main`.
+2. Buat token API di hPanel, menu profil, **API**, **Generate token**. Simpan token itu langsung di GitHub, jangan di chat atau di berkas repo.
+3. Di GitHub, repo `yudventure/fantasea`, **Settings**, **Secrets and variables**, **Actions**.
+   - Tab **Secrets**, **New repository secret**, nama `HOSTINGER_API_TOKEN`, isi token dari langkah 2.
+   - Tab **Variables**, **New repository variable**, nama `HOSTINGER_DOMAIN`, isi domain situs. Kalau kosong, dipakai `testingwebsite.click`. Ganti begitu domain utama dipasang.
+4. Masih di **Settings**, **Actions**, **General**, centang **Allow GitHub Actions to create and approve pull requests**, supaya setiap merge tercatat sebagai PR. Tanpa centang ini merge tetap jalan, langsung ke `main`.
+5. **Settings**, **General**, **Default branch**, pilih `main`.
+
+Yang perlu diketahui.
+
+| Hal | Keterangan |
+| --- | --- |
+| Belum ada `HOSTINGER_API_TOKEN` | merge tetap jalan, cek **deploy** hanya memberi peringatan dan situs tidak dibangun ulang |
+| Branch berawalan `wip/` | tidak digabung otomatis, untuk pekerjaan yang belum siap tayang |
+| Variabel repo `AUTO_MERGE` berisi `false` | mematikan merge otomatis untuk semua branch |
+| Deploy manual | Actions, **Deploy**, **Run workflow** |
+| Build Hostinger gagal | 80 baris terakhir log build tampil di ringkasan cek **deploy** |
+| Data situs | tetap aman, folder data di luar folder aplikasi |
 
 ## Data di server
 
