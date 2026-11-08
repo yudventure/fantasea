@@ -35,13 +35,14 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - Tanpa titik dua, titik koma, dan tanda pisah panjang di teks yang tampil. Boleh jam (07:00), rasio (4:5), alamat (https://), dan rentang rapat (12–15 Dec). Pesan WhatsApp juga. `npm run cek:tanda` memeriksanya, dan kolom panel memperingatkan pemilik.
 - Tanpa garis datar pemisah (`<hr>`, `border-t`/`border-b` sebagai pemisah, `divide-y`). Bingkai kartu dan kolom isian boleh.
 - Kartu yang sendirian di barisnya melebar penuh, dua kartu di baris terakhir kisi tiga kolom dibagi rata (`lib/kisi.ts`).
+- Kartu trip, homestay, dan titik selam di ponsel dua lajur (permintaan pemilik, November 2026). Kartu yang berbagi baris di ponsel `sempit` (tulisan kecil, ringkasan tiga baris, pil disembunyikan), dan yang sendirian di baris terakhir melebar dua lajur. Di bawah md paling banyak 6 kartu dulu (`MAKS_KARTU_PONSEL`), sisanya lewat tombol tulisan tanpa latar dengan panah kecil di bawahnya, Load more lalu Show less (`components/KisiKartu.tsx`). Daftar kartu baru memakai `KisiKartu` juga. Ulasan tetap satu lajur (`KISI_TIGA_TEKS`).
 - Satu butir memakai nomor atau ikon, tidak keduanya. Tanpa hiasan garis putus-putus berpanah. Tanpa warna krem keabuan.
 - Pilihan memakai `components/Dropdown.tsx` dan tanggal memakai `components/DatePicker.tsx`, bukan `<select>` atau `<input type="date">` bawaan.
 
 ## Merek
 
 - Warna hanya dari `tailwind.config.ts` (sama dengan `brand/token/tokens.json`). Koral Senja hanya untuk ajakan pesan dan harga, teks di atasnya navy.
-- Judul `font-display` (Londrina Solid), label `.aksen` (Gochi Hand kapital berjarak), isi `font-body` (Nunito).
+- Judul `font-display` (Londrina Solid), label `.aksen` (Gochi Hand kapital berjarak, 22 px di layar lebar dan 18 px di ponsel, karena Gochi Hand terbaca kecil), isi `font-body` (Nunito).
 - Header memakai logo utama lengkap, tidak dipisah (permintaan pemilik, November 2026). Di puncak halaman header tanpa latar dan logonya sedang (sekitar 105 px lebar, bukan lebih besar), begitu digulir latarnya putih tembus pandang dan logonya mengecil (`components/Header.tsx`). Tanpa tombol Pesan trip di pojok kanan atas, tombol pesan ada di menu ponsel, hero, dan halaman trip. Latar dan blurnya di lapisan anak `absolute inset-0`, bukan di `<header>`. Logo latar gelap di footer.
 - Hero beranda selalu tepat satu layar di semua ukuran, bagian berikutnya tidak mengintip (`min-h` 100svh, judul dan kartu ikut tinggi layar). Judul hero dua baris, baris baru dari panel tetap baris baru dan tiap baris tidak patah (lebar 26ch, ukuran huruf ikut lebar dan tinggi layar). Kartu foto yang disorot pointer membesar jelas (`components/Hero.tsx`). Setelah mengubah hero, periksa di beberapa ukuran layar dari 375x667 sampai 2560x1440.
 

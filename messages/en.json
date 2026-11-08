@@ -132,5 +132,9 @@
     "judul": "Lost at sea",
     "lead": "This page drifted away. Head back to the home page and pick a trip from there.",
     "tombol": "Back to home"
+  },
+  "kartu": {
+    "lagi": "Load more",
+    "sedikit": "Show less"
   }
 }

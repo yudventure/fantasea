@@ -132,5 +132,9 @@
     "judul": "Tersesat di laut",
     "lead": "Halaman ini hanyut entah ke mana. Kembali ke beranda lalu pilih trip dari sana.",
     "tombol": "Kembali ke beranda"
+  },
+  "kartu": {
+    "lagi": "Lihat lebih banyak",
+    "sedikit": "Lihat lebih sedikit"
   }
 }
