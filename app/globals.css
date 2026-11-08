@@ -61,3 +61,32 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/*
+ * Efek gulir (permintaan pemilik, November 2026). Bagian dan kartu bertanda
+ * data-muncul naik pelan saat masuk layar (components/EfekGulir.tsx), kartu
+ * bertahap lewat --tunda, dan hero masuk saat halaman dimuat. Kelas
+ * gulir-siap dipasang skrip kecil di head sebelum halaman tampil, jadi isi
+ * yang belum digulir tersembunyi tanpa berkedip. Skrip itu mencabutnya lagi
+ * bila EfekGulir tidak berjalan dalam 4 detik, supaya isi tidak hilang.
+ * Semua mati untuk pengunjung yang mematikan animasi di perangkatnya.
+ */
+@keyframes masuk-naik { from { opacity: 0; transform: translate3d(0, 28px, 0); } to { opacity: 1; transform: none; } }
+@keyframes masuk-kartu { from { opacity: 0; transform: translate3d(0, 56px, 0) scale(0.94); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .gulir-siap [data-muncul] {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+    transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--tunda, 0ms);
+  }
+  .gulir-siap [data-muncul="kiri"] { transform: translate3d(-48px, 0, 0); }
+  .gulir-siap [data-muncul="kanan"] { transform: translate3d(48px, 0, 0); }
+  .gulir-siap [data-muncul="zoom"] { transform: scale(0.95); }
+  .gulir-siap [data-muncul].muncul { opacity: 1; transform: none; }
+
+  /* Animasi masuk memakai fill backwards, jadi sesudah selesai efek sorot kartu hero tetap jalan. */
+  .hero-masuk { animation: masuk-naik 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; animation-delay: var(--tunda, 0ms); }
+  .hero-kartu { animation: masuk-kartu 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; animation-delay: var(--tunda, 0ms); }
+}

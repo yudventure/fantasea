@@ -35,14 +35,14 @@ export default function Jelajah({ id, label, judul, lead, kartu, children }: {
   return (
     <section id={id} className="overflow-hidden py-16 sm:py-24">
       <div className="wrap grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-        <div>
+        <div data-muncul="">
           {label && <p className="aksen">{label}</p>}
           <h2 className="mt-3 text-[clamp(40px,5.6vw,68px)]">{isiJudul(judul)}</h2>
           {lead && <p className="mt-6 max-w-[46ch] text-[16px] text-ink2">{lead}</p>}
         </div>
 
         {n > 0 && (
-          <div className="relative">
+          <div className="relative" data-muncul="kanan">
             <div className="relative aspect-[1.25/1] w-full">
               {ada.map((c, i) => {
                 const tempat = (i - geser + n) % n;

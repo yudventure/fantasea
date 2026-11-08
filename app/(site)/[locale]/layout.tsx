@@ -8,6 +8,8 @@ import { getMessages } from "@/lib/i18n/messages";
 import { tx } from "@/lib/konten";
 import { bacaKonten } from "@/lib/server/konten";
 import { asalSitus } from "@/lib/server/situs";
+import EfekGulir from "@/components/EfekGulir";
+import { SKRIP_AWAL } from "@/lib/gulir-awal";
 
 // Isi situs dibaca dari folder data tiap permintaan, jadi simpanan dari panel langsung tayang.
 export const dynamic = "force-dynamic";
@@ -32,9 +34,14 @@ export default async function SiteLayout({ children, params }: { children: React
   if (!isLocale(locale)) notFound();
   const l: Locale = locale;
   return (
-    <html lang={BCP47[l]} className={kelasFont}>
+    // suppressHydrationWarning karena SKRIP_AWAL menambah kelas gulir-siap sebelum React mengambil alih.
+    <html lang={BCP47[l]} className={kelasFont} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: SKRIP_AWAL }} />
+      </head>
       <body>
         <I18nProvider locale={l} messages={getMessages(l)}>{children}</I18nProvider>
+        <EfekGulir />
       </body>
     </html>
   );

@@ -7,7 +7,8 @@ import { getMessages } from "@/lib/i18n/messages";
 import { rupiah, potonganTanggal } from "@/lib/format";
 import { KISI_TIGA, KISI_TIGA_TEKS, tempatTiga } from "@/lib/kisi";
 import KisiKartu from "./KisiKartu";
-import { sisaKursi, tx, txDaftar, type Edukasi, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
+import Gelembung from "./Gelembung";
+import { sisaKursi, tx, txDaftar, type Edukasi, type Konten, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
 import { IkonBintang, IkonJam, IkonMasker, IkonPanahKanan, IkonPin } from "./Ikon";
 import { isiJudul } from "./Judul";
 
@@ -16,7 +17,7 @@ const unopt = (src: string) => src.startsWith("/unggahan/");
 /** Label aksen, judul berwarna, dan kalimat pembuka bagian. */
 export function KepalaBagianSitus({ b, l, tengah = false }: { b: KepalaBagian; l: Locale; tengah?: boolean }) {
   return (
-    <div className={tengah ? "mx-auto max-w-[760px] text-center" : "max-w-[760px]"}>
+    <div data-muncul="" className={tengah ? "mx-auto max-w-[760px] text-center" : "max-w-[760px]"}>
       {tx(b.label, l) && <p className="aksen">{tx(b.label, l)}</p>}
       <h2 className="mt-3 text-[clamp(38px,5.6vw,64px)]">{isiJudul(tx(b.judul, l))}</h2>
       {tx(b.lead, l) && <p className={`mt-5 text-[16px] text-ink2 ${tengah ? "mx-auto" : ""} max-w-[56ch]`}>{tx(b.lead, l)}</p>}
@@ -40,7 +41,7 @@ function HargaMulai({ harga, l, label, besar = false, sempit = false }: { harga:
 export function KepalaHalaman({ b, l }: { b: KepalaBagian; l: Locale }) {
   return (
     <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-8 pt-[100px] sm:pb-12 sm:pt-[128px]">
-      <div className="wrap">
+      <div className="wrap hero-masuk">
         {tx(b.label, l) && <p className="aksen">{tx(b.label, l)}</p>}
         <h1 className="mt-3 max-w-[16ch] text-[clamp(44px,7.4vw,88px)] leading-[0.95]">{isiJudul(tx(b.judul, l))}</h1>
         {tx(b.lead, l) && <p className="mt-5 max-w-[58ch] text-[17px] text-ink2">{tx(b.lead, l)}</p>}
@@ -52,7 +53,7 @@ export function KepalaHalaman({ b, l }: { b: KepalaBagian; l: Locale }) {
 /** Tombol menuju halaman sendiri, di atas kisi kartu beranda (permintaan pemilik, November 2026). */
 export function TombolSemua({ href, label }: { href: string; label: string }) {
   return (
-    <Link href={href} className="btn btn-garis min-h-[44px] flex-none px-5 text-[14px]">
+    <Link href={href} data-muncul="" className="btn btn-garis min-h-[44px] flex-none px-5 text-[14px]">
       {label}<IkonPanahKanan size={16} />
     </Link>
   );
@@ -154,7 +155,7 @@ export function DaftarEdukasi({ b, butir, l }: { b: KepalaBagian; butir: Edukasi
         <KepalaBagianSitus b={b} l={l} />
         <div className={`mt-10 ${KISI_TIGA_TEKS}`}>
           {butir.map((e, i) => (
-            <article key={e.id} className={`${tempatTiga(i, butir.length, false).kelas} rounded-card bg-white p-6 shadow-card sm:p-7`}>
+            <article key={e.id} data-muncul="" style={{ "--tunda": `${(i % 3) * 90}ms` } as React.CSSProperties} className={`${tempatTiga(i, butir.length, false).kelas} rounded-card bg-white p-6 shadow-card sm:p-7`}>
               <Image src="/brand/grafis/tanda-arah.svg" alt="" width={100} height={100} unoptimized aria-hidden className="h-8 w-8 -rotate-12" />
               <h3 className="mt-4 text-[26px] leading-tight">{tx(e.judul, l)}</h3>
               {tx(e.isi, l) && <p className="mt-2 text-[15.5px] text-ink2">{tx(e.isi, l)}</p>}
@@ -201,6 +202,52 @@ export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Home
   );
 }
 
+/**
+ * Bagian Liveaboard di beranda (permintaan pemilik, November 2026). Latar
+ * navy dengan Ukir Sayap samar, foto besar, daftar keunggulan, dan tombol
+ * tanya jadwal. Trip berkategori liveaboard tampil sebagai kartu di bawahnya.
+ */
+export function Liveaboard({ b, trip, l, href }: { b: Konten["liveaboard"]; trip: Trip[]; l: Locale; href: string }) {
+  if (!b.tampil) return null;
+  const daftar = trip.filter((x) => x.tampil && x.kategori === "liveaboard");
+  const butir = txDaftar(b.butir, l);
+  return (
+    <section id="liveaboard" className="relative overflow-hidden bg-navy py-16 text-white sm:py-24">
+      <Image src="/brand/grafis/ukir-sayap-putih.svg" alt="" width={993} height={835} unoptimized aria-hidden className="pointer-events-none absolute -right-40 -top-24 w-[760px] max-w-none opacity-[0.06]" />
+      <div className="wrap relative grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-14">
+        {b.foto && (
+          <div className="relative" data-muncul="kiri">
+            {b.tag && <Gelembung teks={b.tag} warna={b.warna} className="absolute -top-5 left-6 z-10 -rotate-3" />}
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] bg-malam shadow-lift">
+              <Image src={b.foto} alt="" fill sizes="(max-width: 1024px) 100vw, 640px" unoptimized={unopt(b.foto)} className="object-cover" />
+            </div>
+          </div>
+        )}
+        <div data-muncul="">
+          {tx(b.label, l) && <p className="aksen text-ukir">{tx(b.label, l)}</p>}
+          <h2 className="mt-3 text-[clamp(40px,5.6vw,68px)] text-white">{isiJudul(tx(b.judul, l), "text-ukir")}</h2>
+          {tx(b.lead, l) && <p className="mt-5 max-w-[50ch] text-[16px] text-kabut">{tx(b.lead, l)}</p>}
+          {butir.length > 0 && (
+            <ul className="mt-6 grid gap-3">
+              {butir.map((s) => (
+                <li key={s} className="flex items-start gap-3 text-[15.5px] font-semibold text-white">
+                  <span aria-hidden className="mt-0.5 grid h-6 w-6 flex-none place-items-center rounded-full bg-ukir/20 text-ukir">✓</span>{s}
+                </li>
+              ))}
+            </ul>
+          )}
+          {tx(b.tombol, l) && <Link href={href} className="btn btn-koral mt-8">{tx(b.tombol, l)}<IkonPanahKanan size={16} /></Link>}
+        </div>
+      </div>
+      {daftar.length > 0 && (
+        <div className="wrap relative mt-12 sm:mt-16">
+          <KisiKartu kelas={KISI_TIGA} {...kisi(daftar, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+        </div>
+      )}
+    </section>
+  );
+}
+
 export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya }: { b: KepalaBagian; jadwal: Jadwal[]; trip: Trip[]; l: Locale; hrefTanya: string }) {
   const t = buatT(getMessages(l));
   const tripDari = new Map(trip.filter((x) => x.tampil).map((x) => [x.id, x]));
@@ -218,12 +265,12 @@ export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya }: { b: KepalaBag
               <Link href={hrefTanya} className="btn btn-navy mt-4">{t("ajakan.permintaan")}</Link>
             </div>
           )}
-          {daftar.map((j) => {
+          {daftar.map((j, urut) => {
             const x = tripDari.get(j.tripId)!;
             const sisa = sisaKursi(j);
             const tgl = potonganTanggal(j.mulai, j.selesai, l);
             return (
-              <article key={j.id} className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-card bg-white p-4 shadow-card sm:flex-nowrap sm:p-5">
+              <article key={j.id} data-muncul="" style={{ "--tunda": `${Math.min(urut, 4) * 80}ms` } as React.CSSProperties} className="flex flex-wrap items-center gap-x-5 gap-y-3 rounded-card bg-white p-4 shadow-card sm:flex-nowrap sm:p-5">
                 <div className="grid w-[112px] flex-none place-items-center rounded-[18px] bg-buih px-3 py-3 text-center">
                   <span className="font-display text-[30px] leading-none text-navy">{tgl.hari}</span>
                   <span className="mt-1 font-aksen text-[15px] uppercase tracking-[0.12em] text-tanda">{tgl.bulan}</span>
@@ -303,7 +350,7 @@ export function DaftarUlasan({ b, ulasan, l }: { b: KepalaBagian; ulasan: Ulasan
         <KepalaBagianSitus b={b} l={l} />
         <div className={`mt-10 ${KISI_TIGA_TEKS}`}>
           {tampil.map((u, i) => (
-            <figure key={u.id} className={`${tempatTiga(i, tampil.length, false).kelas} m-0 flex flex-col rounded-card bg-white p-6 shadow-card`}>
+            <figure key={u.id} data-muncul="" style={{ "--tunda": `${(i % 3) * 90}ms` } as React.CSSProperties} className={`${tempatTiga(i, tampil.length, false).kelas} m-0 flex flex-col rounded-card bg-white p-6 shadow-card`}>
               <div className="flex gap-1 text-koral" aria-label={`${u.bintang}/5`}>
                 {Array.from({ length: u.bintang }, (_, n) => <IkonBintang key={n} size={18} />)}
               </div>
@@ -328,8 +375,8 @@ export function DaftarFaq({ b, faq, l }: { b: KepalaBagian; faq: Faq[]; l: Local
       <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
         <KepalaBagianSitus b={b} l={l} />
         <div className="grid gap-3">
-          {isi.map((f) => (
-            <details key={f.id} className="group rounded-card bg-white px-5 py-4 shadow-card open:pb-5 sm:px-6">
+          {isi.map((f, urut) => (
+            <details key={f.id} data-muncul="" style={{ "--tunda": `${Math.min(urut, 5) * 70}ms` } as React.CSSProperties} className="group rounded-card bg-white px-5 py-4 shadow-card open:pb-5 sm:px-6">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-extrabold text-navy [&::-webkit-details-marker]:hidden">
                 {tx(f.tanya, l)}
                 <span aria-hidden className="grid h-8 w-8 flex-none place-items-center rounded-full bg-buih text-[20px] leading-none text-navy transition group-open:rotate-45">+</span>
@@ -348,7 +395,7 @@ export function Ajakan({ judul, lead, tombol, href, l }: { judul: string; lead: 
   return (
     <section className="py-16 sm:py-24">
       <div className="wrap">
-        <div className="relative overflow-hidden rounded-[32px] bg-navy px-6 py-12 text-white sm:px-12 sm:py-16">
+        <div data-muncul="zoom" className="relative overflow-hidden rounded-[32px] bg-navy px-6 py-12 text-white sm:px-12 sm:py-16">
           <Image src="/brand/grafis/ukir-sayap-putih.svg" alt="" width={993} height={835} aria-hidden className="pointer-events-none absolute -bottom-20 -left-16 w-[640px] max-w-none opacity-[0.07]" />
           <Image src="/brand/logo/fantasea-manta-latar-gelap.png" alt="" width={993} height={835} aria-hidden unoptimized className="pointer-events-none absolute -right-6 bottom-0 hidden w-[300px] -rotate-6 opacity-95 md:block lg:right-10 lg:w-[360px]" />
           <div className="relative max-w-[600px]">

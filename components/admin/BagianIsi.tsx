@@ -1,7 +1,7 @@
 "use client";
 import { MAKS_FOTO_GERBANG, idBaru, type Konten, type KepalaBagian } from "@/lib/konten";
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
-import { KartuPanel, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
+import { KartuPanel, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
 import type { Ubah } from "./Panel";
 import { kontakMasihContoh } from "@/data/bawaan";
 
@@ -64,6 +64,20 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
             <button type="button" onClick={() => ubah((d) => { d.gerbang.foto.push({ foto: "/brand/foto/senja-karst.webp", keterangan: kosong }); })} className="inline-flex w-fit items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah foto galeri</button>
           )}
         </div>
+      </KartuPanel>
+
+      <KartuPanel id="liveaboard" judul="Liveaboard" keterangan="Bagian navy di antara open trip dan FAQ. Trip berjenis Liveaboard di menu Trip dan harga tampil di sini sebagai kartu dan tidak diulang di daftar trip beranda. Tombolnya membuka WhatsApp bila nomor sudah diisi, kalau belum menuju halaman Trip.">
+        <Saklar label="Tampil di beranda" value={k.liveaboard.tampil} onChange={(v) => ubah((d) => { d.liveaboard.tampil = v; })} />
+        <KepalaEditor b={k.liveaboard} set={(f) => ubah((d) => f(d.liveaboard))} />
+        <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+          <KolomFoto label="Foto" value={k.liveaboard.foto} onChange={(v) => ubah((d) => { d.liveaboard.foto = v; })} />
+          <div className="grid content-start gap-2">
+            <KolomTeks label="Gelembung tag" hint="Contoh @misool. Kosongkan untuk menyembunyikan." value={k.liveaboard.tag} onChange={(v) => ubah((d) => { d.liveaboard.tag = v; })} maks={40} />
+            <PilihWarna value={k.liveaboard.warna} onChange={(v) => ubah((d) => { d.liveaboard.warna = v; })} />
+          </div>
+        </div>
+        <KolomDaftar label="Daftar keunggulan" value={k.liveaboard.butir} onChange={(v) => ubah((d) => { d.liveaboard.butir = v; })} />
+        <KolomDua label="Tombol" value={k.liveaboard.tombol} onChange={(v) => ubah((d) => { d.liveaboard.tombol = v; })} maks={40} />
       </KartuPanel>
 
       <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip.">

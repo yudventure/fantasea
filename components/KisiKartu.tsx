@@ -29,7 +29,8 @@ export default function KisiKartu({ kelas, kartu, kelasKartu, semuaUkuran = fals
     <>
       <div className={kelas}>
         {kartu.map((k, i) => (
-          <div key={i} className={`${kelasKartu[i] ?? ""} ${!buka && i >= MAKS_KARTU_PONSEL ? (semuaUkuran ? "hidden" : "max-md:hidden") : ""}`}>{k}</div>
+          <div key={i} data-muncul="" style={{ "--tunda": `${(i % 3) * 90}ms` } as React.CSSProperties}
+            className={`${kelasKartu[i] ?? ""} ${!buka && i >= MAKS_KARTU_PONSEL ? (semuaUkuran ? "hidden" : "max-md:hidden") : ""}`}>{k}</div>
         ))}
       </div>
       {lebih && (

@@ -28,11 +28,13 @@ export default function Gerbang({ label, judul, lead, foto, video, tag, warna }:
   return (
     <section className="py-16 sm:py-24">
       <div className="wrap">
-        {label && <p className="aksen">{label}</p>}
-        <h2 className="mt-3 text-[clamp(40px,6.2vw,72px)]">{isiJudul(judul)}</h2>
-        {lead && <p className="mt-5 max-w-[52ch] text-ink2">{lead}</p>}
+        <div data-muncul="">
+          {label && <p className="aksen">{label}</p>}
+          <h2 className="mt-3 text-[clamp(40px,6.2vw,72px)]">{isiJudul(judul)}</h2>
+          {lead && <p className="mt-5 max-w-[52ch] text-ink2">{lead}</p>}
+        </div>
 
-        <div className="relative mt-10">
+        <div className="relative mt-10" data-muncul="zoom">
           {tag && <Gelembung teks={tag} warna={warna} className="absolute -top-5 right-6 z-20 rotate-2 sm:right-14" />}
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] bg-kabut shadow-lift sm:aspect-[16/8.5]">
             {foto.map((f, i) => (

@@ -137,6 +137,24 @@ export const KONTEN_BAWAAN: Konten = {
     lead: { en: "Tell us your dates and we will plan the rest.", id: "Kabari tanggalmu, sisanya kami yang atur." },
     tombol: { en: "Chat on WhatsApp", id: "Chat lewat WhatsApp" },
   },
+  // Bagian Liveaboard di beranda (permintaan pemilik, November 2026).
+  liveaboard: {
+    tampil: true,
+    label: { en: "Liveaboard", id: "Liveaboard" },
+    judul: { en: "Sleep where\n*you dive.*", id: "Bermalam di\n*atas laut.*" },
+    lead: {
+      en: "On a liveaboard you stay on the boat for several days, so you reach the far reefs of Raja Ampat that day trips cannot. Tell us your dates and we will find a boat that fits.",
+      id: "Di liveaboard kamu tinggal di kapal selama beberapa hari, jadi bisa mencapai karang Raja Ampat yang jauh dan tidak terjangkau trip harian. Kabari tanggalmu, kami carikan kapal yang cocok.",
+    },
+    foto: F("kapal-penyelam"),
+    tag: "@misool",
+    warna: "koral",
+    butir: {
+      en: ["Several days on board with a cabin and meals", "Up to four dives a day", "Remote sites such as Misool and Wayag", "Small groups with a dive guide"],
+      id: ["Beberapa hari di kapal dengan kabin dan makan", "Sampai empat kali selam sehari", "Titik jauh seperti Misool dan Wayag", "Rombongan kecil bersama pemandu selam"],
+    },
+    tombol: { en: "Ask about liveaboard dates", id: "Tanya jadwal liveaboard" },
+  },
   // Halaman Trip dan Homestay (permintaan pemilik, November 2026). Edukasi
   // selam berisi pengetahuan umum, bertanda contoh supaya diperiksa pemandu.
   halamanTrip: {
