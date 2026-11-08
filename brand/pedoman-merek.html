@@ -28,6 +28,7 @@
   --tautan: #1264A8;
   --sorot: #30A6DE;
   --segi: #C3D6E2;
+  --zebra: #F3F8FB;
   --jangan: #C2410C;
   --tampil-terang: block;
   --tampil-gelap: none;
@@ -44,13 +45,13 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #131F33; --bg-panel: #1A2A42; --bg-kartu: #1D2E48; --fg: #E8F0F6; --fg-pudar: #A3B4C6;
-    --garis: #2C405C; --tautan: #5CBDEB; --sorot: #30A6DE; --segi: #22344F; --jangan: #FF9B73;
+    --garis: #2C405C; --tautan: #5CBDEB; --sorot: #30A6DE; --segi: #22344F; --zebra: #22344F; --jangan: #FF9B73;
     --tampil-terang: none; --tampil-gelap: block; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #131F33; --bg-panel: #1A2A42; --bg-kartu: #1D2E48; --fg: #E8F0F6; --fg-pudar: #A3B4C6;
-  --garis: #2C405C; --tautan: #5CBDEB; --sorot: #30A6DE; --segi: #22344F; --jangan: #FF9B73;
+  --garis: #2C405C; --tautan: #5CBDEB; --sorot: #30A6DE; --segi: #22344F; --zebra: #22344F; --jangan: #FF9B73;
   --tampil-terang: none; --tampil-gelap: block; color-scheme: dark;
 }
 
@@ -82,12 +83,12 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .pembuka .lead { font-size: var(--fs-md); margin-top: 22px; max-width: 34em; }
 .daftar-isi { margin-top: 32px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 20px; padding: 0; list-style: none; counter-reset: bab; }
 .daftar-isi li { counter-increment: bab; }
-.daftar-isi a { display: flex; gap: 10px; align-items: baseline; text-decoration: none; color: var(--fg); font-weight: 700; padding: 4px 0; border-bottom: 1px solid var(--garis); }
+.daftar-isi a { display: flex; gap: 10px; align-items: baseline; text-decoration: none; color: var(--fg); font-weight: 700; padding: 5px 0; }
 .daftar-isi a::before { content: counter(bab, decimal-leading-zero); font-family: var(--f-aksen); color: var(--sorot); font-weight: 400; }
 .daftar-isi a:hover { color: var(--tautan); }
 
 /* ---------- bab ---------- */
-.bab { padding-block: 72px; border-top: 1px solid var(--garis); scroll-margin-top: 12px; }
+.bab { padding-block: 72px; scroll-margin-top: 12px; }
 .bab:nth-of-type(even) { background: var(--bg-panel); }
 .kepala-bab { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 28px; align-items: end; margin-bottom: 40px; }
 .kepala-bab .nomor { grid-row: span 2; font-family: var(--f-judul); font-weight: 900; font-size: clamp(4rem, 12vw, 7.5rem); line-height: .8; color: var(--sorot); }
@@ -99,7 +100,9 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.g5 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.g5 { display: flex; flex-wrap: wrap; }
+.g5 > * { flex: 1 1 190px; }
+.stiker-koral { display: inline-block; background: var(--koral); color: var(--navy); font-family: var(--f-judul); font-weight: 900; font-size: 2.4rem; line-height: 1; padding: 12px 24px; border-radius: 16px; transform: rotate(-4deg); }
 .kartu { background: var(--bg-kartu); border: 1px solid var(--garis); border-radius: 18px; padding: 22px; min-width: 0; }
 .kartu h3 { font-size: var(--fs-md); font-family: var(--f-isi); font-weight: 900; margin-bottom: 6px; }
 .kartu .aksen { display: block; margin-bottom: 8px; }
@@ -109,7 +112,8 @@ code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-si
 .kutipan + p { margin-top: 10px; padding-left: 30px; }
 
 table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
-th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--garis); vertical-align: top; }
+th, td { text-align: left; padding: 12px 14px; vertical-align: top; }
+tbody tr:nth-child(odd) { background: var(--zebra); }
 th { font-family: var(--f-aksen); font-weight: 400; text-transform: uppercase; letter-spacing: .14em; color: var(--fg-pudar); }
 .gulir { overflow-x: auto; border: 1px solid var(--garis); border-radius: 18px; background: var(--bg-kartu); }
 
@@ -162,7 +166,7 @@ th { font-family: var(--f-aksen); font-weight: 400; text-transform: uppercase; l
 .swatch .data { padding: 16px; display: grid; gap: 4px; font-size: var(--fs-sm); }
 .swatch .data strong { font-size: var(--fs-md); font-weight: 900; }
 .swatch .data .kode { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85rem; color: var(--fg-pudar); }
-.salin { all: unset; cursor: pointer; font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; font-size: .95rem; color: var(--fg); border-bottom: 1px dashed var(--fg-pudar); justify-self: start; }
+.salin { all: unset; cursor: pointer; font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; font-size: .95rem; color: var(--fg); background: var(--bg-panel); padding: 2px 10px; border-radius: 999px; justify-self: start; }
 .salin:focus-visible { outline: 3px solid var(--sorot); outline-offset: 2px; }
 .proporsi { display: flex; height: 64px; border-radius: 16px; overflow: hidden; border: 1px solid var(--garis); }
 .proporsi div { display: flex; align-items: center; justify-content: center; font-family: var(--f-aksen); font-size: 14px; letter-spacing: .1em; min-width: 0; }
@@ -213,7 +217,7 @@ th { font-family: var(--f-aksen); font-weight: 400; text-transform: uppercase; l
 
 /* ---------- website ---------- */
 .contoh-web { border-radius: 22px; overflow: hidden; border: 1px solid var(--garis); background: #fff; color: #203149; }
-.contoh-web .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 24px; background: #fff; border-bottom: 1px solid #D5E2EA; flex-wrap: wrap; }
+.contoh-web .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 24px; background: #fff; flex-wrap: wrap; }
 .contoh-web .nav img { height: 44px; width: auto; }
 .contoh-web .nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; font-weight: 700; font-size: var(--fs-sm); flex-wrap: wrap; }
 .contoh-web .hero-web { position: relative; padding: 48px 28px; background: #131F33; color: #fff; overflow: hidden; }
@@ -278,10 +282,13 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
   .ikon-baris { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .ritme { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .daftar-isi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 > :last-child:nth-child(odd), .kartu-trip-wadah > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media screen and (max-width: 560px) {
   .g2, .g3, .g4, .feed-grid, .kartu-trip-wadah { grid-template-columns: minmax(0, 1fr); }
   .ritme { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ritme > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .g3 > :last-child:nth-child(odd), .kartu-trip-wadah > :last-child:nth-child(odd) { grid-column: auto; }
   .hirarki .baris { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .kepala-bab { grid-template-columns: minmax(0, 1fr); }
   .kepala-bab .nomor { grid-row: auto; }
@@ -294,7 +301,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
 /* ---------- cetak (PDF A4 lanskap) ---------- */
 @page { size: A4 landscape; margin: 11mm 13mm 13mm; }
 @media print {
-  :root { --bg: #fff; --bg-panel: #EEF5F9; --bg-kartu: #fff; --fg: #203149; --fg-pudar: #55657A; --garis: #D5E2EA; --tautan: #1264A8; --segi: #C3D6E2; --jangan: #C2410C; --tampil-terang: block; --tampil-gelap: none; color-scheme: light; }
+  :root { --bg: #fff; --bg-panel: #EEF5F9; --bg-kartu: #fff; --fg: #203149; --fg-pudar: #55657A; --garis: #D5E2EA; --tautan: #1264A8; --segi: #C3D6E2; --zebra: #F3F8FB; --jangan: #C2410C; --tampil-terang: block; --tampil-gelap: none; color-scheme: light; }
   body { font-size: 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .wadah { max-width: none; padding-left: 0; padding-right: 0; }
   .pembuka { padding-block: 4mm 0; min-height: 0; }
@@ -308,7 +315,6 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
   .prosa p { font-size: 11.5pt; }
   .kartu, .swatch, .ubin, .spesimen, .hirarki, .feed-grid figure, .panggung, .profil, .hero-web, .kartu-trip-wadah, .kartu-trip, .peta, .ruang, .gulir, tr, .elemen, .ikon-baris figure, .ritme, .anatomi, .proporsi, figure { break-inside: avoid; }
   .peta svg { min-width: 0; }
-  .salin { border: 0; }
   .ubin { min-height: 150px; padding: 18px; }
   .ubin img { max-height: 130px; }
   .salah .ubin { min-height: 120px; }
@@ -328,7 +334,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
   .stiker .bulat { height: 96px; }
   .contoh-web .hero-web { padding: 28px 24px; }
   th, td { padding: 6px 10px; }
-  .g5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .g5 > * { flex: 1 1 0; }
   .kepala-bab { break-after: avoid; }
   pre.kode, .sorotan, .tanda-li, .boleh, .jangan-li, .daftar-isi { break-inside: avoid; }
   .profil { padding: 14px; }
@@ -374,7 +380,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
     <div class="kepala-bab"><span class="nomor">01</span><span class="aksen">Siapa kami</span><h2>Esensi merek</h2></div>
     <div class="prosa">
       <p>Fantasea Dive Travel adalah penyelenggara perjalanan selam dan snorkeling di Raja Ampat. Tamu cukup datang ke Sorong. Fantasea yang mengatur kapal, penginapan, makan, pemandu, alat, dan urutan titik selam, sehingga setiap hari di air terasa mulus.</p>
-      <p>Namanya gabungan <em>fantasy</em> dan <em>sea</em>. Raja Ampat memang terlihat seperti khayalan: pulau karst hijau, air sebening kaca, dan pari manta yang lewat di atas kepala. Bedanya, semua itu nyata, dan Fantasea yang membawa tamu ke sana.</p>
+      <p>Namanya gabungan <em>fantasy</em> dan <em>sea</em>. Raja Ampat memang terlihat seperti khayalan, dengan pulau karst hijau, air sebening kaca, dan pari manta yang lewat di atas kepala. Bedanya, semua itu nyata, dan Fantasea yang membawa tamu ke sana.</p>
     </div>
 
     <h3 class="sub">Pernyataan posisi</h3>
@@ -410,7 +416,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
     <div class="kepala-bab"><span class="nomor">02</span><span class="aksen">Ide besar</span><h2>Jalur Manta</h2></div>
     <div class="prosa">
       <p>Di logo, manta melayang di atas nama Fantasea dan ekornya turun menjadi huruf T. Ekor itu adalah garis. Di sekelilingnya tersebar segitiga kecil dan bidang bersegi, seperti titik dan pulau di peta.</p>
-      <p>Dari situ lahir ide besar merek ini: <strong>setiap trip adalah satu jalur</strong>. Manta meninggalkan Garis Ekor dari bandara ke dermaga, dari pulau ke titik selam. Tanda Arah menandai setiap perhentian. Pulau Segi menjadi tempat dan bingkai. Ukir Sayap membawa cerita dan rasa kampung. Semua materi Fantasea dibangun dari empat unsur ini.</p>
+      <p>Dari situ lahir ide besar merek ini, yaitu <strong>setiap trip adalah satu jalur</strong>. Manta meninggalkan Garis Ekor dari bandara ke dermaga, dari pulau ke titik selam. Tanda Arah menandai setiap perhentian. Pulau Segi menjadi tempat dan bingkai. Ukir Sayap membawa cerita dan rasa kampung. Semua materi Fantasea dibangun dari empat unsur ini.</p>
     </div>
 
     <h3 class="sub">Contoh jalur</h3>
@@ -441,7 +447,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
 
     <h3 class="sub">Empat unsur</h3>
     <div class="grid g4">
-      <div class="kartu"><span class="aksen">Garis Ekor</span><p class="kecil">Rute dan alur. Pemisah bagian, garis bawah judul, garis rute di peta dan jadwal.</p></div>
+      <div class="kartu"><span class="aksen">Garis Ekor</span><p class="kecil">Rute dan alur. Garis rute di peta dan jadwal, garis bawah judul, penghubung antarperhentian.</p></div>
       <div class="kartu"><span class="aksen">Tanda Arah</span><p class="kecil">Perhentian dan penanda. Butir daftar, titik di peta, aksen kecil di sudut desain.</p></div>
       <div class="kartu"><span class="aksen">Pulau Segi</span><p class="kecil">Tempat dan bingkai. Bidang di belakang foto, judul, atau harga.</p></div>
       <div class="kartu"><span class="aksen">Ukir Sayap</span><p class="kecil">Cerita dan rasa lokal. Tekstur samar di latar gelap, motif kaos dan kemasan.</p></div>
@@ -502,7 +508,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
           <figure><img src="logo/fantasea-manta.png" alt="" width="40" style="width:40px"><figcaption>Tanda manta · 40 px · 10 mm</figcaption></figure>
           <figure><img src="logo/web/favicon-32.png" alt="" width="32" style="width:32px;image-rendering:auto"><figcaption>Favikon · 16–32 px</figcaption></figure>
         </div>
-        <p class="kecil pudar">Di bawah 160 px tulisan DIVE TRAVEL tidak terbaca lagi, jadi ganti ke tanda manta. Di bawah 40 px pola ukir hilang; pakai favikon siluet.</p>
+        <p class="kecil pudar">Di bawah 160 px tulisan DIVE TRAVEL tidak terbaca lagi, jadi ganti ke tanda manta. Di bawah 40 px pola ukir hilang, jadi pakai favikon siluet.</p>
       </div>
     </div>
 
@@ -511,7 +517,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <figure style="margin:0"><div class="ubin putih"><img src="logo/fantasea-logo-utama.png" alt="" style="transform:scaleX(1.45)"></div><figcaption class="keterangan"><span>Meregangkan atau memampatkan.</span></figcaption></figure>
       <figure style="margin:0"><div class="ubin putih"><img src="logo/fantasea-logo-utama.png" alt="" style="transform:rotate(-14deg)"></div><figcaption class="keterangan"><span>Memiringkan. Lengkung nama sudah cukup bergerak.</span></figcaption></figure>
       <figure style="margin:0"><div class="ubin putih"><img src="logo/fantasea-logo-utama.png" alt="" style="filter:hue-rotate(140deg) saturate(1.6)"></div><figcaption class="keterangan"><span>Mengganti warna ukir atau manta.</span></figcaption></figure>
-      <figure style="margin:0"><div class="ubin navy"><img src="logo/fantasea-logo-utama.png" alt=""></div><figcaption class="keterangan"><span>Logo utama di latar navy. Manta tenggelam; pakai versi latar gelap.</span></figcaption></figure>
+      <figure style="margin:0"><div class="ubin navy"><img src="logo/fantasea-logo-utama.png" alt=""></div><figcaption class="keterangan"><span>Logo utama di latar navy. Manta tenggelam, jadi pakai versi latar gelap.</span></figcaption></figure>
       <figure style="margin:0"><div class="ubin putih"><img src="logo/fantasea-logo-utama.png" alt="" style="filter:drop-shadow(8px 10px 0 #FF8A5C)"></div><figcaption class="keterangan"><span>Memberi bayangan, garis tepi, atau efek.</span></figcaption></figure>
       <figure style="margin:0"><div class="ubin foto"><img src="logo/fantasea-logo-navy.png" alt=""></div><figcaption class="keterangan"><span>Logo gelap di atas foto ramai tanpa bidang polos.</span></figcaption></figure>
       <figure style="margin:0"><div class="ubin putih"><span style="font-family:var(--f-judul);font-weight:900;font-size:2.6rem;color:#203149;letter-spacing:.06em">FANTASEA</span></div><figcaption class="keterangan"><span>Mengetik ulang nama dengan huruf lain sebagai pengganti logo.</span></figcaption></figure>
@@ -531,12 +537,12 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <div class="swatch"><div class="blok" style="background:#30A6DE;color:#131F33">Pola ukir</div><div class="data"><strong>Biru Ukir</strong><button class="salin" type="button" data-salin="#30A6DE">#30A6DE</button><span class="kode">RGB 48 166 222 · CMYK 78 25 0 13</span><span class="pudar">Aksen khas. Grafis dan teks di latar gelap.</span></div></div>
       <div class="swatch"><div class="blok" style="background:#1264A8;color:#fff">Segitiga</div><div class="data"><strong>Biru Tanda</strong><button class="salin" type="button" data-salin="#1264A8">#1264A8</button><span class="kode">RGB 18 100 168 · CMYK 89 40 0 34</span><span class="pudar">Tanda Arah, tautan, tombol biru.</span></div></div>
       <div class="swatch"><div class="blok" style="background:#C3D6E2;color:#203149">Bidang segi</div><div class="data"><strong>Kabut Karang</strong><button class="salin" type="button" data-salin="#C3D6E2">#C3D6E2</button><span class="kode">RGB 195 214 226 · CMYK 14 5 0 11</span><span class="pudar">Pulau Segi, latar lembut.</span></div></div>
-      <div class="swatch"><div class="blok" style="background:#FFFFFF;color:#203149;border-bottom:1px solid #D5E2EA">Ruang</div><div class="data"><strong>Putih Buih</strong><button class="salin" type="button" data-salin="#FFFFFF">#FFFFFF</button><span class="kode">RGB 255 255 255 · CMYK 0 0 0 0</span><span class="pudar">Latar utama. Beri napas.</span></div></div>
+      <div class="swatch"><div class="blok" style="background:#FFFFFF;color:#203149;box-shadow:inset 0 0 0 1px #D5E2EA">Ruang</div><div class="data"><strong>Putih Buih</strong><button class="salin" type="button" data-salin="#FFFFFF">#FFFFFF</button><span class="kode">RGB 255 255 255 · CMYK 0 0 0 0</span><span class="pudar">Latar utama. Beri napas.</span></div></div>
     </div>
 
     <h3 class="sub">Warna pendamping</h3>
     <div class="grid g3">
-      <div class="swatch"><div class="blok" style="background:#131F33;color:#C3D6E2;height:110px">Laut dalam</div><div class="data"><strong>Laut Malam</strong><button class="salin" type="button" data-salin="#131F33">#131F33</button><span class="pudar">Latar paling gelap: story, footer, foto profil.</span></div></div>
+      <div class="swatch"><div class="blok" style="background:#131F33;color:#C3D6E2;height:110px">Laut dalam</div><div class="data"><strong>Laut Malam</strong><button class="salin" type="button" data-salin="#131F33">#131F33</button><span class="pudar">Latar paling gelap untuk story, footer, dan foto profil.</span></div></div>
       <div class="swatch"><div class="blok" style="background:#EEF5F9;color:#203149;height:110px">Panel</div><div class="data"><strong>Buih</strong><button class="salin" type="button" data-salin="#EEF5F9">#EEF5F9</button><span class="pudar">Latar panel dan kartu di layar.</span></div></div>
       <div class="swatch"><div class="blok" style="background:#FF8A5C;color:#203149;height:110px">Ajakan</div><div class="data"><strong>Koral Senja</strong><button class="salin" type="button" data-salin="#FF8A5C">#FF8A5C</button><span class="pudar">Hanya untuk tombol pesan, harga, dan sisa kursi. Teks di atasnya selalu navy.</span></div></div>
     </div>
@@ -578,11 +584,11 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
     <div class="grid" style="gap:18px">
       <div class="spesimen">
         <div><span class="aksen">Judul</span><p class="besar" style="font-family:var(--f-judul);font-weight:900">Londrina Solid</p></div>
-        <div><p class="abjad" style="font-family:var(--f-judul);font-weight:900;font-size:1.6rem">ABCDEFGHIJKLM abcdefghijklm 0123456789</p><p class="kecil pudar" style="margin-top:10px">Huruf tebal dengan tepi seperti dipotong tangan, senada dengan huruf papan kayu FANTASEA. Berat 900 untuk judul, harga, dan tanggal; 400 untuk subjudul. Jangan untuk paragraf.</p></div>
+        <div><p class="abjad" style="font-family:var(--f-judul);font-weight:900;font-size:1.6rem">ABCDEFGHIJKLM abcdefghijklm 0123456789</p><p class="kecil pudar" style="margin-top:10px">Huruf tebal dengan tepi seperti dipotong tangan, senada dengan huruf papan kayu FANTASEA. Berat 900 untuk judul, harga, dan tanggal, berat 400 untuk subjudul. Jangan untuk paragraf.</p></div>
       </div>
       <div class="spesimen">
         <div><span class="aksen">Aksen</span><p class="besar" style="font-family:var(--f-aksen);font-size:clamp(2.4rem,7vw,4.4rem)">Gochi Hand</p></div>
-        <div><p class="abjad" style="font-family:var(--f-aksen);text-transform:uppercase;letter-spacing:.2em;font-size:1.4rem">Dive travel · Raja Ampat</p><p class="kecil pudar" style="margin-top:10px">Tulisan tangan yang mengulang gaya DIVE TRAVEL di logo. Selalu kapital dengan spasi huruf lebar (0,18–0,2 em). Hanya untuk label pendek, paling banyak lima kata: nama rubrik, nama tempat, keterangan kecil.</p></div>
+        <div><p class="abjad" style="font-family:var(--f-aksen);text-transform:uppercase;letter-spacing:.2em;font-size:1.4rem">Dive travel · Raja Ampat</p><p class="kecil pudar" style="margin-top:10px">Tulisan tangan yang mengulang gaya DIVE TRAVEL di logo. Selalu kapital dengan spasi huruf lebar (0,18–0,2 em). Hanya untuk label pendek paling banyak lima kata, seperti nama rubrik, nama tempat, dan keterangan kecil.</p></div>
       </div>
       <div class="spesimen">
         <div><span class="aksen">Teks isi</span><p class="besar" style="font-family:var(--f-isi);font-weight:800;font-size:clamp(2.4rem,7vw,4.4rem)">Nunito</p></div>
@@ -598,7 +604,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <div class="baris"><span>Isi · Nunito 400</span><span>Kapal berangkat dari dermaga Waisai pukul 07.30 WIT. Dua kali selam pagi di Selat Dampier, makan siang di Arborek, lalu satu selam sore.</span></div>
       <div class="baris"><span>Tombol · Nunito 800</span><span><span class="tombol tombol-pesan">Pesan sekarang</span></span></div>
     </div>
-    <p class="kecil pudar" style="margin-top:14px">Di Canva, cari ketiganya dengan nama yang sama. Bila tidak ada, unggah berkas TTF dari <code>brand/font/desktop</code> (Canva Pro) atau pakai pengganti: Londrina Solid → Bebas Neue, Gochi Hand → Patrick Hand, Nunito → Quicksand.</p>
+    <p class="kecil pudar" style="margin-top:14px">Di Canva, cari ketiganya dengan nama yang sama. Bila tidak ada, unggah berkas TTF dari <code>brand/font/desktop</code> (Canva Pro) atau pakai pengganti Bebas Neue untuk Londrina Solid, Patrick Hand untuk Gochi Hand, dan Quicksand untuk Nunito.</p>
   </div>
 </section>
 
@@ -607,12 +613,12 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
   <div class="wadah">
     <div class="kepala-bab"><span class="nomor">06</span><span class="aksen">Perangkat visual</span><h2>Elemen grafis</h2></div>
     <div class="grid g3">
-      <div class="kartu elemen"><div class="gambar"><img src="grafis/garis-ekor.svg" alt="Garis Ekor" width="200" height="600"></div><h3>Garis Ekor</h3><p class="kecil">Ekor manta yang meruncing. Untuk garis rute, pemisah bagian, dan garis bawah judul. Selalu meruncing ke satu arah, tidak pernah putus-putus kecuali menandai rute kapal.</p></div>
+      <div class="kartu elemen"><div class="gambar"><img src="grafis/garis-ekor.svg" alt="Garis Ekor" width="200" height="600"></div><h3>Garis Ekor</h3><p class="kecil">Ekor manta yang meruncing. Untuk garis rute di peta dan jadwal serta garis bawah judul. Selalu utuh dan meruncing ke satu arah.</p></div>
       <div class="kartu elemen"><div class="gambar" style="display:flex;gap:28px;justify-content:center;align-items:center"><img src="grafis/tanda-arah.svg" alt="Tanda Arah polos" width="100" height="100" style="width:96px;transform:rotate(-12deg)"><img src="grafis/tanda-arah-belah.svg" alt="Tanda Arah belah" width="100" height="100" style="width:72px;transform:rotate(18deg)"></div><h3>Tanda Arah</h3><p class="kecil">Segitiga bergaris tebal dari logo, polos atau belah. Butir daftar, titik di peta, aksen sudut. Paling banyak enam per desain, sedikit diputar agar terasa ditebar tangan.</p></div>
       <div class="kartu elemen"><div class="gambar"><img src="grafis/pulau-segi.svg" alt="Pulau Segi" width="300" height="300"></div><h3>Pulau Segi</h3><p class="kecil">Bidang bersegi tujuh atau delapan, tidak simetris. Kabut Karang di latar terang, putih 6–12% di latar gelap. Untuk bingkai foto, harga, dan latar judul.</p></div>
       <div class="kartu elemen"><div class="gambar gelap-bg"><img src="grafis/ukir-sayap-putih.svg" alt="Ukir Sayap" width="993" height="835" style="opacity:.9;max-height:none;width:120%"></div><h3>Ukir Sayap</h3><p class="kecil">Pola ukir yang diambil langsung dari sayap manta. Tekstur samar (opasitas 5–12%) di latar gelap, motif kaos, kertas pembungkus. Jangan diwarnai selain putih atau Biru Ukir.</p></div>
-      <div class="kartu elemen"><div class="gambar" style="background:#203149 url(grafis/pola-jalur-gelap.svg) 0 0 / 180px"></div><h3>Pola Jalur</h3><p class="kecil">Ubin berulang Pulau Segi dan Tanda Arah. Versi terang untuk kertas dan stiker, versi gelap untuk latar web, lanyard, dan kaos.</p></div>
-      <div class="kartu elemen"><div class="gambar"><svg viewBox="0 0 220 120" width="220" height="120" aria-hidden="true"><path d="M10 90 C 60 96, 80 40, 120 44 C 160 48, 170 90, 210 30" fill="none" stroke="#30A6DE" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 10"/><g fill="#1264A8" fill-rule="evenodd"><path transform="translate(2 80)" d="M0 0 L22 10 L0 20 Z M5 6 L5 14 L13 10 Z"/><path transform="translate(112 34)" d="M0 0 L22 10 L0 20 Z M5 6 L5 14 L13 10 Z"/><path transform="translate(198 20) rotate(-30)" d="M0 0 L22 10 L0 20 Z M5 6 L5 14 L13 10 Z"/></g></svg></div><h3>Rute kapal</h3><p class="kecil">Satu-satunya garis putus-putus: titik bulat Biru Ukir untuk perjalanan kapal di peta dan jadwal, dengan Tanda Arah di setiap perhentian.</p></div>
+      <div class="kartu elemen"><div class="gambar" style="background:#203149 url(grafis/pola-jalur-gelap.svg) 0 0 / 180px"></div><h3>Pola Jalur</h3><p class="kecil">Ubin berulang Pulau Segi dan Tanda Arah yang ditebar tanpa garis penghubung. Versi terang untuk kertas dan stiker, versi gelap untuk latar web, lanyard, dan kaos.</p></div>
+      <div class="kartu elemen"><div class="gambar"><span class="stiker-koral">Rp 8,5 jt</span></div><h3>Stiker Koral</h3><p class="kecil">Label harga dan sisa kursi berwarna Koral Senja, sedikit miring seperti stiker yang ditempel tangan. Satu per desain, teksnya selalu navy.</p></div>
     </div>
 
     <h3 class="sub">Ikon garis</h3>
@@ -633,9 +639,9 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
   <div class="wadah">
     <div class="kepala-bab"><span class="nomor">07</span><span class="aksen">Laut apa adanya</span><h2>Fotografi</h2></div>
     <div class="grid g3">
-      <figure class="contoh-foto"><img src="logo/fantasea-manta-navy.png" alt=""><figcaption>Bawah air: sejajar mata satwa, cahaya dari atas</figcaption></figure>
-      <figure class="contoh-foto atas-air"><div class="pulau"></div><figcaption>Di atas air: pulau, kapal, dermaga, langit</figcaption></figure>
-      <figure class="contoh-foto senja"><figcaption>Manusia: tamu dan kru tertawa di kapal, senja di Arborek</figcaption></figure>
+      <figure class="contoh-foto"><img src="logo/fantasea-manta-navy.png" alt=""><figcaption>Bawah air, sejajar mata satwa, cahaya dari atas</figcaption></figure>
+      <figure class="contoh-foto atas-air"><div class="pulau"></div><figcaption>Di atas air dengan pulau, kapal, dermaga, dan langit</figcaption></figure>
+      <figure class="contoh-foto senja"><figcaption>Tamu dan kru tertawa di kapal saat senja di Arborek</figcaption></figure>
     </div>
     <p class="kecil pudar" style="margin-top:10px">Bingkai di atas adalah ilustrasi arah, bukan foto. Ganti dengan foto milik Fantasea.</p>
     <div class="grid g2" style="margin-top:28px">
@@ -643,8 +649,8 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
         <ul class="boleh kecil">
           <li>Pakai foto sendiri dari trip nyata, dengan nama fotografer atau pemandu di keterangan.</li>
           <li>Koreksi biru dengan white balance agar warna karang tetap alami.</li>
-          <li>Tunjukkan skala: penyelam di samping manta, kapal kecil di antara pulau karst.</li>
-          <li>Seimbangkan feed: satu foto bawah air, satu di atas air, satu wajah.</li>
+          <li>Tunjukkan skala, misalnya penyelam di samping manta atau kapal kecil di antara pulau karst.</li>
+          <li>Seimbangkan feed dengan satu foto bawah air, satu di atas air, dan satu wajah.</li>
           <li>Minta izin sebelum memotret tamu dan warga kampung.</li>
         </ul>
       </div>
@@ -668,7 +674,7 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <div class="kartu" style="background:var(--malam);color:#E8F0F6;border-color:var(--malam)">
         <span class="aksen">Tagline utama</span>
         <p style="font-family:var(--f-judul);font-weight:900;font-size:clamp(2.6rem,7vw,4rem);line-height:.95;margin-top:6px">Live the <span style="color:#30A6DE">Fantasea.</span></p>
-        <p style="margin-top:14px;color:#C3D6E2">Pendamping bahasa Indonesia: <strong style="color:#fff">Laut nyata, melampaui khayalan.</strong></p>
+        <p style="margin-top:14px;color:#C3D6E2">Pendamping bahasa Indonesia<br><strong style="color:#fff">Laut nyata, melampaui khayalan.</strong></p>
       </div>
       <div class="kartu">
         <span class="aksen">Baris pendukung</span>
@@ -702,8 +708,8 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
         <li><strong>Angka jujur.</strong> Harga ditulis dengan apa yang termasuk dan tidak termasuk. Satwa tidak pernah dijamin.</li>
       </ul>
       <ul class="tanda-li">
-        <li><strong>Waktu lokal.</strong> Tulis WIT dan format 07.30. Tanggal: 12–15 Desember.</li>
-        <li><strong>Emoji secukupnya.</strong> Paling banyak dua per caption, tidak di judul. Yang berfungsi saja: 📍 lokasi, 🐠 satwa.</li>
+        <li><strong>Waktu lokal.</strong> Tulis WIT dan format 07.30. Tanggal ditulis 12–15 Desember.</li>
+        <li><strong>Emoji secukupnya.</strong> Paling banyak dua per caption, tidak di judul. Pakai yang berfungsi saja, seperti 📍 untuk lokasi dan 🐠 untuk satwa.</li>
         <li><strong>Sapa sebagai teman.</strong> Pakai "kamu" untuk media sosial dan "Anda" untuk penawaran resmi dan surel.</li>
       </ul>
     </div>
@@ -724,11 +730,11 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <table>
         <thead><tr><th>Pilar</th><th>Isi</th><th>Template</th></tr></thead>
         <tbody>
-          <tr><td><strong>Paket Trip</strong></td><td>Satu paket per unggahan: durasi, jumlah selam, yang termasuk, harga mulai.</td><td>Feed 02</td></tr>
-          <tr><td><strong>Titik Selam</strong></td><td>Satu titik selam: lokasi, kedalaman, arus, level, satwa utama.</td><td>Feed 03</td></tr>
+          <tr><td><strong>Paket Trip</strong></td><td>Satu paket per unggahan berisi durasi, jumlah selam, yang termasuk, dan harga mulai.</td><td>Feed 02</td></tr>
+          <tr><td><strong>Titik Selam</strong></td><td>Satu titik selam berisi lokasi, kedalaman, arus, level, dan satwa utama.</td><td>Feed 03</td></tr>
           <tr><td><strong>Jadwal Open Trip</strong></td><td>Tanggal keberangkatan dan sisa kursi. Diperbarui setiap awal bulan.</td><td>Feed 04, Story 06</td></tr>
           <tr><td><strong>Kata Tamu</strong></td><td>Kutipan ulasan asli dari Google atau TripAdvisor, dengan izin tamu.</td><td>Feed 05</td></tr>
-          <tr><td><strong>Di Kapal</strong></td><td>Video pendek dan foto hari itu: kru, pemandu, kampung, momen lucu.</td><td>Foto dengan tanda manta di sudut</td></tr>
+          <tr><td><strong>Di Kapal</strong></td><td>Video pendek dan foto hari itu tentang kru, pemandu, kampung, dan momen lucu.</td><td>Foto dengan tanda manta di sudut</td></tr>
         </tbody>
       </table>
     </div>
@@ -807,8 +813,8 @@ pre.kode { margin: 0; padding: 20px; border-radius: 18px; background: #131F33; c
       <div>
         <h3 class="sub" style="margin-top:0">Aturan tombol</h3>
         <ul class="tanda-li">
-          <li><strong>Koral Senja</strong> hanya untuk satu ajakan utama per layar: pesan, lihat jadwal.</li>
-          <li><strong>Biru Tanda</strong> untuk aksi kedua: detail, kirim, lanjut.</li>
+          <li><strong>Koral Senja</strong> hanya untuk satu ajakan utama per layar, misalnya pesan atau lihat jadwal.</li>
+          <li><strong>Biru Tanda</strong> untuk aksi kedua seperti detail, kirim, dan lanjut.</li>
           <li><strong>Garis</strong> untuk aksi ketiga dan tombol di atas foto.</li>
           <li>Tinggi minimal 48 px, sudut pil, huruf Nunito 800. Fokus keyboard memakai cincin Biru Ukir.</li>
         </ul>
@@ -857,7 +863,7 @@ font-family: var(--f-judul);</pre>
           <path d="M112 30 C126 46 174 46 188 30" fill="none" stroke="#131F33" stroke-width="6"/>
           <image href="logo/fantasea-logo-latar-gelap.png" x="104" y="76" width="92" height="57"/>
         </svg>
-        <p class="kecil pudar">Kaos kru: logo latar gelap di dada 9 cm, Pola Jalur gelap di punggung.</p>
+        <p class="kecil pudar">Kaos kru dengan logo latar gelap di dada 9 cm dan Pola Jalur gelap di punggung.</p>
       </div>
       <div class="panggung">
         <div class="stiker">
@@ -881,11 +887,13 @@ font-family: var(--f-judul);</pre>
           <tr><td><code>logo/svg</code></td><td>Delapan versi logo dan tanda manta dalam vektor. Untuk percetakan, sablon, papan nama, dan desainer.</td></tr>
           <tr><td><code>logo</code></td><td>PNG transparan (utama, latar gelap, navy, putih), tanda manta, foto profil 1080 px, logo asli.</td></tr>
           <tr><td><code>logo/web</code></td><td>Favikon 16/32/48, favicon.ico, apple-touch-icon, ikon aplikasi 192/512 dan maskable.</td></tr>
-          <tr><td><code>font</code></td><td>Londrina Solid, Gochi Hand, Nunito: TTF untuk komputer, woff2 dan <code>fonts.css</code> untuk web. Lisensi SIL OFL 1.1.</td></tr>
-          <tr><td><code>token</code></td><td><code>tokens.css</code> dan <code>tokens.json</code>: warna, huruf, jarak, tombol, kartu trip.</td></tr>
+          <tr><td><code>font</code></td><td>Londrina Solid, Gochi Hand, dan Nunito dalam TTF untuk komputer serta woff2 dan <code>fonts.css</code> untuk web. Lisensi SIL OFL 1.1.</td></tr>
+          <tr><td><code>token</code></td><td><code>tokens.css</code> dan <code>tokens.json</code> berisi warna, huruf, jarak, tombol, dan kartu trip.</td></tr>
           <tr><td><code>grafis</code></td><td>Garis Ekor, Tanda Arah, Pulau Segi, Ukir Sayap, Pola Jalur, ikon garis (SVG).</td></tr>
           <tr><td><code>sosial</code></td><td>Template HTML, PNG siap unggah, dan skrip <code>render.js</code> untuk membuat ulang PNG.</td></tr>
           <tr><td><code>pedoman-merek.pdf</code></td><td>Buku pedoman ini dalam PDF A4 untuk dicetak atau dikirim.</td></tr>
+          <tr><td><code>warna</code></td><td>Palet warna PNG dan TXT, swatch Adobe (.ase) dan GIMP/Inkscape (.gpl).</td></tr>
+          <tr><td><code>ekspor</code></td><td><strong>Fantasea-Dive-Travel-Brand-Kit.zip</strong> berisi semua aset di atas, satu folder untuk setiap item. Berkas inilah yang dikirim ke klien, percetakan, atau desainer.</td></tr>
         </tbody>
       </table>
     </div>

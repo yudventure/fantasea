@@ -27,7 +27,7 @@ HALAMAN = """<!doctype html>
 <html lang="id">
 <head>
 <meta charset="utf-8">
-<title>Template 07: Cover Sorotan (1080x1080)</title>
+<title>Template 07 Cover Sorotan (1080x1080)</title>
 <link rel="stylesheet" href="_dasar.css">
 <style>
   /* Instagram memotong sampul sorotan menjadi lingkaran. Isi penting berada di lingkaran tengah 760 px. */

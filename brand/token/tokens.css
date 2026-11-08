@@ -88,5 +88,5 @@ a { color: var(--tautan); text-underline-offset: .2em; }
 .daftar-tanda li { position: relative; padding-left: 1.7em; margin: .4em 0; }
 .daftar-tanda li::before { content: ""; position: absolute; left: 0; top: .42em; width: .95em; height: .95em; background: var(--tanda); clip-path: polygon(0 0, 100% 50%, 0 100%, 0 0, 26% 22%, 26% 78%, 66% 50%, 26% 22%); }
 
-/* ---- Garis Ekor: garis lengkung meruncing, pemisah dan garis rute ---- */
+/* ---- Garis Ekor: garis meruncing untuk garis bawah judul dan garis rute (bukan pemisah bagian) ---- */
 .garis-ekor { display: block; height: 14px; background: var(--ukir); clip-path: polygon(0 40%, 100% 50%, 0 60%); }

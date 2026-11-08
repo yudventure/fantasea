@@ -5,12 +5,33 @@ Identitas merek **Fantasea Dive Travel**, penyelenggara trip selam dan snorkelin
 > **Live the Fantasea.**
 > *Laut nyata, melampaui khayalan.*
 
-Buka `brand/pedoman-merek.html` di browser untuk melihat semuanya dalam satu halaman, atau kirim `brand/pedoman-merek.pdf` (A4 lanskap, 28 halaman).
+Buka `brand/pedoman-merek.html` di browser untuk melihat semuanya dalam satu halaman, atau kirim `brand/pedoman-merek.pdf` (A4 lanskap).
+
+## Paket aset siap kirim
+
+**`brand/ekspor/Fantasea-Dive-Travel-Brand-Kit.zip`** berisi semua aset, satu folder untuk setiap item. Kirim berkas ini ke klien, percetakan, atau desainer.
+
+| Folder di dalam ZIP | Isi |
+| --- | --- |
+| `00-BACA-DULU.txt` | Panduan singkat isi paket, warna, dan aturan logo |
+| `01-pedoman-merek` | Buku pedoman merek (PDF) |
+| `02-logo-utama` | Logo lengkap dalam PNG dan SVG (utama, latar gelap, navy, putih) dan JPG latar putih |
+| `03-tanda-manta` | Manta tanpa tulisan dalam PNG dan SVG |
+| `04-logo-asli` | Gambar logo asli |
+| `05-favikon-dan-ikon-web` | Favikon dan ikon aplikasi |
+| `06-warna` | Palet PNG dan TXT, swatch Adobe (`.ase`) dan GIMP/Inkscape (`.gpl`) |
+| `07-font` | TTF untuk komputer beserta lisensinya |
+| `08-elemen-grafis` | Garis Ekor, Tanda Arah, Pulau Segi, Ukir Sayap, Pola Jalur dalam SVG dan PNG |
+| `09-ikon` | Ikon garis navy dan putih dalam SVG dan PNG |
+| `10-media-sosial` | Foto profil, template feed, story, dan cover sorotan |
+| `11-website` | `tokens.css`, `tokens.json`, dan font web |
 
 ## Isi folder `brand/`
 
 | Berkas | Isi |
 | --- | --- |
+| `ekspor/` | Paket aset ZIP siap kirim (lihat di atas) |
+| `warna/` | Palet warna PNG dan TXT, swatch `.ase` dan `.gpl` |
 | `pedoman-merek.html` / `.pdf` | Buku pedoman: esensi, ide Jalur Manta, logo, warna, tipografi, elemen grafis, fotografi, suara, media sosial, website, penerapan |
 | `logo/` | Logo asli, PNG transparan (utama, latar gelap, satu warna navy, satu warna putih), tanda manta tanpa tulisan, foto profil 1080 px |
 | `logo/svg/` | Delapan versi logo dan tanda manta dalam vektor, untuk percetakan dan desainer |
@@ -66,6 +87,16 @@ node brand/sosial/render.js
 ```bash
 node brand/scripts/buat_pdf.js
 ```
+
+```bash
+node brand/scripts/buat_png_grafis.js
+```
+
+```bash
+python3 brand/scripts/buat_zip.py
+```
+
+Jalankan `buat_zip.py` paling akhir setiap kali ada aset yang berubah, supaya ZIP selalu berisi versi terbaru.
 
 `urai_logo.py` memecah logo asli menjadi bobot per warna merek, lalu `buat_logo.py` dan `vektor_logo.py` mewarnai ulang dan menjiplaknya. `render.js` memakai font dari `brand/font/web` sehingga tidak butuh internet; `buat_pdf.js` memuat Google Fonts. Untuk satu template saja, beri awalan nama berkas, misalnya `node brand/sosial/render.js 02`.
 

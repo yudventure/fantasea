@@ -1,0 +1,30 @@
+WARNA FANTASEA DIVE TRAVEL
+Lima warna inti dibaca langsung dari logo (sRGB). CMYK adalah titik awal; minta contoh cetak.
+
+WARNA INTI
+- Navy Manta    #203149  RGB 32 49 73  CMYK 56 33 0 71
+  Badan manta, tulisan, teks utama
+- Biru Ukir     #30A6DE  RGB 48 166 222  CMYK 78 25 0 13
+  Pola ukir sayap, aksen khas. Bukan untuk teks di atas putih
+- Biru Tanda    #1264A8  RGB 18 100 168  CMYK 89 40 0 34
+  Segitiga penanda, tautan, tombol biru
+- Kabut Karang  #C3D6E2  RGB 195 214 226  CMYK 14 5 0 11
+  Bidang segi, latar lembut
+- Putih Buih    #FFFFFF  RGB 255 255 255  CMYK 0 0 0 0
+  Ruang, latar utama
+
+WARNA PENDAMPING
+- Laut Malam    #131F33  RGB 19 31 51
+  Latar paling gelap, story, footer
+- Buih          #EEF5F9  RGB 238 245 249
+  Latar panel terang
+- Koral Senja   #FF8A5C  RGB 255 138 92
+  Tombol pesan, harga, sorotan. Teks di atasnya selalu navy
+
+PASANGAN TEKS YANG LOLOS KETERBACAAN
+- navy di atas putih: 13.15 : 1
+- putih di atas laut malam: 16.52 : 1
+- biru ukir di atas navy: 4.78 : 1
+- biru tanda di atas putih: 6.15 : 1
+- navy di atas koral senja: 5.66 : 1
+- biru ukir di atas putih (hanya grafis): 2.75 : 1
