@@ -22,16 +22,27 @@ export async function POST(req: Request) {
 
   const bahasa = isLocale(str(o.bahasa, 5)) ? (str(o.bahasa, 5) as "en" | "id") : "en";
   const k = await bacaKonten();
-  const trip = k.trip.find((t) => t.id === str(o.tripId, 40) && t.tampil);
-  if (!trip) return jsonTanpaCache({ galat: bahasa === "id" ? "Trip tidak ditemukan." : "Trip not found." }, { status: 400 });
+  const idHomestay = str(o.homestayId, 40);
+  const homestay = idHomestay ? k.homestay.find((h) => h.id === idHomestay && h.tampil) : undefined;
+  if (idHomestay && !homestay) return jsonTanpaCache({ galat: bahasa === "id" ? "Homestay tidak ditemukan." : "Homestay not found." }, { status: 400 });
+  const trip = homestay ? undefined : k.trip.find((t) => t.id === str(o.tripId, 40) && t.tampil);
+  if (!homestay && !trip) return jsonTanpaCache({ galat: bahasa === "id" ? "Trip tidak ditemukan." : "Trip not found." }, { status: 400 });
 
   const orang = Math.round(Number(o.orang));
   if (!Number.isFinite(orang) || orang < 1 || orang > 30) return jsonTanpaCache({ galat: bahasa === "id" ? "Jumlah orang 1 sampai 30." : "Guests must be 1 to 30." }, { status: 400 });
 
   const hariIni = hariIniWit();
   let mulai = "", selesai = "", jadwalId = "";
-  const idJadwal = str(o.jadwalId, 40);
-  if (idJadwal) {
+  const idJadwal = homestay ? "" : str(o.jadwalId, 40);
+  if (homestay) {
+    // Menginap: tanggal masuk mulai hari ini, tanggal keluar sesudahnya, paling lama 60 malam.
+    mulai = str(o.mulai, 10);
+    selesai = str(o.selesai, 10);
+    const sah = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
+    if (!sah(mulai) || mulai < hariIni) return jsonTanpaCache({ galat: bahasa === "id" ? "Pilih tanggal masuk mulai hari ini." : "Choose a check-in date from today." }, { status: 400 });
+    const malam = (Date.parse(selesai) - Date.parse(mulai)) / 86_400_000;
+    if (!sah(selesai) || !(malam >= 1 && malam <= 60)) return jsonTanpaCache({ galat: bahasa === "id" ? "Tanggal keluar 1 sampai 60 malam setelah tanggal masuk." : "Check-out must be 1 to 60 nights after check-in." }, { status: 400 });
+  } else if (idJadwal && trip) {
     const j = jadwalMendatang(k.jadwal, hariIni).find((x) => x.id === idJadwal && x.tripId === trip.id);
     if (!j) return jsonTanpaCache({ galat: bahasa === "id" ? "Tanggal open trip ini sudah tidak tersedia." : "This open trip date is no longer available." }, { status: 400 });
     if (sisaKursi(j) < orang) return jsonTanpaCache({ galat: bahasa === "id" ? `Sisa kursi tinggal ${sisaKursi(j)}.` : `Only ${sisaKursi(j)} seats left on this date.` }, { status: 409 });
@@ -49,8 +60,10 @@ export async function POST(req: Request) {
   if (angka.length < 8 || angka.length > 16) return jsonTanpaCache({ galat: bahasa === "id" ? "Periksa lagi nomor WhatsApp." : "Please check the WhatsApp number." }, { status: 400 });
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return jsonTanpaCache({ galat: bahasa === "id" ? "Periksa lagi alamat email." : "Please check the email address." }, { status: 400 });
 
+  const item = (homestay ?? trip)!;
   const p = await tambahPermintaan({
-    tripId: trip.id, tripNama: tx(trip.nama, "id") || tx(trip.nama, "en"), jadwalId, mulai, selesai,
+    ...(homestay ? { jenis: "homestay" as const } : {}),
+    tripId: item.id, tripNama: tx(item.nama, "id") || tx(item.nama, "en"), jadwalId, mulai, selesai,
     orang, nama, whatsapp, email, catatan: str(o.catatan, 600), bahasa,
   });
   return jsonTanpaCache({ kode: p.kode, mulai: p.mulai, selesai: p.selesai });

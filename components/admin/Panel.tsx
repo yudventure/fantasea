@@ -6,7 +6,7 @@ import type { Permintaan } from "@/lib/server/permintaan";
 import { IkonKeluar } from "@/components/Ikon";
 import Gerbang from "./Gerbang";
 import { BagianPermintaan, BagianRingkasan } from "./BagianPermintaan";
-import { BagianJadwal, BagianTitik, BagianTrip } from "./BagianTrip";
+import { BagianHomestay, BagianJadwal, BagianTitik, BagianTrip } from "./BagianTrip";
 import { BagianBeranda, BagianKontak, BagianUlasanFaq } from "./BagianIsi";
 import BagianAkun from "./BagianAkun";
 
@@ -18,6 +18,7 @@ const TAB = [
   { id: "permintaan", label: "Permintaan" },
   { id: "trip", label: "Trip dan harga" },
   { id: "jadwal", label: "Jadwal open trip" },
+  { id: "homestay", label: "Homestay" },
   { id: "titik", label: "Titik selam" },
   { id: "beranda", label: "Beranda" },
   { id: "ulasan", label: "Ulasan dan FAQ" },
@@ -136,6 +137,7 @@ export default function Panel() {
           {tab === "permintaan" && <BagianPermintaan permintaan={permintaan} setPermintaan={setPermintaan} sesi={sesi} k={k} />}
           {tab === "trip" && <BagianTrip k={k} ubah={ubah} />}
           {tab === "jadwal" && <BagianJadwal k={k} ubah={ubah} />}
+          {tab === "homestay" && <BagianHomestay k={k} ubah={ubah} />}
           {tab === "titik" && <BagianTitik k={k} ubah={ubah} />}
           {tab === "beranda" && <BagianBeranda k={k} ubah={ubah} />}
           {tab === "ulasan" && <BagianUlasanFaq k={k} ubah={ubah} />}

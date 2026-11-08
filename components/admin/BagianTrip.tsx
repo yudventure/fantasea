@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { KATEGORI_TRIP, MAKS_FOTO_TRIP, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Jadwal, type KategoriTrip, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
+import { KATEGORI_TRIP, MAKS_FOTO_TRIP, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Homestay, type Jadwal, type KategoriTrip, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
 import { rentangTanggal, rupiah } from "@/lib/format";
 import DatePicker from "@/components/DatePicker";
 import Dropdown from "@/components/Dropdown";
@@ -85,6 +85,63 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
                 <div className="flex justify-end">
                   <button type="button" onClick={() => { if (window.confirm("Hapus trip ini beserta jadwal open trip-nya?")) ubah((d) => { d.trip = d.trip.filter((x) => x.id !== t.id); d.jadwal = d.jadwal.filter((j) => j.tripId !== t.id); }); }}
                     className="inline-flex items-center gap-1.5 rounded-pill px-4 py-2 text-[13.5px] font-bold text-[#A63A22] hover:bg-[#FBE4DD]"><IkonSampah size={16} />Hapus trip</button>
+                </div>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </KartuPanel>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
+/** Homestay mitra di bawah bagian kartu bertumpuk beranda (permintaan pemilik, November 2026). */
+export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
+  const [buka, setBuka] = useState<string | null>(null);
+  const ubahH = (id: string, f: (h: Homestay) => void) => ubah((d) => { const h = d.homestay.find((x) => x.id === id); if (h) { f(h); delete h.contoh; } });
+
+  function tambah() {
+    const id = idBaru("h");
+    ubah((d) => { d.homestay.push({ id, slug: `homestay-${d.homestay.length + 1}`, nama: { en: "New homestay", id: "Homestay baru" }, lokasi: kosong, ringkas: kosong, deskripsi: kosong, fasilitas: { en: [], id: [] }, hargaMulai: 0, foto: [], tampil: false }); });
+    setBuka(id);
+  }
+
+  return (
+    <KartuPanel judul="Homestay" keterangan="Kartu homestay di beranda, di bawah bagian Temukan penginapanmu. Tiap homestay punya halaman sendiri dengan formulir permintaan menginap. Urutan di sini sama dengan urutan di situs."
+      aksi={<button type="button" onClick={tambah} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah homestay</button>}>
+      {k.homestay.length === 0 && <p className="text-[14.5px] text-ink2">Belum ada homestay. Bagian kartu homestay di beranda tersembunyi sampai ada yang tampil.</p>}
+      <ul className="grid gap-3">
+        {k.homestay.map((h, i) => (
+          <li key={h.id} className="rounded-card border border-line bg-white">
+            <div className="flex flex-wrap items-center gap-3 p-3 sm:p-4">
+              <div className="relative h-16 w-24 flex-none overflow-hidden rounded-[12px] bg-buih">
+                {h.foto[0] && <Image src={h.foto[0]} alt="" fill sizes="96px" unoptimized className="object-cover" />}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="flex flex-wrap items-center gap-2 text-[16px] font-extrabold text-navy">{tx(h.nama, "id") || "Tanpa nama"}<TandaContoh ada={h.contoh} />{!h.tampil && <span className="rounded-pill bg-[#F1F3F5] px-2 py-0.5 text-[11.5px] font-extrabold text-ink2">Disembunyikan</span>}</p>
+                <p className="text-[13px] text-ink2">{tx(h.lokasi, "id") || "Lokasi belum diisi"} · {h.hargaMulai ? `mulai ${rupiah(h.hargaMulai, "id")} per malam` : "tanya harga"} · /homestay/{h.slug}</p>
+              </div>
+              <Geser i={i} n={k.homestay.length} onGeser={(a) => ubah((d) => geserDaftar(d.homestay, i, a))} />
+              <button type="button" onClick={() => setBuka(buka === h.id ? null : h.id)} aria-expanded={buka === h.id} className="rounded-pill bg-buih px-4 py-2 text-[13.5px] font-bold text-navy hover:bg-line">{buka === h.id ? "Tutup" : "Ubah"}</button>
+            </div>
+            {buka === h.id && (
+              <div className="grid gap-5 bg-soft p-4 sm:p-5">
+                <Saklar label="Tampil di situs" value={h.tampil} onChange={(v) => ubahH(h.id, (x) => { x.tampil = v; })} hint="Homestay yang disembunyikan tidak tampil dan alamatnya menjawab 404." />
+                <KolomDua label="Nama homestay" value={h.nama} onChange={(v) => ubahH(h.id, (x) => { x.nama = v; })} maks={120} />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <KolomTeks label="Alamat halaman" value={h.slug} onChange={(v) => ubahH(h.id, (x) => { x.slug = slugDari(v) || x.slug; })} hint={`Tampil sebagai /en/homestay/${h.slug}`} jenis="tautan" maks={60} />
+                  <KolomAngka label="Harga mulai per orang per malam" hint="Rupiah. Isi 0 untuk menampilkan Tanya harga." awalan="Rp" value={h.hargaMulai} onChange={(v) => ubahH(h.id, (x) => { x.hargaMulai = v; })} />
+                </div>
+                <KolomDua label="Lokasi" hint="Pulau atau kampung, contoh Pulau Kri, Selat Dampier." value={h.lokasi} onChange={(v) => ubahH(h.id, (x) => { x.lokasi = v; })} maks={120} />
+                <KolomDua label="Ringkasan di kartu" value={h.ringkas} onChange={(v) => ubahH(h.id, (x) => { x.ringkas = v; })} panjang maks={300} />
+                <KolomDua label="Deskripsi lengkap" hint="Pisahkan paragraf dengan satu baris kosong." value={h.deskripsi} onChange={(v) => ubahH(h.id, (x) => { x.deskripsi = v; })} panjang maks={6000} />
+                <KolomDaftar label="Fasilitas" value={h.fasilitas} onChange={(v) => ubahH(h.id, (x) => { x.fasilitas = v; })} />
+                <KolomBanyakFoto label="Foto homestay" maks={MAKS_FOTO_TRIP} value={h.foto} onChange={(v) => ubahH(h.id, (x) => { x.foto = v; })} />
+                <div className="flex justify-end">
+                  <button type="button" onClick={() => { if (window.confirm("Hapus homestay ini?")) ubah((d) => { d.homestay = d.homestay.filter((x) => x.id !== h.id); }); }}
+                    className="inline-flex items-center gap-1.5 rounded-pill px-4 py-2 text-[13.5px] font-bold text-[#A63A22] hover:bg-[#FBE4DD]"><IkonSampah size={16} />Hapus homestay</button>
                 </div>
               </div>
             )}

@@ -5,8 +5,8 @@ import { buatT } from "@/lib/i18n/t";
 import { getMessages } from "@/lib/i18n/messages";
 import { rupiah, potonganTanggal } from "@/lib/format";
 import { KISI_TIGA, tempatTiga } from "@/lib/kisi";
-import { sisaKursi, tx, txDaftar, type Faq, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
-import { IkonBintang, IkonJam, IkonMasker, IkonPanahKanan } from "./Ikon";
+import { sisaKursi, tx, txDaftar, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
+import { IkonBintang, IkonJam, IkonMasker, IkonPanahKanan, IkonPin } from "./Ikon";
 import { isiJudul } from "./Judul";
 
 const unopt = (src: string) => src.startsWith("/unggahan/");
@@ -75,6 +75,61 @@ export function DaftarTrip({ b, trip, l }: { b: KepalaBagian; trip: Trip[]; l: L
         </div>
       </div>
     </section>
+  );
+}
+
+export function HargaHomestay({ h, l, besar = false }: { h: Homestay; l: Locale; besar?: boolean }) {
+  const t = buatT(getMessages(l));
+  if (!h.hargaMulai) return <span className={`font-display text-navy ${besar ? "text-[32px]" : "text-[24px]"} leading-none`}>{t("homestay.tanyaHarga")}</span>;
+  return (
+    <span className="grid leading-none">
+      <span className="text-[12.5px] font-bold text-ink2">{t("homestay.dari")}</span>
+      <span className={`mt-1 font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"}`}>{rupiah(h.hargaMulai, l)}</span>
+      <span className="mt-1 text-[12.5px] font-semibold text-ink2">{t("homestay.perMalam")}</span>
+    </span>
+  );
+}
+
+/** Kartu homestay, rupanya sama dengan kartu trip (permintaan pemilik, November 2026). */
+export function KartuHomestay({ h, l, lebar = false }: { h: Homestay; l: Locale; lebar?: boolean }) {
+  const t = buatT(getMessages(l));
+  const href = `/${l}/homestay/${h.slug}`;
+  const sampul = h.foto[0];
+  const fasilitas = txDaftar(h.fasilitas, l).slice(0, 3);
+  return (
+    <article className={`group flex h-full overflow-hidden rounded-card bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lift ${lebar ? "flex-col md:flex-row" : "flex-col"}`}>
+      <Link href={href} className={`relative block flex-none overflow-hidden bg-kabut ${lebar ? "aspect-[4/3] md:aspect-auto md:w-[46%]" : "aspect-[4/3]"}`} tabIndex={-1} aria-hidden>
+        {sampul && <Image src={sampul} alt="" fill sizes="(max-width: 768px) 100vw, 420px" unoptimized={unopt(sampul)} className="object-cover transition duration-700 group-hover:scale-[1.04]" />}
+        {tx(h.lokasi, l) && <span className="pill pill-terang absolute left-3 top-3 max-w-[calc(100%-24px)] bg-white/95"><IkonPin size={15} className="flex-none" /><span className="truncate">{tx(h.lokasi, l)}</span></span>}
+      </Link>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <h3 className="text-[28px] sm:text-[30px]"><Link href={href} className="hover:text-tanda">{tx(h.nama, l)}</Link></h3>
+        {tx(h.ringkas, l) && <p className="mt-2 text-[15px] text-ink2">{tx(h.ringkas, l)}</p>}
+        {fasilitas.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {fasilitas.map((f) => <span key={f} className="pill pill-terang">{f}</span>)}
+          </div>
+        )}
+        <div className="mt-auto flex items-end justify-between gap-3 pt-6">
+          <HargaHomestay h={h} l={l} />
+          <Link href={href} className="btn btn-navy min-h-[44px] px-5 text-[14px]">{t("homestay.lihat")}</Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/** Kisi kartu homestay di bawah bagian kartu bertumpuk. */
+export function DaftarHomestay({ homestay, l }: { homestay: Homestay[]; l: Locale }) {
+  const tampil = homestay.filter((h) => h.tampil);
+  if (!tampil.length) return null;
+  return (
+    <div className={`wrap mt-12 sm:mt-16 ${KISI_TIGA}`}>
+      {tampil.map((h, i) => {
+        const p = tempatTiga(i, tampil.length);
+        return <div key={h.id} className={p.kelas}><KartuHomestay h={h} l={l} lebar={p.lebar} /></div>;
+      })}
+    </div>
   );
 }
 

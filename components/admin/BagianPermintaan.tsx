@@ -13,7 +13,7 @@ const NAMA_STATUS: Record<StatusPermintaan, string> = { baru: "Baru", dihubungi:
 const KELAS_STATUS: Record<StatusPermintaan, string> = { baru: "bg-koral text-navy", dihubungi: "bg-ukir/20 text-tanda", dikonfirmasi: "bg-[#E3F1E9] text-[#2E7D5B]", batal: "bg-[#F1F3F5] text-ink2" };
 const URUTAN: StatusPermintaan[] = ["baru", "dihubungi", "dikonfirmasi", "batal"];
 
-export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; permintaan: Permintaan[]; pindah: (id: "permintaan" | "trip" | "jadwal" | "titik" | "beranda" | "kontak") => void }) {
+export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; permintaan: Permintaan[]; pindah: (id: "permintaan" | "trip" | "jadwal" | "homestay" | "titik" | "beranda" | "kontak") => void }) {
   const hariIni = hariIniWit();
   const mendatang = jadwalMendatang(k.jadwal, hariIni);
   const baru = permintaan.filter((p) => p.status === "baru");
@@ -21,6 +21,7 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
     trip: k.trip.filter((t) => t.contoh && t.tampil).length,
     jadwal: mendatang.filter((j) => j.contoh).length,
     titik: k.titik.filter((t) => t.contoh && t.tampil).length,
+    homestay: k.homestay.filter((h) => h.contoh && h.tampil).length,
   };
   const kursi = mendatang.reduce((n, j) => n + sisaKursi(j), 0);
   const angka = [
@@ -43,13 +44,14 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
         ))}
       </div>
 
-      {(contoh.trip + contoh.jadwal + contoh.titik > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
+      {(contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
         <KartuPanel judul="Yang perlu dilengkapi sebelum promosi" keterangan="Isi berikut masih contoh bawaan, bukan data Fantasea. Ganti atau sembunyikan supaya tamu tidak salah paham.">
           <ul className="grid gap-2.5 text-[14.5px] text-navy">
             {kontakContoh.wa && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{k.situs.kontak.whatsapp ? "Nomor WhatsApp masih contoh. Footer menampilkan nomor contoh, dan permintaan tamu belum diteruskan ke WhatsApp." : "Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi."}</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
             {kontakContoh.lain.length > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{kontakContoh.lain.join(", ")} di footer masih alamat contoh fantaseadivetravel. Ganti dengan akun asli atau kosongkan.</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
             {contoh.trip > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.trip} trip contoh masih tampil dengan harga contoh.</span><button type="button" onClick={() => pindah("trip")} className="font-bold text-tanda">Ubah trip</button></li>}
             {contoh.jadwal > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.jadwal} jadwal open trip contoh masih tampil.</span><button type="button" onClick={() => pindah("jadwal")} className="font-bold text-tanda">Ubah jadwal</button></li>}
+            {contoh.homestay > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.homestay} homestay contoh masih tampil. Ganti dengan homestay mitra asli beserta foto dan harganya, atau sembunyikan.</span><button type="button" onClick={() => pindah("homestay")} className="font-bold text-tanda">Ubah homestay</button></li>}
             {contoh.titik > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{contoh.titik} titik selam contoh. Minta pemandu memeriksa kedalaman, arus, dan level.</span><button type="button" onClick={() => pindah("titik")} className="font-bold text-tanda">Periksa titik</button></li>}
             {fotoBawaan > 0 && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-buih px-4 py-3"><span>{fotoBawaan} foto beranda masih ilustrasi bawaan. Ganti dengan foto trip Fantasea.</span><button type="button" onClick={() => pindah("beranda")} className="font-bold text-tanda">Ganti foto</button></li>}
           </ul>
@@ -114,15 +116,16 @@ export function BagianPermintaan({ permintaan, setPermintaan, sesi, k }: { permi
             ? `Halo ${p.nama}, terima kasih sudah memesan ${p.tripNama} di Fantasea Dive Travel.\nKode ${p.kode}`
             : `Hello ${p.nama}, thank you for your request for ${p.tripNama} with Fantasea Dive Travel.\nCode ${p.kode}`;
           const wa = tautanWa(p.whatsapp.replace(/^0/, "62"), salam);
-          const trip = k.trip.find((t) => t.id === p.tripId);
+          const menginap = p.jenis === "homestay";
+          const item = menginap ? k.homestay.find((h) => h.id === p.tripId) : k.trip.find((t) => t.id === p.tripId);
           return (
             <li key={p.id} className="rounded-card border border-line bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[12.5px] font-bold text-ink2">{p.kode} · masuk {tanggalPanjang(p.dibuat.slice(0, 10), "id")}</p>
                   <p className="mt-0.5 text-[18px] font-extrabold text-navy">{p.nama}</p>
-                  <p className="text-[14px] text-navy">{trip ? tx(trip.nama, "id") : p.tripNama}</p>
-                  <p className="text-[14px] text-ink2">{rentangTanggal(p.mulai, p.selesai, "id")} · {p.orang} orang · {p.jadwalId ? "Open trip" : "Tanggal sendiri"} · bahasa {p.bahasa === "id" ? "Indonesia" : "Inggris"}</p>
+                  <p className="text-[14px] text-navy">{item ? tx(item.nama, "id") : p.tripNama}</p>
+                  <p className="text-[14px] text-ink2">{rentangTanggal(p.mulai, p.selesai, "id")} · {p.orang} orang · {menginap ? "Menginap" : p.jadwalId ? "Open trip" : "Tanggal sendiri"} · bahasa {p.bahasa === "id" ? "Indonesia" : "Inggris"}</p>
                 </div>
                 <span className={`rounded-pill px-2.5 py-1 text-[12px] font-extrabold ${KELAS_STATUS[p.status]}`}>{NAMA_STATUS[p.status]}</span>
               </div>

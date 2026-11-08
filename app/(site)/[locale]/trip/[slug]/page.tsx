@@ -126,8 +126,8 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
           <aside id="pesan" className="lg:sticky lg:top-24 lg:self-start">
             <FormPermintaan
               key={jadwalAwal}
-              tripId={trip.id}
-              tripNama={nama}
+              itemId={trip.id}
+              itemNama={nama}
               jadwal={jadwalTrip.map((j) => ({ id: j.id, mulai: j.mulai, selesai: j.selesai, sisa: sisaKursi(j) }))}
               jadwalAwal={jadwalAwal}
               hariIni={hariIniWit()}

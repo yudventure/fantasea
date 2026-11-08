@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n/context";
 import type { Kartu } from "@/lib/konten";
 import Gelembung from "./Gelembung";
@@ -12,6 +11,10 @@ import { isiJudul } from "./Judul";
  * Bagian kedua referensi: teks di kiri, empat kartu foto bertumpuk menurun
  * di kanan dengan gelembung tag, dan tombol atas dan bawah untuk menggeser
  * urutannya. Tempat kartu ditentukan urutan, jadi pergeseran beranimasi.
+ *
+ * Permintaan pemilik, November 2026: bagian ini jadi pembuka homestay
+ * (Find your accommodation with us), tanpa dua tombol, dan kartu homestay
+ * tampil di bawahnya (`children`, dari DaftarHomestay).
  */
 const TEMPAT = [
   "left-0 top-[6%] w-[38%] -rotate-[3deg]",
@@ -20,8 +23,8 @@ const TEMPAT = [
   "left-[64%] top-[32%] w-[33%] rotate-[2deg]",
 ];
 
-export default function Jelajah({ label, judul, lead, tombol1, tombol2, kartu, hrefTombol1 }: {
-  label: string; judul: string; lead: string; tombol1: string; tombol2: string; kartu: Kartu[]; hrefTombol1: string;
+export default function Jelajah({ id, label, judul, lead, kartu, children }: {
+  id?: string; label: string; judul: string; lead: string; kartu: Kartu[]; children?: ReactNode;
 }) {
   const { t } = useI18n();
   const ada = kartu.filter((c) => c.foto);
@@ -30,16 +33,12 @@ export default function Jelajah({ label, judul, lead, tombol1, tombol2, kartu, h
   const putar = (arah: number) => setGeser((g) => (g + arah + n) % n);
 
   return (
-    <section className="overflow-hidden py-16 sm:py-24">
+    <section id={id} className="overflow-hidden py-16 sm:py-24">
       <div className="wrap grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
         <div>
           {label && <p className="aksen">{label}</p>}
           <h2 className="mt-3 text-[clamp(40px,5.6vw,68px)]">{isiJudul(judul)}</h2>
-          {lead && <p className="mt-6 max-w-[40ch] text-[16px] text-ink2">{lead}</p>}
-          <div className="mt-8 flex flex-wrap gap-3">
-            {tombol1 && <Link href={hrefTombol1} className="btn btn-navy">{tombol1}</Link>}
-            {tombol2 && <Link href="#trip" className="btn btn-terang">{tombol2}</Link>}
-          </div>
+          {lead && <p className="mt-6 max-w-[46ch] text-[16px] text-ink2">{lead}</p>}
         </div>
 
         {n > 0 && (
@@ -68,6 +67,7 @@ export default function Jelajah({ label, judul, lead, tombol1, tombol2, kartu, h
           </div>
         )}
       </div>
+      {children}
     </section>
   );
 }

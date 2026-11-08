@@ -44,6 +44,7 @@ export const KONTEN_BAWAAN: Konten = {
   menu: {
     trip: { en: "Trips", id: "Trip" },
     jadwal: { en: "Open trips", id: "Open trip" },
+    homestay: { en: "Homestays", id: "Homestay" },
     titik: { en: "Dive sites", id: "Titik selam" },
     ulasan: { en: "Stories", id: "Cerita" },
     faq: { en: "FAQ", id: "FAQ" },
@@ -65,15 +66,15 @@ export const KONTEN_BAWAAN: Konten = {
       { foto: F("manta-biru"), tag: "@mantasandy", warna: "ukir" },
     ],
   },
+  // Pembuka homestay (permintaan pemilik, November 2026). Teks lama "Dive with
+  // us" di simpanan diganti otomatis, lihat JELAJAH_LAMA di lib/konten.ts.
   jelajah: {
-    label: { en: "Dive travel", id: "Dive travel" },
-    judul: { en: "Dive with us,\n*& explore the reefs*\ntogether.", id: "Menyelam bersama,\n*& jelajahi karang*\nRaja Ampat." },
+    label: { en: "Where to stay", id: "Tempat menginap" },
+    judul: { en: "Find your\n*accommodation*\nwith us.", id: "Temukan\n*penginapanmu*\nbersama kami." },
     lead: {
-      en: "A small dive travel team from Raja Ampat. We plan the boat, the homestay and the dives. You bring the curiosity.",
-      id: "Tim dive travel kecil dari Raja Ampat. Kami atur kapal, homestay, dan titik selamnya. Kamu cukup membawa rasa ingin tahu.",
+      en: "Staying in Raja Ampat, especially in high season, means booking your bed long before you fly. We work to connect you with authentic homestays that truly live as one with nature.",
+      id: "Menginap di Raja Ampat, terutama saat musim ramai, berarti tempat bermalam harus sudah dipesan jauh hari sebelumnya. Kami berusaha menghubungkanmu dengan homestay autentik yang benar-benar menyatu dengan alam.",
     },
-    tombol1: { en: "Plan my trip", id: "Rencanakan trip" },
-    tombol2: { en: "See all trips", id: "Lihat semua trip" },
     kartu: [
       { foto: F("pantai-karst"), tag: "@pulaukri", warna: "koral" },
       { foto: F("penyelam-karang"), tag: "", warna: "tanda" },
@@ -260,6 +261,76 @@ export const KONTEN_BAWAAN: Konten = {
     { id: "j-3", tripId: "t-snorkel", mulai: "2027-01-09", selesai: "2027-01-11", kursi: 10, terisi: 3, catatan: { en: "", id: "" }, contoh: true },
     { id: "j-4", tripId: "t-escape", mulai: "2027-01-16", selesai: "2027-01-19", kursi: 8, terisi: 2, catatan: { en: "", id: "" }, contoh: true },
     { id: "j-5", tripId: "t-piaynemo", mulai: "2027-02-06", selesai: "2027-02-11", kursi: 8, terisi: 3, catatan: { en: "", id: "" }, contoh: true },
+  ],
+  // Homestay contoh, tanpa harga (Tanya harga). Nama dan isinya umum, bukan
+  // homestay tertentu, dan fotonya ilustrasi. Ganti dengan homestay mitra asli.
+  homestay: [
+    {
+      id: "h-kri",
+      slug: "homestay-pulau-kri",
+      nama: { en: "Kri Island homestay", id: "Homestay Pulau Kri" },
+      lokasi: { en: "Kri Island, Dampier Strait", id: "Pulau Kri, Selat Dampier" },
+      ringkas: {
+        en: "Wooden bungalows on a white sand beach, a short boat ride from the Dampier Strait dive sites.",
+        id: "Bungalo kayu di pantai pasir putih, dekat dengan titik selam Selat Dampier.",
+      },
+      deskripsi: {
+        en: "Simple wooden bungalows a few steps from the water, run by a local family. Wake up to the sound of the reef and snorkel straight from the beach.\n\nMeals are cooked by the family and served together. We arrange the boat transfer from Waisai and plan your dives around your stay.",
+        id: "Bungalo kayu sederhana beberapa langkah dari air, dikelola keluarga setempat. Bangun dengan suara ombak dan snorkeling langsung dari pantai.\n\nMakanan dimasak keluarga pemilik dan disantap bersama. Kami atur kapal dari Waisai dan merencanakan titik selam sesuai masa menginapmu.",
+      },
+      fasilitas: {
+        en: ["Beachfront bungalow", "Three meals a day", "Mosquito net", "Snorkeling from the beach"],
+        id: ["Bungalo tepi pantai", "Makan tiga kali sehari", "Kelambu", "Snorkeling dari pantai"],
+      },
+      hargaMulai: 0,
+      foto: [F("pantai-karst"), F("snorkel-laguna"), F("penyu-karang")],
+      tampil: true,
+      contoh: true,
+    },
+    {
+      id: "h-arborek",
+      slug: "homestay-kampung-arborek",
+      nama: { en: "Arborek village homestay", id: "Homestay Kampung Arborek" },
+      lokasi: { en: "Arborek Village, Dampier Strait", id: "Kampung Arborek, Selat Dampier" },
+      ringkas: {
+        en: "Stay with a local family in a small island village, with the reef right below the jetty.",
+        id: "Menginap bersama keluarga setempat di kampung pulau kecil, karangnya tepat di bawah dermaga.",
+      },
+      deskripsi: {
+        en: "A homestay inside a small island village, where days follow the rhythm of the community. Children play on the jetty and fish circle the pillars below.\n\nYour stay supports the family directly. Ask us about joining village life, from cooking to weaving.",
+        id: "Homestay di dalam kampung pulau kecil, hari berjalan mengikuti irama warga. Anak-anak bermain di dermaga dan ikan berputar di tiang di bawahnya.\n\nMenginap di sini langsung membantu keluarga pemilik. Tanyakan kepada kami untuk ikut kegiatan kampung, dari memasak sampai menganyam.",
+      },
+      fasilitas: {
+        en: ["Village stay", "Three meals a day", "Mosquito net", "Reef by the jetty"],
+        id: ["Menginap di kampung", "Makan tiga kali sehari", "Kelambu", "Karang di dekat dermaga"],
+      },
+      hargaMulai: 0,
+      foto: [F("speedboat-laguna"), F("ikan-badut"), F("snorkel-karst")],
+      tampil: true,
+      contoh: true,
+    },
+    {
+      id: "h-mansuar",
+      slug: "homestay-pulau-mansuar",
+      nama: { en: "Mansuar Island homestay", id: "Homestay Pulau Mansuar" },
+      lokasi: { en: "Mansuar Island, Dampier Strait", id: "Pulau Mansuar, Selat Dampier" },
+      ringkas: {
+        en: "Quiet bungalows at the edge of the water, with sunsets behind the karst islands.",
+        id: "Bungalo tenang di tepi air, dengan matahari terbenam di balik pulau karst.",
+      },
+      deskripsi: {
+        en: "Bungalows on stilts over the shallow reef, away from the busier islands. Evenings are for sunsets and stars, mornings for the first dive.\n\nElectricity usually runs in the evening from a generator. Bring a power bank and leave the rest to the island.",
+        id: "Bungalo panggung di atas karang dangkal, jauh dari pulau yang lebih ramai. Sore untuk matahari terbenam dan bintang, pagi untuk selam pertama.\n\nListrik biasanya menyala malam hari dari genset. Bawa power bank, sisanya serahkan kepada pulau.",
+      },
+      fasilitas: {
+        en: ["Bungalow over the water", "Three meals a day", "Evening electricity", "Sunset view"],
+        id: ["Bungalo di atas air", "Makan tiga kali sehari", "Listrik malam hari", "Pemandangan senja"],
+      },
+      hargaMulai: 0,
+      foto: [F("senja-karst"), F("snorkel-karst"), F("pantai-karst")],
+      tampil: true,
+      contoh: true,
+    },
   ],
   titik: [
     {
