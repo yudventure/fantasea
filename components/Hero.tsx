@@ -7,14 +7,23 @@ import { Judul } from "./Judul";
 
 /**
  * Hero ala referensi: judul besar di tengah, lima kartu foto mengipas
- * dengan gelembung tag, kalimat pendek, dan dua tombol. Kartu luar miring
- * menjauh dengan perspektif, kartu tengah paling besar dan tegak.
+ * dengan gelembung tag, kalimat pendek, dan dua tombol.
+ *
+ * Permintaan pemilik, November 2026:
+ * - Hero selalu tepat satu layar penuh di semua ukuran layar, jadi bagian
+ *   di bawahnya tidak mengintip. Tingginya minimal 100svh (100vh untuk
+ *   peramban lama), dan ukuran judul serta kartu mengikuti tinggi layar
+ *   (vh) selain lebarnya, supaya isinya tetap utuh di layar pendek.
+ * - Kartu foto lebih besar, dan kartu yang disorot pointer membesar jelas:
+ *   naik, membesar, maju ke depan, bayangannya menebal, fotonya ikut
+ *   mendekat. Rotasi 3D ada di <figure>, pembesaran di lapisan dalam,
+ *   supaya keduanya tidak saling menimpa transform.
  * Di ponsel hanya tiga kartu tengah yang tampil supaya tidak sesak.
  */
 const GAYA = [
   "[transform:rotateY(26deg)_rotate(-5deg)_translateY(34px)_scale(.84)] hidden sm:block",
   "[transform:rotateY(13deg)_rotate(-2deg)_translateY(10px)_scale(.94)]",
-  "z-[3] [transform:translateY(-4px)]",
+  "[transform:translateY(-4px)]",
   "[transform:rotateY(-13deg)_rotate(2deg)_translateY(10px)_scale(.94)]",
   "[transform:rotateY(-26deg)_rotate(5deg)_translateY(34px)_scale(.84)] hidden sm:block",
 ];
@@ -23,31 +32,36 @@ const URUTAN_Z = ["z-[1]", "z-[2]", "z-[3]", "z-[2]", "z-[1]"];
 export default function Hero({ k, l }: { k: Konten; l: Locale }) {
   const h = k.hero;
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F1F6F9] via-white to-white pb-16 pt-10 sm:pt-14">
-      <div className="wrap text-center">
-        <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[16ch] text-[clamp(44px,8.4vw,92px)] leading-[0.95]" />
-      </div>
+    <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[92px] supports-[height:100svh]:min-h-[100svh] sm:pt-[118px]">
+      <div className="flex flex-1 flex-col justify-center">
+        <div className="wrap text-center">
+          <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[16ch] text-[clamp(36px,min(8.4vw,9vh),96px)] leading-[0.95]" />
+        </div>
 
-      <div className="relative mx-auto mt-8 flex max-w-[1180px] items-end justify-center px-2 [perspective:1400px] sm:mt-10" aria-hidden>
-        {h.kartu.map((c, i) => (
-          <figure key={i} className={`group relative -mx-3 m-0 w-[34vw] max-w-[230px] flex-none transition-transform duration-500 sm:-mx-4 sm:w-[19vw] ${URUTAN_Z[i]} ${GAYA[i]}`}>
-            {c.foto && (
-              <div className="foto-kartu aspect-[4/5] transition-transform duration-500 group-hover:-translate-y-2">
-                <div className="isi">
-                  <Image src={c.foto} alt="" fill sizes="(max-width: 640px) 34vw, 230px" priority={i === 2} unoptimized={c.foto.startsWith("/unggahan/")} className="object-cover" />
-                </div>
+        <div className="relative mx-auto mt-[3.5vh] flex w-full max-w-[1500px] items-end justify-center px-2 [perspective:1400px]" aria-hidden>
+          {h.kartu.map((c, i) => (
+            <figure key={i} className={`group relative -mx-3 m-0 w-[min(38vw,26vh)] max-w-[330px] flex-none sm:-mx-5 sm:w-[min(21vw,31vh)] ${URUTAN_Z[i]} ${GAYA[i]} hover:z-20`}>
+              <div className="relative transition-transform duration-500 ease-out group-hover:-translate-y-3 group-hover:scale-[1.15] motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 motion-reduce:group-hover:scale-100">
+                {c.foto && (
+                  <div className="foto-kartu aspect-[4/5] transition-shadow duration-500 group-hover:shadow-[0_36px_64px_-18px_rgba(19,31,51,.6)]">
+                    <div className="isi">
+                      <Image src={c.foto} alt="" fill sizes="(max-width: 640px) 38vw, 330px" priority={i === 2} unoptimized={c.foto.startsWith("/unggahan/")}
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08] motion-reduce:group-hover:scale-100" />
+                    </div>
+                  </div>
+                )}
+                {c.tag && <Gelembung teks={c.tag} warna={c.warna} className={`absolute -top-4 ${i < 2 ? "left-2" : "right-2"} z-[4] -rotate-3`} />}
               </div>
-            )}
-            {c.tag && <Gelembung teks={c.tag} warna={c.warna} className={`absolute -top-4 ${i < 2 ? "left-2" : "right-2"} z-[4] -rotate-3`} />}
-          </figure>
-        ))}
-      </div>
+            </figure>
+          ))}
+        </div>
 
-      <div className="wrap mt-10 text-center">
-        {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[16px] text-ink2 sm:text-[17px]">{tx(h.lead, l)}</p>}
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          {tx(h.tombol1, l) && <Link href="#jadwal" className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
-          {tx(h.tombol2, l) && <Link href="#titik" className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
+        <div className="wrap mt-[4.5vh] text-center">
+          {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
+          <div className="mt-[2.6vh] flex flex-wrap items-center justify-center gap-3">
+            {tx(h.tombol1, l) && <Link href="#jadwal" className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
+            {tx(h.tombol2, l) && <Link href="#titik" className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
+          </div>
         </div>
       </div>
     </section>

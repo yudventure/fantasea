@@ -7,7 +7,7 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 ## Perintah
 
 - `npm run dev` · `npm run typecheck` · `npm run cek:tanda` · `npm run build` · `npm run serve` (server.js, meniru Hostinger).
-- Sebelum push jalankan `npm run cek` (cek tipe, tanda baca, build). CI menjalankan hal yang sama.
+- Sebelum push jalankan `npm run cek` (cek tipe, tanda baca, build). CI menjalankan hal yang sama, lalu menggabungkan ke `main` dan men-deploy ke Hostinger (bagian Deploy).
 - Setelah kode situs berubah, buat ulang ZIP Hostinger: `python3 scripts/buat_zip_hostinger.py`.
 
 ## Struktur
@@ -40,7 +40,8 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 
 - Warna hanya dari `tailwind.config.ts` (sama dengan `brand/token/tokens.json`). Koral Senja hanya untuk ajakan pesan dan harga, teks di atasnya navy.
 - Judul `font-display` (Londrina Solid), label `.aksen` (Gochi Hand kapital berjarak), isi `font-body` (Nunito).
-- Header memakai tanda manta dengan nama Fantasea, karena logo lengkap di bawah 160 px tidak terbaca. Logo lengkap di footer dan halaman masuk.
+- Header memakai logo utama lengkap, tidak dipisah (permintaan pemilik, November 2026). Di puncak halaman header tanpa latar, begitu digulir latarnya putih tembus pandang dan logonya mengecil (`components/Header.tsx`). Latar dan blurnya di lapisan anak `absolute inset-0`, bukan di `<header>`. Logo latar gelap di footer.
+- Hero beranda selalu tepat satu layar di semua ukuran, bagian berikutnya tidak mengintip (`min-h` 100svh, judul dan kartu ikut tinggi layar). Kartu foto yang disorot pointer membesar jelas (`components/Hero.tsx`). Setelah mengubah hero, periksa di beberapa ukuran layar dari 375x667 sampai 2560x1440.
 
 ## Deploy dan environment
 
@@ -48,6 +49,7 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - Paket build (Tailwind, PostCSS, TypeScript) sengaja di `dependencies`, supaya build tetap jalan bila Hostinger memasang mode produksi.
 - Env dibaca lewat `envText()` (`lib/env.ts`): "-" sama dengan kosong, karena pemilik mengimpor semua key sekaligus dengan value "-" lalu mengisinya sendiri. Key baru wajib ditambahkan ke `hostinger/fantasea-hpanel.env`, `.env.example`, dan tabel panduan. Rahasia tidak pernah lewat chat atau repo.
 - Data di `FANTASEA_DATA_DIR` atau `~/.fantasea-data`, di luar folder aplikasi.
+- Merge dan deploy otomatis, seperti Dragonet (permintaan pemilik, November 2026). `.github/workflows/ci.yml` mengecek setiap push (build), menggabungkan branch selain `main` dan `wip/` ke `main` lewat PR atau merge langsung (merge), lalu memanggil `deploy.yml` yang menjalankan `scripts/hostinger-deploy.mjs` lewat API Hostinger (deploy). Butuh secret `HOSTINGER_API_TOKEN` dan variabel repo `HOSTINGER_DOMAIN` (bawaan testingwebsite.click), tanpa token deploy dilewati dengan peringatan. Pemeriksaan akhirnya `/api/health` dengan `app` bernilai `fantasea`, jadi jangan ubah jawaban health tanpa mengubah skripnya. `AUTO_MERGE=false` mematikan merge. Push hanya pekerjaan yang siap tayang, sisanya di branch `wip/`.
 
 ## Pengujian
 

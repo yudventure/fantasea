@@ -47,7 +47,7 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
     <>
       <Header menu={menu} pesan={pesan} jalur={`/trip/${trip.slug}`} />
       <main id="isi" className="pb-8">
-        <section className="bg-gradient-to-b from-[#F1F6F9] to-white pb-10 pt-8 sm:pt-10">
+        <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-10 pt-[100px] sm:pt-[128px]">
           <div className="wrap">
             <Link href={`/${l}#trip`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
               <IkonPanahKiri size={16} />{t("trip.semua")}

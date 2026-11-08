@@ -10,9 +10,12 @@ import { IkonMenu, IkonTutup } from "./Ikon";
 export interface TautanMenu { href: string; label: string }
 
 /**
- * Header ala referensi: tanda manta di kiri, menu di kanan, tombol bahasa
- * dan tombol pesan. Logo lengkap tidak dipakai di sini karena di bawah
- * 160 px tulisan DIVE TRAVEL tidak terbaca (pedoman merek bab 03).
+ * Header ala referensi: logo utama di kiri, menu di kanan, tombol bahasa dan
+ * tombol pesan. Permintaan pemilik, November 2026: logo utama utuh (bukan
+ * tanda manta dengan nama terpisah), dan di puncak halaman header tanpa
+ * latar. Latar putih tembus pandang baru muncul saat halaman digulir, dan
+ * logonya mengecil. Header melayang (fixed) di atas hero, jadi bagian pertama
+ * tiap halaman memberi ruang di atasnya.
  * `jalur` adalah alamat halaman tanpa kode bahasa, untuk tombol EN / ID.
  */
 export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pesan: TautanMenu; jalur: string }) {
@@ -37,14 +40,14 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
   const bahasaLain = (l: Locale) => `/${l}${jalur}`;
 
   return (
-    <header className="sticky top-0 z-40">
+    <header className="fixed inset-x-0 top-0 z-40">
       {/* Latar dan bayangan di lapisan anak, supaya panel menu ponsel tidak terkurung (aturan DAMPIER bagian Ponsel). */}
-      <div aria-hidden className={`absolute inset-0 bg-white/90 backdrop-blur transition-shadow ${gulir ? "shadow-[0_6px_24px_-12px_rgba(19,31,51,.25)]" : ""}`} />
+      <div aria-hidden className={`absolute inset-0 bg-white/75 shadow-[0_6px_24px_-12px_rgba(19,31,51,.25)] backdrop-blur-md transition-opacity duration-300 ${gulir ? "opacity-100" : "opacity-0"}`} />
       <a href="#isi" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-pill focus:bg-navy focus:px-4 focus:py-2 focus:text-white">{t("nav.lompat")}</a>
-      <div className="wrap relative flex h-[72px] items-center gap-4">
+      <div className={`wrap relative flex items-center gap-4 transition-[padding] duration-300 ${gulir ? "py-1.5" : "py-3"}`}>
         <Link href={`/${locale}`} className="flex flex-none items-center" aria-label="Fantasea Dive Travel">
-          <Image src="/brand/logo/fantasea-manta.png" alt="" width={993} height={835} priority unoptimized className="h-[46px] w-auto" />
-          <span className="ml-2.5 font-display text-[26px] leading-none text-navy">Fantasea</span>
+          <Image src="/brand/logo/fantasea-logo-utama.png" alt="Fantasea Dive Travel" width={1617} height={1004} priority unoptimized
+            className={`w-auto transition-[height] duration-300 ${gulir ? "h-[52px] sm:h-[60px]" : "h-[64px] sm:h-[88px]"}`} />
         </Link>
 
         <nav className="ml-auto hidden items-center gap-1 lg:flex" aria-label="Menu">
@@ -74,7 +77,7 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
           <button type="button" aria-label={t("nav.tutup")} className="absolute inset-0 bg-malam/40" onClick={() => setBuka(false)} />
           <div className="absolute inset-x-3 top-3 rounded-[26px] bg-white p-5 shadow-lift">
             <div className="flex items-center justify-between">
-              <span className="font-display text-[26px] text-navy">Fantasea</span>
+              <Image src="/brand/logo/fantasea-logo-utama.png" alt="Fantasea Dive Travel" width={1617} height={1004} unoptimized className="h-[56px] w-auto" />
               <button type="button" onClick={() => setBuka(false)} className="btn-bulat" aria-label={t("nav.tutup")}><IkonTutup size={22} /></button>
             </div>
             <nav className="mt-4 grid gap-1" aria-label="Menu">
