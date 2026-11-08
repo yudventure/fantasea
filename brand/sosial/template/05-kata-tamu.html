@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 05: Kata Tamu (Feed 4:5)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .kanvas { background: var(--putih); }
+  .segi.s1 { width: 760px; height: 760px; left: -220px; top: 200px; }
+  .segi.s2 { width: 180px; height: 150px; right: 90px; top: 1000px; }
+  .kepala { position: absolute; left: 64px; right: 64px; top: 64px; display: flex; justify-content: space-between; align-items: center; }
+  .kepala .aksen { font-size: 36px; color: var(--tanda); }
+  .kepala img { height: 84px; }
+  .kutip { position: absolute; left: 100px; top: 180px; font-family: var(--f-judul); font-weight: 900; font-size: 360px; line-height: 1; color: var(--ukir); }
+  blockquote { position: absolute; left: 100px; right: 100px; top: 470px; font-family: var(--f-isi); font-weight: 700; font-size: 58px; line-height: 1.25; color: var(--navy); }
+  .nilai { position: absolute; left: 100px; top: 940px; display: flex; gap: 14px; }
+  .nilai i { width: 46px; height: 46px; background: var(--koral); clip-path: polygon(50% 0, 63% 35%, 100% 38%, 71% 61%, 81% 98%, 50% 77%, 19% 98%, 29% 61%, 0 38%, 37% 35%); }
+  .nama { position: absolute; left: 100px; top: 1020px; }
+  .nama strong { display: block; font-family: var(--f-judul); font-weight: 900; font-size: 64px; line-height: 1; }
+  .nama span { display: block; font-family: var(--f-aksen); font-size: 30px; letter-spacing: .14em; text-transform: uppercase; color: #55657A; margin-top: 10px; }
+  .kaki { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="kanvas" data-nama="05-kata-tamu">
+  <div class="segi s1"></div><div class="segi b s2"></div>
+  <div class="kepala"><span class="aksen">Kata Tamu</span><img src="../../logo/fantasea-manta.png" alt=""></div>
+  <div class="kutip">“</div>
+  <blockquote>Tempat kutipan ulasan tamu. Salin apa adanya dari Google atau TripAdvisor, paling banyak 30 kata.</blockquote>
+  <div class="nilai"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="nama"><strong>Nama Tamu</strong><span>Asal negara · Bulan trip</span></div>
+  <div class="kaki"><span class="handle">@fantaseadivetravel</span><span>#LiveTheFantasea</span></div>
+</div>
+</body>
+</html>

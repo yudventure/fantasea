@@ -1,0 +1,49 @@
+/* Dasar bersama semua template media sosial Fantasea Dive Travel.
+   Kanvas: feed 1080x1350 (.kanvas), story 1080x1920 (.kanvas.story), sorotan 1080x1080 (.kanvas.kotak).
+   Font dimuat dari folder brand/font/web, jadi template bisa dirender tanpa internet. */
+@import url("../../font/web/fonts.css");
+
+:root {
+  --navy: #203149;
+  --ukir: #30A6DE;
+  --tanda: #1264A8;
+  --kabut: #C3D6E2;
+  --putih: #FFFFFF;
+  --malam: #131F33;
+  --buih: #EEF5F9;
+  --koral: #FF8A5C;
+  --f-judul: "Londrina Solid", Impact, sans-serif;
+  --f-aksen: "Gochi Hand", cursive;
+  --f-isi: "Nunito", system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #7d8a96; }
+body { display: grid; gap: 40px; padding: 40px; justify-content: start; }
+.kanvas { position: relative; overflow: hidden; width: 1080px; height: 1350px; font-family: var(--f-isi); color: var(--navy); background: var(--putih); }
+.kanvas.story { height: 1920px; }
+.kanvas.kotak { height: 1080px; }
+
+.judul { font-family: var(--f-judul); font-weight: 900; line-height: .9; letter-spacing: .005em; }
+/* label aksen: tulisan tangan kapital berjarak lebar, seperti DIVE TRAVEL di logo */
+.aksen { font-family: var(--f-aksen); text-transform: uppercase; letter-spacing: .2em; }
+
+/* kaki: handle dan tagar, selalu di dasar kanvas */
+.kaki { position: absolute; left: 64px; right: 64px; bottom: 44px; display: flex; justify-content: space-between; align-items: center; font-family: var(--f-aksen); font-size: 32px; letter-spacing: .08em; }
+.kaki .handle { text-transform: lowercase; }
+
+/* Tanda Arah: segitiga penanda dari logo. Pakai elemen <i class="tanda"> lalu atur ukuran, warna (color) dan putaran */
+.tanda { display: inline-block; width: 40px; height: 40px; background: currentColor; color: var(--tanda); clip-path: polygon(8% 10%, 94% 50%, 8% 90%, 8% 10%, 24% 33%, 24% 67%, 60% 50%, 24% 33%); }
+.tanda.belah { clip-path: polygon(6% 12%, 96% 22%, 14% 92%, 6% 12%, 21% 40%, 26% 70%, 41% 57%, 21% 40%, 23% 28%, 48% 51%, 69% 33%, 23% 28%); }
+
+/* Pulau Segi: bidang bersegi tak beraturan */
+.segi { position: absolute; background: var(--kabut); clip-path: polygon(39% 6%, 74% 2%, 95% 31%, 90% 65%, 59% 95%, 21% 87%, 5% 50%, 13% 21%); }
+.segi.b { clip-path: polygon(7% 46%, 28% 8%, 68% 2%, 95% 34%, 90% 74%, 58% 98%, 22% 90%); }
+
+/* Foto bawah air. Tempat foto asli; selama kosong tampil laut dengan siluet manta */
+.foto { position: absolute; overflow: hidden; background:
+  radial-gradient(70% 55% at 50% -5%, rgba(160, 225, 255, .55), transparent 70%),
+  linear-gradient(180deg, #2f9fd2 0%, #1a6fa6 38%, #12406b 72%, #0c2544 100%); }
+.foto::before { content: ""; position: absolute; inset: -20% -10% 30%; background: repeating-linear-gradient(100deg, rgba(255,255,255,.0) 0 60px, rgba(255,255,255,.10) 60px 90px, rgba(255,255,255,0) 90px 170px); filter: blur(8px); transform: skewX(-8deg); }
+.foto img.siluet { position: absolute; left: 50%; top: 46%; width: 62%; transform: translate(-50%, -50%) rotate(-6deg); opacity: .78; filter: brightness(.35) saturate(.6); }
+.foto img.asli { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.foto .ket { position: absolute; right: 24px; bottom: 20px; font-family: var(--f-isi); font-weight: 700; font-size: 20px; color: rgba(255, 255, 255, .7); letter-spacing: .02em; }

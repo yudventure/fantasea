@@ -1,0 +1,37 @@
+/* Font merek Fantasea Dive Travel, di-host sendiri (SIL Open Font License 1.1).
+   Pakai: <link rel="stylesheet" href="/font/web/fonts.css"> lalu variabel di token/tokens.css */
+@font-face {
+  font-family: "Londrina Solid";
+  src: url("LondrinaSolid-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Londrina Solid";
+  src: url("LondrinaSolid-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gochi Hand";
+  src: url("GochiHand-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nunito";
+  src: url("Nunito-Variable.woff2") format("woff2");
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Nunito";
+  src: url("Nunito-Italic-Variable.woff2") format("woff2");
+  font-weight: 200 1000;
+  font-style: italic;
+  font-display: swap;
+}

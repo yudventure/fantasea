@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 01: Perkenalan (Feed 4:5)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .kanvas { background: var(--malam); color: var(--putih); }
+  .tekstur { position: absolute; left: -120px; top: 760px; width: 1320px; opacity: .07; transform: rotate(-8deg); }
+  .segi.s1 { width: 520px; height: 520px; right: -140px; top: -120px; background: var(--putih); opacity: .06; }
+  .segi.s2 { width: 200px; height: 170px; left: 70px; top: 120px; background: var(--putih); opacity: .06; }
+  .logo { position: absolute; left: 50%; top: 120px; width: 860px; transform: translateX(-50%); }
+  .tg { position: absolute; left: 40px; right: 40px; top: 740px; text-align: center; }
+  .tg h1 { font-size: 138px; white-space: nowrap; }
+  .tg h1 span { color: var(--ukir); }
+  .tg p { margin: 30px auto 0; max-width: 800px; font-size: 38px; line-height: 1.35; color: var(--kabut); }
+  .rute { position: absolute; left: 0; right: 0; top: 1150px; display: flex; justify-content: center; align-items: center; gap: 22px; font-size: 34px; color: var(--putih); }
+  .rute .tanda { width: 30px; height: 30px; color: var(--ukir); }
+  .kaki { color: var(--kabut); }
+  .t1 { position: absolute; left: 110px; top: 610px; transform: rotate(-24deg); color: var(--ukir); width: 46px; height: 46px; }
+  .t2 { position: absolute; right: 120px; top: 660px; transform: rotate(150deg); color: var(--ukir); }
+</style>
+</head>
+<body>
+<div class="kanvas" data-nama="01-perkenalan">
+  <img class="tekstur" src="../../grafis/ukir-sayap-putih.svg" alt="">
+  <div class="segi s1"></div><div class="segi b s2"></div>
+  <img class="logo" src="../../logo/fantasea-logo-latar-gelap.png" alt="Fantasea Dive Travel">
+  <i class="tanda belah t1"></i><i class="tanda t2"></i>
+  <div class="tg">
+    <h1 class="judul">Live the <span>Fantasea.</span></h1>
+    <p>Perjalanan selam Raja Ampat, kami atur dari bandara sampai titik selam.</p>
+  </div>
+  <div class="rute aksen"><span>Sorong</span><i class="tanda"></i><span>Waisai</span><i class="tanda"></i><span>Arborek</span><i class="tanda"></i><span>Manta Sandy</span></div>
+  <div class="kaki"><span class="handle">@fantaseadivetravel</span><span>#LiveTheFantasea</span></div>
+</div>
+</body>
+</html>

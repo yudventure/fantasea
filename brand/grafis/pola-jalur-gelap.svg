@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <title>Pola Jalur (latar gelap): ubin berulang Tanda Arah dan Pulau Segi untuk latar, kertas pembungkus, dan kaos</title>
+  <g fill="#C3D6E2" fill-opacity=".16">
+    <path d="M40 40 L86 34 L112 72 L104 118 L60 136 L22 104 L18 64 Z"/>
+    <path d="M262 230 L304 224 L328 258 L318 300 L280 314 L246 290 L244 252 Z"/>
+    <path d="M300 40 L326 30 L346 50 L340 76 L312 82 L296 64 Z"/>
+    <path d="M70 290 L94 282 L112 300 L106 324 L80 330 L64 312 Z"/>
+  </g>
+  <g fill="#30A6DE" fill-rule="evenodd">
+    <path transform="translate(180 60) rotate(-18)" d="M0 0 L40 18 L0 36 Z M8 10 L8 26 L24 18 Z"/>
+    <path transform="translate(150 250) rotate(24)" d="M0 0 L36 4 L4 34 Z M8 6 L26 8 L10 24 Z"/>
+    <path transform="translate(330 150) rotate(160)" d="M0 0 L40 18 L0 36 Z M8 10 L8 26 L24 18 Z"/>
+    <path transform="translate(40 190) rotate(70)" d="M0 0 L30 14 L0 28 Z M7 8 L7 20 L19 14 Z"/>
+  </g>
+  <path d="M120 130 C170 150 200 200 238 236" fill="none" stroke="#30A6DE" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10"/>
+</svg>

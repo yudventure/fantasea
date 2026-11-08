@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 06: Slot Terakhir (Story 9:16)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .kanvas { background: var(--malam); color: var(--putih); }
+  .foto { left: 0; top: 0; width: 1080px; height: 1180px; }
+  .foto::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(180deg, rgba(19,31,51,0), var(--malam)); }
+  .foto img.siluet { top: 40%; width: 70%; }
+  .atas { position: absolute; left: 64px; right: 64px; top: 270px; display: flex; justify-content: space-between; align-items: center; }
+  .atas .aksen { font-size: 40px; }
+  .atas img { height: 96px; }
+  .isi { position: absolute; left: 64px; right: 64px; top: 800px; }
+  .isi .aksen { font-size: 44px; color: var(--ukir); }
+  h1 { font-size: 210px; margin-top: 14px; }
+  .trip { font-size: 54px; font-weight: 800; margin-top: 30px; }
+  .trip span { color: var(--kabut); font-weight: 600; }
+  .sisa { display: inline-block; margin-top: 34px; background: var(--koral); color: var(--navy); font-weight: 900; font-size: 46px; padding: 16px 40px; border-radius: 999px; transform: rotate(-2deg); }
+  .ajak { position: absolute; left: 64px; right: 64px; top: 1530px; display: grid; gap: 16px; }
+  .ajak strong { font-family: var(--f-judul); font-weight: 900; font-size: 72px; }
+  .ajak span { font-size: 38px; color: var(--kabut); }
+  .t1 { position: absolute; right: 110px; top: 860px; width: 70px; height: 70px; color: var(--ukir); transform: rotate(160deg); }
+</style>
+</head>
+<body>
+<div class="kanvas story" data-nama="06-story-slot-terakhir">
+  <div class="foto"><img class="siluet" src="../../logo/fantasea-manta-navy.png" alt=""><span class="ket" style="top:390px;bottom:auto">Ganti dengan foto atau video trip</span></div>
+  <div class="atas"><span class="aksen">Open Trip</span><img src="../../logo/fantasea-manta-latar-gelap.png" alt=""></div>
+  <i class="tanda belah t1"></i>
+  <section class="isi">
+    <div class="aksen">Jangan sampai ketinggalan</div>
+    <h1 class="judul">Slot Terakhir</h1>
+    <p class="trip">Dive Escape · <span>12–15 Desember</span></p>
+    <div class="sisa">Sisa 2 kursi</div>
+  </section>
+  <div class="ajak"><strong>Balas story ini ↑</strong><span>atau WhatsApp +62 8XX-XXXX-XXXX</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* Token desain Fantasea Dive Travel.
+   Warna inti dibaca langsung dari logo (sRGB). Muat font/web/fonts.css lebih dulu. */
+:root {
+  /* ---- warna inti (dari logo) ---- */
+  --navy: #203149;        /* Navy Manta: badan manta, tulisan, teks utama */
+  --ukir: #30A6DE;        /* Biru Ukir: pola ukir di sayap, aksen khas */
+  --tanda: #1264A8;       /* Biru Tanda: segitiga penanda, tautan, tombol biru */
+  --kabut: #C3D6E2;       /* Kabut Karang: bidang segi, latar lembut */
+  --putih: #FFFFFF;
+
+  /* ---- warna pendamping ---- */
+  --malam: #131F33;       /* Laut Malam: latar paling gelap, story, footer */
+  --buih: #EEF5F9;        /* Buih: latar panel terang */
+  --koral: #FF8A5C;       /* Koral Senja: tombol pesan, harga, sorotan. Teks di atasnya selalu navy */
+
+  /* turunan untuk keadaan tombol */
+  --tanda-tekan: #0E528A;
+  --koral-tekan: #F2733F;
+  --navy-70: rgba(32, 49, 73, .7);
+  --navy-12: rgba(32, 49, 73, .12);
+
+  /* ---- peran ---- */
+  --bg: var(--putih);
+  --bg-panel: var(--buih);
+  --fg: var(--navy);
+  --fg-pudar: #55657A;
+  --garis: #D5E2EA;
+  --tautan: var(--tanda);
+
+  /* ---- huruf ---- */
+  --f-judul: "Londrina Solid", "Arial Narrow", Impact, sans-serif;
+  --f-aksen: "Gochi Hand", "Comic Sans MS", cursive;
+  --f-isi: "Nunito", "Segoe UI", system-ui, sans-serif;
+
+  /* skala huruf (layar) */
+  --fs-xs: .8125rem;
+  --fs-sm: .9375rem;
+  --fs-base: 1.0625rem;
+  --fs-md: 1.25rem;
+  --fs-lg: 1.625rem;
+  --fs-xl: 2.25rem;
+  --fs-2xl: clamp(2.5rem, 6vw, 3.75rem);
+  --fs-hero: clamp(3.25rem, 11vw, 7.5rem);
+
+  /* ---- jarak, sudut, bayangan ---- */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px;
+  --r-kecil: 6px;
+  --r: 14px;
+  --r-besar: 28px;
+  --r-pil: 999px;
+  --bayang: 0 10px 30px -12px rgba(19, 31, 51, .35);
+  --lebar: 1200px;
+}
+
+/* ---- dasar ---- */
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--f-isi); font-size: var(--fs-base); line-height: 1.65; }
+h1, h2, h3 { font-family: var(--f-judul); font-weight: 900; line-height: 1; letter-spacing: .005em; margin: 0; text-wrap: balance; }
+a { color: var(--tautan); text-underline-offset: .2em; }
+
+/* label aksen: tulisan tangan kapital berjarak, seperti DIVE TRAVEL di logo */
+.f-aksen { font-family: var(--f-aksen); text-transform: uppercase; letter-spacing: .18em; }
+
+/* ---- tombol ---- */
+.tombol { display: inline-flex; align-items: center; gap: .5em; min-height: 48px; padding: 0 1.4em; border: 0; border-radius: var(--r-pil); font: 800 var(--fs-sm)/1 var(--f-isi); letter-spacing: .02em; text-decoration: none; cursor: pointer; }
+.tombol-pesan { background: var(--koral); color: var(--navy); }           /* ajakan utama: pesan trip */
+.tombol-pesan:hover { background: var(--koral-tekan); }
+.tombol-biru { background: var(--tanda); color: var(--putih); }           /* aksi kedua */
+.tombol-biru:hover { background: var(--tanda-tekan); }
+.tombol-garis { background: transparent; color: var(--navy); box-shadow: inset 0 0 0 2px currentColor; }
+.tombol:focus-visible { outline: 3px solid var(--ukir); outline-offset: 3px; }
+
+/* ---- label kecil (durasi, level, slot) ---- */
+.label { display: inline-flex; align-items: center; gap: .4em; padding: .3em .8em; border-radius: var(--r-pil); background: var(--buih); color: var(--navy); font: 700 var(--fs-xs)/1.2 var(--f-isi); }
+.label-gelap { background: var(--navy); color: var(--putih); }
+.label-koral { background: var(--koral); color: var(--navy); }
+
+/* ---- kartu trip ---- */
+.kartu-trip { background: var(--putih); border-radius: var(--r-besar); overflow: hidden; box-shadow: var(--bayang); }
+.kartu-trip .foto { aspect-ratio: 4 / 3; background: var(--kabut); object-fit: cover; width: 100%; display: block; }
+.kartu-trip .isi { padding: var(--s-5); }
+.kartu-trip h3 { font-size: var(--fs-lg); }
+.kartu-trip .harga { font-family: var(--f-judul); font-weight: 900; font-size: var(--fs-xl); color: var(--navy); }
+.kartu-trip .harga small { font: 700 var(--fs-xs)/1 var(--f-isi); color: var(--fg-pudar); display: block; }
+
+/* ---- Tanda Arah: segitiga penanda dari logo, dipakai sebagai butir daftar ---- */
+.daftar-tanda { list-style: none; padding: 0; margin: 0; }
+.daftar-tanda li { position: relative; padding-left: 1.7em; margin: .4em 0; }
+.daftar-tanda li::before { content: ""; position: absolute; left: 0; top: .42em; width: .95em; height: .95em; background: var(--tanda); clip-path: polygon(0 0, 100% 50%, 0 100%, 0 0, 26% 22%, 26% 78%, 66% 50%, 26% 22%); }
+
+/* ---- Garis Ekor: garis lengkung meruncing, pemisah dan garis rute ---- */
+.garis-ekor { display: block; height: 14px; background: var(--ukir); clip-path: polygon(0 40%, 100% 50%, 0 60%); }

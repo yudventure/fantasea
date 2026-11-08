@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 04: Jadwal Open Trip (Feed 4:5)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .kanvas { background: var(--buih); }
+  .segi.s1 { width: 460px; height: 460px; right: -150px; top: -110px; }
+  .kepala { position: absolute; left: 64px; top: 64px; }
+  .kepala .aksen { font-size: 34px; color: var(--tanda); }
+  .kepala h1 { font-size: 132px; margin-top: 14px; }
+  .logo { position: absolute; right: 64px; top: 64px; height: 84px; }
+  .daftar { position: absolute; left: 64px; right: 64px; top: 372px; list-style: none; display: grid; gap: 22px; }
+  .daftar li { display: grid; grid-template-columns: 70px 1fr auto; align-items: center; gap: 20px; background: var(--putih); border-radius: 22px; padding: 24px 30px 24px 18px; }
+  .daftar .tanda { width: 40px; height: 40px; justify-self: center; }
+  .daftar strong { display: block; font-family: var(--f-judul); font-weight: 900; font-size: 60px; line-height: 1; }
+  .daftar span.trip { display: block; font-size: 28px; font-weight: 600; color: #55657A; margin-top: 4px; }
+  .sisa { font-weight: 800; font-size: 26px; padding: 10px 22px; border-radius: 999px; background: var(--ukir); color: var(--malam); white-space: nowrap; }
+  .sisa.tipis { background: var(--koral); color: var(--navy); }
+  .sisa.penuh { background: var(--navy); color: var(--putih); }
+  .ajak { position: absolute; left: 64px; right: 64px; top: 1180px; font-size: 34px; font-weight: 800; color: var(--navy); }
+  .ajak span { color: var(--tanda); }
+  .kaki { color: var(--navy); bottom: 40px; font-size: 28px; }
+</style>
+</head>
+<body>
+<div class="kanvas" data-nama="04-jadwal-open-trip">
+  <div class="segi s1"></div>
+  <img class="logo" src="../../logo/fantasea-manta.png" alt="">
+  <div class="kepala"><div class="aksen">Desember 2026 – Februari 2027</div><h1 class="judul">Jadwal Open Trip</h1></div>
+  <ul class="daftar">
+    <li><i class="tanda"></i><div><strong>12–15 Des</strong><span class="trip">Dive Escape · Selat Dampier</span></div><span class="sisa tipis">Sisa 2 kursi</span></li>
+    <li><i class="tanda"></i><div><strong>27–30 Des</strong><span class="trip">Akhir Tahun · Selat Dampier</span></div><span class="sisa penuh">Penuh</span></li>
+    <li><i class="tanda"></i><div><strong>16–19 Jan</strong><span class="trip">Dive Escape · Selat Dampier</span></div><span class="sisa">Sisa 6 kursi</span></li>
+    <li><i class="tanda"></i><div><strong>6–11 Feb</strong><span class="trip">Piaynemo &amp; Fam · 6 hari</span></div><span class="sisa">Sisa 5 kursi</span></li>
+  </ul>
+  <p class="ajak">Amankan kursimu: <span>DM atau WhatsApp kami.</span></p>
+  <div class="kaki"><span class="handle">@fantaseadivetravel</span><span>#LiveTheFantasea</span></div>
+</div>
+</body>
+</html>

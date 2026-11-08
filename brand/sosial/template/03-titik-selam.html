@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 03: Titik Selam (Feed 4:5)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .kanvas { background: var(--navy); color: var(--putih); }
+  .kepala { position: absolute; left: 64px; right: 64px; top: 52px; display: flex; justify-content: space-between; align-items: center; }
+  .kepala .aksen { font-size: 36px; color: var(--ukir); }
+  .kepala .aksen b { color: var(--kabut); font-weight: 400; }
+  .kepala img { height: 76px; }
+  .foto { left: 64px; right: 64px; top: 150px; height: 540px; border-radius: 28px; }
+  .rute { position: absolute; left: 92px; top: 626px; display: flex; align-items: center; gap: 14px; font-size: 26px; color: var(--putih); }
+  .rute .tanda { width: 22px; height: 22px; color: var(--putih); }
+  h1 { position: absolute; left: 64px; top: 736px; font-size: 150px; }
+  .lok { position: absolute; left: 64px; top: 888px; font-size: 36px; color: var(--kabut); font-weight: 600; }
+  .data { position: absolute; left: 64px; right: 64px; top: 966px; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 4px solid var(--ukir); }
+  .data div { padding: 22px 20px 0 0; }
+  .data small { display: block; font-family: var(--f-aksen); font-size: 26px; text-transform: uppercase; letter-spacing: .16em; color: var(--ukir); }
+  .data strong { display: block; font-family: var(--f-judul); font-weight: 900; font-size: 64px; line-height: 1; margin-top: 6px; }
+  .bintang { position: absolute; left: 64px; right: 64px; top: 1140px; font-size: 30px; line-height: 1.4; color: var(--kabut); }
+  .bintang b { color: var(--putih); }
+  .kaki { color: var(--kabut); bottom: 36px; font-size: 28px; }
+</style>
+</head>
+<body>
+<div class="kanvas" data-nama="03-titik-selam">
+  <div class="kepala"><span class="aksen">Titik Selam <b>· No. 01</b></span><img src="../../logo/fantasea-manta-latar-gelap.png" alt=""></div>
+  <div class="foto"><img class="siluet" src="../../logo/fantasea-manta-navy.png" alt=""><span class="ket">Ganti dengan foto titik selam</span></div>
+  <div class="rute aksen"><span>Waisai</span><i class="tanda"></i><span>Arborek</span><i class="tanda"></i><span>Manta Sandy</span></div>
+  <h1 class="judul">Manta Sandy</h1>
+  <div class="lok">Selat Dampier, dekat Pulau Arborek</div>
+  <div class="data">
+    <div><small>Kedalaman</small><strong>5–20 m</strong></div>
+    <div><small>Arus</small><strong>Sedang</strong></div>
+    <div><small>Level</small><strong>Open Water</strong></div>
+  </div>
+  <p class="bintang"><b>Bintang utama:</b> pari manta karang yang datang ke stasiun pembersihan.</p>
+  <div class="kaki"><span class="handle">@fantaseadivetravel</span><span>#LiveTheFantasea</span></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Template 02: Paket Trip (Feed 4:5)</title>
+<link rel="stylesheet" href="_dasar.css">
+<style>
+  .foto { left: 0; top: 0; width: 1080px; height: 640px; }
+  .atas { position: absolute; left: 64px; right: 64px; top: 52px; display: flex; justify-content: space-between; align-items: center; color: var(--putih); }
+  .atas .aksen { font-size: 36px; }
+  .atas img { height: 84px; }
+  .segi.s1 { width: 520px; height: 520px; right: -200px; top: 760px; }
+  .isi { position: absolute; left: 64px; right: 64px; top: 612px; }
+  .lencana { display: inline-flex; gap: 14px; }
+  .lencana span { background: var(--navy); color: var(--putih); font-weight: 800; font-size: 28px; padding: 10px 24px; border-radius: 999px; }
+  .lencana span.u { background: var(--ukir); color: var(--malam); }
+  h1 { font-size: 104px; margin-top: 44px; max-width: 900px; }
+  ul { list-style: none; margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 32px; }
+  li { display: flex; align-items: center; gap: 16px; font-size: 31px; font-weight: 600; white-space: nowrap; }
+  li .tanda { width: 30px; height: 30px; flex: none; }
+  .harga { position: absolute; right: 56px; top: 330px; width: 340px; padding: 26px 30px 30px; background: var(--koral); color: var(--navy); border-radius: 28px; transform: rotate(-3deg); }
+  .harga small { display: block; font-family: var(--f-aksen); font-size: 30px; text-transform: uppercase; letter-spacing: .14em; }
+  .harga strong { display: block; font-family: var(--f-judul); font-weight: 900; font-size: 92px; line-height: .95; white-space: nowrap; }
+  .harga em { font-style: normal; font-weight: 700; font-size: 26px; }
+  .ajak { position: absolute; left: 64px; top: 1190px; font-size: 32px; font-weight: 800; color: var(--tanda); }
+  .kaki { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="kanvas" data-nama="02-paket-trip">
+  <div class="foto"><img class="siluet" src="../../logo/fantasea-manta-navy.png" alt=""><span class="ket">Ganti dengan foto trip</span></div>
+  <div class="atas"><span class="aksen">Paket Trip</span><img src="../../logo/fantasea-manta-latar-gelap.png" alt=""></div>
+  <div class="segi s1"></div>
+  <section class="isi">
+    <div class="lencana"><span>4 hari 3 malam</span><span class="u">8× selam</span></div>
+    <h1 class="judul">Raja Ampat Dive Escape</h1>
+    <ul>
+      <li><i class="tanda"></i>Jemput di Bandara Sorong</li>
+      <li><i class="tanda"></i>Kapal cepat ke Waisai</li>
+      <li><i class="tanda"></i>Homestay tepi pantai</li>
+      <li><i class="tanda"></i>Makan 3× sehari</li>
+      <li><i class="tanda"></i>Pemandu selam lokal</li>
+      <li><i class="tanda"></i>Tabung &amp; pemberat</li>
+    </ul>
+  </section>
+  <div class="harga"><small>Mulai</small><strong>Rp 8,5 jt</strong><em>per orang</em></div>
+  <div class="ajak">Pesan lewat DM atau WhatsApp</div>
+  <div class="kaki"><span class="handle">@fantaseadivetravel</span><span>#LiveTheFantasea</span></div>
+</div>
+</body>
+</html>
