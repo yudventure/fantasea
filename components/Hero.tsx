@@ -21,6 +21,10 @@ import { Judul } from "./Judul";
  *   naik, membesar, maju ke depan, bayangannya menebal, fotonya ikut
  *   mendekat. Rotasi 3D ada di <figure>, pembesaran di lapisan dalam,
  *   supaya keduanya tidak saling menimpa transform.
+ * - Latar diberi elemen grafis merek yang samar (permintaan pemilik, November
+ *   2026): Ukir Sayap besar di belakang judul, beberapa Pulau Segi, dan Tanda
+ *   Arah yang ditebar (paling banyak enam, sesuai pedoman merek). Semuanya
+ *   tipis supaya foto dan judul tetap yang paling menonjol.
  * Di ponsel hanya tiga kartu tengah yang tampil supaya tidak sesak.
  */
 const GAYA = [
@@ -32,11 +36,38 @@ const GAYA = [
 ];
 const URUTAN_Z = ["z-[1]", "z-[2]", "z-[3]", "z-[2]", "z-[1]"];
 
+/** Elemen grafis merek di latar hero, sengaja samar. Posisi dalam persen supaya ikut ukuran layar. */
+const PULAU = [
+  "left-[-5%] top-[16%] w-[clamp(120px,16vw,260px)] -rotate-[8deg] opacity-[0.45]",
+  "right-[2%] top-[12%] w-[clamp(90px,10vw,170px)] rotate-[12deg] opacity-[0.38] hidden sm:block",
+  "right-[8%] bottom-[6%] w-[clamp(80px,8vw,130px)] rotate-[24deg] opacity-[0.32] hidden sm:block",
+];
+const ARAH = [
+  { src: "tanda-arah", kelas: "left-[11%] top-[30%] w-[clamp(20px,2.2vw,36px)] -rotate-[14deg] hidden sm:block" },
+  { src: "tanda-arah-belah", kelas: "right-[15%] top-[33%] w-[clamp(18px,2vw,30px)] rotate-[18deg] hidden sm:block" },
+  { src: "tanda-arah", kelas: "left-[5%] bottom-[16%] w-[clamp(18px,2vw,32px)] rotate-[32deg] hidden sm:block" },
+  { src: "tanda-arah-belah", kelas: "right-[5%] bottom-[24%] w-[clamp(20px,2.2vw,36px)] -rotate-[22deg] hidden sm:block" },
+  // Di ponsel hanya satu Tanda Arah, di ruang kosong di bawah header.
+  { src: "tanda-arah", kelas: "right-[10%] top-[15%] w-[22px] -rotate-[14deg] sm:hidden" },
+];
+
+function HiasanHero() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <Image src="/brand/grafis/ukir-sayap.svg" alt="" width={993} height={835} unoptimized
+        className="absolute left-1/2 top-[17%] w-[170vw] max-w-none -translate-x-1/2 opacity-[0.07] sm:top-[4%] sm:w-[min(1180px,150vw)]" />
+      {PULAU.map((k, i) => <Image key={i} src="/brand/grafis/pulau-segi.svg" alt="" width={300} height={300} unoptimized className={`absolute ${k}`} />)}
+      {ARAH.map((a, i) => <Image key={i} src={`/brand/grafis/${a.src}.svg`} alt="" width={100} height={100} unoptimized className={`absolute opacity-[0.16] ${a.kelas}`} />)}
+    </div>
+  );
+}
+
 export default function Hero({ k, l }: { k: Konten; l: Locale }) {
   const h = k.hero;
   return (
     <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[84px] supports-[height:100svh]:min-h-[100svh] sm:pt-[100px]">
-      <div className="flex flex-1 flex-col justify-center">
+      <HiasanHero />
+      <div className="relative flex flex-1 flex-col justify-center">
         <div className="wrap text-center">
           <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[26ch] text-balance text-[clamp(28px,min(9.6vw,9vh),96px)] leading-[0.95]" />
         </div>
