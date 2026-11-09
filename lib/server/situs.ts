@@ -16,12 +16,10 @@ export async function muatSitus(l: Locale) {
   const adaUlasan = k.ulasan.some((u) => u.tampil);
   // Urutan menu mengikuti urutan bagian di beranda (permintaan pemilik,
   // November 2026): homestay, trip dengan open trip, liveaboard, ulasan, FAQ.
-  // Titik selam ada di halaman Trip, jadi tepat sesudah Trip. Open trip
-  // menyatu di bagian Trip, jadi tidak punya menu sendiri lagi.
+  // Open trip dan titik selam termasuk Trip, jadi tidak punya menu sendiri.
   const menu: TautanMenu[] = [
     ...(k.homestay.some((h) => h.tampil) ? [{ href: `${awal}/homestay`, label: tx(k.menu.homestay, l) }] : []),
     { href: `${awal}/trip`, label: tx(k.menu.trip, l) },
-    ...(k.titik.some((x) => x.tampil) ? [{ href: `${awal}/trip#titik`, label: tx(k.menu.titik, l) }] : []),
     ...(k.liveaboard.tampil ? [{ href: `${awal}/liveaboard`, label: tx(k.menu.liveaboard, l) }] : []),
     ...(adaUlasan ? [{ href: `${awal}#ulasan`, label: tx(k.menu.ulasan, l) }] : []),
     { href: `${awal}#faq`, label: tx(k.menu.faq, l) },
