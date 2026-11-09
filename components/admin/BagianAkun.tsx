@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { tanggalPanjang } from "@/lib/format";
-import { META_PERAN, type Peran } from "@/lib/peran";
+import { META_PERAN, PERAN, aksesPenuh, type Peran } from "@/lib/peran";
 import { IkonSampah } from "@/components/Ikon";
 import Dropdown from "@/components/Dropdown";
 import { KartuPanel, KolomTeks } from "./Kolom";
@@ -10,7 +10,9 @@ import type { Sesi } from "./Panel";
 interface AkunTim { email: string; nama: string; peran: Peran; dibuat: string }
 type StatusEmail = { aktif: true; host: string; port: number; dari: string } | { aktif: false };
 
-const PILIH_PERAN = (["tim", "meja"] as const).map((p) => ({ nilai: p, label: META_PERAN[p].label }));
+const PILIH_PERAN = PERAN.map((p) => ({ nilai: p, label: META_PERAN[p].label }));
+/** Peran sendiri hanya bisa pindah di antara akses penuh, supaya selalu ada yang bisa mengatur akun. */
+const PILIH_PERAN_SENDIRI = PILIH_PERAN.filter((p) => aksesPenuh(p.nilai));
 
 /** Key hPanel untuk email sistem. Nilainya diisi pemilik sendiri di hPanel, tidak pernah di panel ini. */
 const KEY_EMAIL = [
@@ -47,7 +49,7 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
   const [peran, setPeran] = useState<Peran>("tim");
   const [pesanTim, setPesanTim] = useState("");
   const [atur, setAtur] = useState<{ email: string; sandi: string } | null>(null);
-  const pemilik = sesi.peran === "pemilik";
+  const pemilik = aksesPenuh(sesi.peran);
 
   useEffect(() => {
     if (!pemilik) return;
@@ -73,7 +75,12 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
   }
   async function gantiPeran(e: string, p: Peran) {
     setPesanTim("");
-    try { const o = await kirim<{ akun: AkunTim[] }>("PUT", { email: e, peran: p }); setTim(o.akun); setPesanTim(`Peran ${e} sekarang ${META_PERAN[p].label}. Ia perlu masuk lagi.`); }
+    try {
+      const o = await kirim<{ akun: AkunTim[] }>("PUT", { email: e, peran: p });
+      // Peran sendiri berubah, jadi panel dimuat ulang supaya sesi dan menunya ikut.
+      if (e === sesi.email) { location.reload(); return; }
+      setTim(o.akun); setPesanTim(`Peran ${e} sekarang ${META_PERAN[p].label}. Ia perlu masuk lagi.`);
+    }
     catch (err) { setPesanTim((err as Error).message); }
   }
   async function aturSandi(ev: React.FormEvent) {
@@ -108,24 +115,28 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
       </KartuPanel>
 
       {pemilik && (
-        <KartuPanel judul="Tim dan peran" keterangan="Tim mengubah isi situs dan menjawab permintaan. Meja permintaan hanya menjawab permintaan tamu. Hanya pemilik yang mengatur akun dan menghapus permintaan.">
+        <KartuPanel judul="Tim dan peran" keterangan="Developer dan Pemilik punya akses penuh, termasuk mengatur akun dan peran. Admin mengelola semua isi situs, permintaan, dan kalender mitra. Tim mengubah isi situs dan menjawab permintaan. Meja permintaan hanya menjawab permintaan tamu.">
           <ul className="grid gap-2">
             {tim.map((a) => (
               <li key={a.email} className="grid gap-3 rounded-in bg-soft px-4 py-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <span className="min-w-0">
                     <span className="block font-extrabold text-navy">{a.nama}</span>
-                    <span className="block break-all text-[13px] text-ink2">{a.email} · sejak {tanggalPanjang(a.dibuat.slice(0, 10), "id")}</span>
+                    <span className="block break-all text-[13px] text-ink2">{a.email} · sejak {tanggalPanjang(a.dibuat.slice(0, 10), "id")}{a.email === sesi.email ? " · akun saya" : ""}</span>
+                    <span className="block text-[12.5px] text-ink2">{META_PERAN[a.peran].ket}</span>
                   </span>
-                  {a.peran === "pemilik" ? (
-                    <span className="rounded-pill bg-white px-3 py-1 text-[12.5px] font-extrabold text-navy">Pemilik</span>
-                  ) : (
-                    <div className="flex flex-wrap items-center gap-2">
-                      <div className="w-[210px]"><Dropdown label={`Peran ${a.nama}`} value={a.peran} onChange={(v) => gantiPeran(a.email, v as Peran)} pilihan={PILIH_PERAN} kosong="Pilih peran" /></div>
-                      <button type="button" onClick={() => setAtur(atur?.email === a.email ? null : { email: a.email, sandi: "" })} className="rounded-pill bg-white px-3 py-2 text-[13px] font-bold text-navy hover:bg-buih">Sandi sementara</button>
-                      <button type="button" onClick={() => hapus(a.email)} className="grid h-9 w-9 place-items-center rounded-full text-[#A63A22] hover:bg-[#FBE4DD]" aria-label={`Hapus ${a.email}`}><IkonSampah size={17} /></button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="w-[210px]">
+                      <Dropdown label={a.email === sesi.email ? "Peran saya" : `Peran ${a.nama}`} value={a.peran} onChange={(v) => v !== a.peran && gantiPeran(a.email, v as Peran)}
+                        pilihan={a.email === sesi.email ? PILIH_PERAN_SENDIRI : PILIH_PERAN} kosong="Pilih peran" />
                     </div>
-                  )}
+                    {a.email !== sesi.email && (
+                      <>
+                        <button type="button" onClick={() => setAtur(atur?.email === a.email ? null : { email: a.email, sandi: "" })} className="rounded-pill bg-white px-3 py-2 text-[13px] font-bold text-navy hover:bg-buih">Sandi sementara</button>
+                        <button type="button" onClick={() => hapus(a.email)} className="grid h-9 w-9 place-items-center rounded-full text-[#A63A22] hover:bg-[#FBE4DD]" aria-label={`Hapus ${a.email}`}><IkonSampah size={17} /></button>
+                      </>
+                    )}
+                  </div>
                 </div>
                 {atur?.email === a.email && (
                   <form onSubmit={aturSandi} className="flex flex-wrap items-end gap-3">
@@ -161,7 +172,7 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
             <p className="rounded-in bg-buih px-4 py-3 text-[14px] text-navy">Terpasang. Kode lupa sandi dikirim lewat {statusEmail.host} port {statusEmail.port}, dari {statusEmail.dari}.</p>
           ) : (
             <>
-              <p className="rounded-in bg-[#FFF4DD] px-4 py-3 text-[14px] text-navy">Belum dipasang. Sampai diisi, pemilik yang lupa sandi memakai kunci penyiapan FANTASEA_KUNCI, dan anggota tim diberi sandi sementara dari kartu Tim dan peran.</p>
+              <p className="rounded-in bg-[#FFF4DD] px-4 py-3 text-[14px] text-navy">Belum dipasang. Sampai diisi, developer dan pemilik yang lupa sandi memakai kunci penyiapan FANTASEA_KUNCI, dan anggota tim diberi sandi sementara dari kartu Tim dan peran.</p>
               <ul className="grid gap-2 text-[13.5px]">
                 {KEY_EMAIL.map((x) => <li key={x.key} className="rounded-in bg-soft px-4 py-2.5"><code className="font-bold text-navy">{x.key}</code> <span className="text-ink2">{x.ket}</span></li>)}
               </ul>

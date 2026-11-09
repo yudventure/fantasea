@@ -7,6 +7,7 @@ import type { Permintaan, StatusPermintaan } from "@/lib/server/permintaan";
 import { IkonSampah, IkonWhatsapp } from "@/components/Ikon";
 import { KartuPanel } from "./Kolom";
 import type { Sesi } from "./Panel";
+import { bolehHapusPermintaan } from "@/lib/peran";
 
 export const NAMA_STATUS: Record<StatusPermintaan, string> = { baru: "Baru", dihubungi: "Sudah dihubungi", dikonfirmasi: "Dikonfirmasi", batal: "Batal" };
 export const KELAS_STATUS: Record<StatusPermintaan, string> = { baru: "bg-koral text-navy", dihubungi: "bg-ukir/20 text-tanda", dikonfirmasi: "bg-[#E3F1E9] text-[#2E7D5B]", batal: "bg-[#F1F3F5] text-ink2" };
@@ -76,7 +77,7 @@ export function BagianPermintaan({ permintaan, setPermintaan, sesi, k }: { permi
                   {URUTAN.filter((s) => s !== p.status).map((s) => (
                     <button key={s} type="button" onClick={() => ubah(p.id, { status: s })} className="rounded-pill bg-buih px-3 py-2 text-[13px] font-bold text-navy hover:bg-line">Tandai {NAMA_STATUS[s].toLowerCase()}</button>
                   ))}
-                  {sesi.peran === "pemilik" && <button type="button" onClick={() => hapus(p.id)} className="grid h-9 w-9 place-items-center rounded-full text-[#A63A22] hover:bg-[#FBE4DD]" aria-label="Hapus permintaan"><IkonSampah size={17} /></button>}
+                  {bolehHapusPermintaan(sesi.peran) && <button type="button" onClick={() => hapus(p.id)} className="grid h-9 w-9 place-items-center rounded-full text-[#A63A22] hover:bg-[#FBE4DD]" aria-label="Hapus permintaan"><IkonSampah size={17} /></button>}
                 </div>
               </div>
             </li>

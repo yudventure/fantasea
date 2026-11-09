@@ -1,4 +1,4 @@
-import { bolehUbahIsi } from "@/lib/peran";
+import { bolehTab, type Peran } from "@/lib/peran";
 import { MAKS_KAMAR } from "@/lib/kalender-mitra";
 import { aturMitra, buatTautan, cabutTautan, daftarPanel, gantiTautan } from "@/lib/server/kalender-mitra";
 import { jsonTanpaCache, wajib, wajibJson } from "@/lib/server/sesi";
@@ -7,11 +7,11 @@ export const dynamic = "force-dynamic";
 
 /**
  * Kalender mitra di panel (pola DAMPIER, /api/kalender-mitra/tautan), untuk
- * pemilik dan tim. GET daftar per homestay, POST membuat atau mengganti
+ * developer, pemilik, dan admin. GET daftar per homestay, POST membuat atau mengganti
  * tautan, PUT data mitra (jumlah kamar, nama dan WhatsApp pemilik), DELETE
  * mencabut tautan. Catatan mitra tidak ikut terhapus.
  */
-const izin = (x: { peran: Parameters<typeof bolehUbahIsi>[0] }) => bolehUbahIsi(x.peran);
+const izin = (x: { peran: Peran }) => bolehTab(x.peran, "kalendermitra");
 
 export async function GET(req: Request) {
   const s = await wajib(req, izin);

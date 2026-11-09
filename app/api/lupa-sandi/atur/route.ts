@@ -1,6 +1,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { SANDI_MIN, aturSandi, cariAkun, rapikanEmail } from "@/lib/server/akun";
 import { periksaKode } from "@/lib/server/kode-sandi";
+import { aksesPenuh } from "@/lib/peran";
 import { alamatPeminta, buatToken, catat, jsonTanpaCache, kunciPenyiapan, lupakan, pasangCookieSesi, wajibJson } from "@/lib/server/sesi";
 
 export const dynamic = "force-dynamic";
@@ -26,8 +27,8 @@ export async function POST(req: Request) {
 
   if (typeof o.kunci === "string") {
     const kunci = kunciPenyiapan();
-    if (!akun || akun.peran !== "pemilik" || !kunci || !sama(o.kunci.trim(), kunci)) {
-      return jsonTanpaCache({ galat: "Kunci penyiapan tidak cocok, atau email itu bukan akun pemilik." }, { status: 400 });
+    if (!akun || !aksesPenuh(akun.peran) || !kunci || !sama(o.kunci.trim(), kunci)) {
+      return jsonTanpaCache({ galat: "Kunci penyiapan tidak cocok, atau email itu bukan akun pemilik atau developer." }, { status: 400 });
     }
   } else {
     const hasil = await periksaKode(email, typeof o.kode === "string" ? o.kode : "");
