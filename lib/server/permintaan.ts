@@ -32,6 +32,8 @@ export interface Permintaan {
   catatanTim: string;
   dibuat: string;
   diubah: string;
+  /** Kapan status pertama kali pindah dari Baru, untuk median waktu jawab di Ringkasan. */
+  dijawab?: string;
 }
 
 interface Berkas { daftar: Permintaan[]; urut: Record<string, number> }
@@ -75,7 +77,9 @@ export async function ubahPermintaan(id: string, ubah: Partial<Pick<Permintaan, 
       ...o,
       daftar: o.daftar.map((p) => {
         if (p.id !== id) return p;
-        hasil = { ...p, ...ubah, diubah: new Date().toISOString() };
+        const kini = new Date().toISOString();
+        const dijawab = p.dijawab ?? (ubah.status && ubah.status !== "baru" && p.status === "baru" ? kini : undefined);
+        hasil = { ...p, ...ubah, diubah: kini, ...(dijawab ? { dijawab } : {}) };
         return hasil;
       }),
     };

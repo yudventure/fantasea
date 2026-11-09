@@ -1,9 +1,12 @@
 "use client";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { hariIniWit, sisaKursi, tx, type Konten } from "@/lib/konten";
 import type { Permintaan } from "@/lib/server/permintaan";
 import type { IdTab } from "@/lib/peran";
-import { orangIkut, pesanMitra, susunKegiatan, type JenisKegiatan, type Kegiatan } from "@/lib/kegiatan";
+import { homestayPenuh, orangIkut, pesanMitra, susunKegiatan, type JenisKegiatan, type Kegiatan } from "@/lib/kegiatan";
+import type { AgendaMitra } from "@/lib/server/kalender-mitra";
+import { metaSumber } from "@/lib/kalender-mitra";
+import { tautanWa } from "@/lib/whatsapp";
 import { NAMA_HARI, bulanLain, bulanTahun, didalam, geser, kisiBulan, selisihHari, tanggalLengkap, tanggalPendek } from "@/lib/tanggal";
 import { rentangTanggal } from "@/lib/format";
 import { IkonPanahKanan, IkonPanahKiri, IkonTutup, IkonWhatsapp } from "@/components/Ikon";
@@ -15,7 +18,8 @@ import { KELAS_STATUS, NAMA_STATUS } from "./BagianPermintaan";
 const JENIS: Record<JenisKegiatan, { warna: string; label: string; legenda: string }> = {
   opentrip: { warna: "#203149", label: "Open trip", legenda: "Keberangkatan open trip" },
   trip: { warna: "#1264A8", label: "Trip", legenda: "Trip tanggal pilihan tamu" },
-  homestay: { warna: "#30A6DE", label: "Homestay", legenda: "Tamu di homestay mitra" },
+  homestay: { warna: "#30A6DE", label: "Homestay", legenda: "Tamu Fantasea di homestay mitra" },
+  mitra: { warna: "#8FA9BC", label: "Kalender mitra", legenda: "Dicatat pemilik homestay" },
 };
 
 /** Kata pertama nama trip, untuk sel tanggal yang sempit. */
@@ -23,7 +27,8 @@ const singkat = (s: string) => s.split(/\s+/)[0] || s;
 
 /** Keadaan satu kegiatan pada satu tanggal: datang, berlangsung, atau pulang. */
 function saat(g: Kegiatan, iso: string): string {
-  if (g.jenis === "homestay") return g.mulai === iso ? "Datang hari itu" : g.selesai === iso ? "Pulang hari itu" : "Menginap";
+  if (g.jenis === "mitra" && g.entri?.sumber === "tutup") return "Tutup";
+  if (g.jenis === "homestay" || g.jenis === "mitra") return g.mulai === iso ? "Datang hari itu" : g.selesai === iso ? "Pulang hari itu" : "Menginap";
   if (g.mulai === iso) return g.jenis === "opentrip" ? "Berangkat hari itu" : "Mulai hari itu";
   return g.selesai === iso ? "Hari terakhir" : "Sedang berjalan";
 }
@@ -38,6 +43,11 @@ function labelSel(g: Kegiatan, iso: string) {
   if (g.jenis === "opentrip" && g.jadwal) {
     const j = g.jadwal;
     return `${singkat(g.judul)} ${sisaKursi(j) === 0 ? "penuh" : `${j.terisi}/${j.kursi}`}`;
+  }
+  if (g.jenis === "mitra" && g.entri) {
+    if (g.entri.sumber === "tutup") return `${singkat(g.judul)} tutup`;
+    const awal = g.mulai === iso ? "Datang " : g.selesai === iso ? "Pulang " : "";
+    return `${awal}${g.entri.nama || metaSumber(g.entri.sumber).pendek}`;
   }
   const awal = g.jenis === "homestay" ? (g.mulai === iso ? "Datang " : g.selesai === iso ? "Pulang " : "") : "";
   return `${awal}${g.permintaan?.nama ?? ""}`;
@@ -59,10 +69,19 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
   const [saring, setSaring] = useState("semua");
   const [belumPasti, setBelumPasti] = useState(true);
   const rincian = useRef<HTMLElement>(null);
+  // Catatan kalender mitra (pola DAMPIER, agenda mitra), dimuat saat halaman dibuka.
+  const [mitra, setMitra] = useState<AgendaMitra | undefined>(undefined);
+  useEffect(() => {
+    let hidup = true;
+    fetch("/api/kalender-mitra/agenda", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null))
+      .then((o: { mitra?: AgendaMitra } | null) => { if (hidup && o?.mitra) setMitra(o.mitra); }).catch(() => {});
+    return () => { hidup = false; };
+  }, []);
 
-  const kegiatan = useMemo(() => susunKegiatan(k, permintaan), [k, permintaan]);
+  const kegiatan = useMemo(() => susunKegiatan(k, permintaan, mitra), [k, permintaan, mitra]);
   const tampil = useMemo(() => kegiatan.filter((g) =>
-    (belumPasti || g.pasti) && (saring === "semua" || saring === `${g.jenis === "homestay" ? "homestay" : "trip"}:${g.itemId}`)), [kegiatan, saring, belumPasti]);
+    (belumPasti || g.pasti) && (saring === "semua" || saring === `${g.jenis === "homestay" || g.jenis === "mitra" ? "homestay" : "trip"}:${g.itemId}`)), [kegiatan, saring, belumPasti]);
+  const penuhPada = (iso: string) => homestayPenuh(k, permintaan, mitra, iso).filter((h) => saring === "semua" || saring === `homestay:${h.id}`);
   const kisi = useMemo(() => kisiBulan(bulan), [bulan]);
   const perHari = useMemo(() => {
     const m = new Map<string, Kegiatan[]>();
@@ -88,8 +107,10 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
   const keTanggal = (iso: string) => { setBulan(`${iso.slice(0, 7)}-01`); pilihTanggal(iso); };
 
   const hariPilih = pilih ? (perHari.get(pilih) ?? []) : [];
-  const datang = hariPilih.filter((g) => g.jenis === "homestay" && g.mulai === pilih).reduce((n, g) => n + (g.permintaan?.orang ?? 0), 0);
-  const pulang = hariPilih.filter((g) => g.jenis === "homestay" && g.selesai === pilih).reduce((n, g) => n + (g.permintaan?.orang ?? 0), 0);
+  const orangG = (g: Kegiatan) => g.permintaan?.orang ?? g.entri?.tamu ?? 0;
+  const datang = hariPilih.filter((g) => (g.jenis === "homestay" || g.jenis === "mitra") && g.mulai === pilih).reduce((n, g) => n + orangG(g), 0);
+  const pulang = hariPilih.filter((g) => (g.jenis === "homestay" || g.jenis === "mitra") && g.selesai === pilih).reduce((n, g) => n + orangG(g), 0);
+  const penuhPilih = pilih ? penuhPada(pilih) : [];
 
   // Agenda dua minggu: yang datang, berangkat, mulai, dan pulang.
   const agenda = useMemo(() => {
@@ -98,8 +119,9 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
       const iso = geser(hariIni, i);
       const isi = tampil.flatMap((g) => {
         const out: { g: Kegiatan; kata: string }[] = [];
-        if (g.mulai === iso) out.push({ g, kata: g.jenis === "homestay" ? "Datang" : g.jenis === "opentrip" ? "Berangkat" : "Mulai" });
-        else if (g.jenis === "homestay" && g.selesai === iso) out.push({ g, kata: "Pulang" });
+        if (g.entri?.sumber === "tutup") return out;
+        if (g.mulai === iso) out.push({ g, kata: g.jenis === "homestay" || g.jenis === "mitra" ? "Datang" : g.jenis === "opentrip" ? "Berangkat" : "Mulai" });
+        else if ((g.jenis === "homestay" || g.jenis === "mitra") && g.selesai === iso) out.push({ g, kata: "Pulang" });
         return out;
       });
       if (isi.length) hasil.push({ iso, isi });
@@ -137,9 +159,11 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
                 const isi = perHari.get(iso) ?? [];
                 const on = pilih === iso;
                 const penuh = isi.filter((g) => g.jadwal && sisaKursi(g.jadwal) === 0).length;
+                const hsPenuh = penuhPada(iso);
+                const hsBentrok = hsPenuh.filter((h) => h.bentrok).length;
                 return (
                   <button key={iso} type="button" onClick={() => pilihTanggal(on ? null : iso)} aria-pressed={on} aria-controls="kalender-hari"
-                    aria-label={`${tanggalLengkap(iso)}, ${isi.length ? `${isi.length} kegiatan` : "tidak ada kegiatan"}`}
+                    aria-label={`${tanggalLengkap(iso)}, ${isi.length ? `${isi.length} kegiatan` : "tidak ada kegiatan"}${hsPenuh.length ? `, ${hsPenuh.length} homestay penuh` : ""}`}
                     className={`flex min-h-[58px] flex-col items-stretch justify-start rounded-[10px] p-1 text-left transition sm:min-h-[88px] sm:p-1.5 ${on ? "bg-navy text-white" : di ? "bg-white hover:bg-buih" : "bg-soft text-ink2"}`}>
                     <span className={`inline-grid h-[22px] min-w-[22px] place-items-center self-start rounded-full px-1 text-[12.5px] font-bold tabular-nums ${on ? "bg-white/20" : iso === hariIni ? "bg-tanda text-white" : di ? "text-navy" : "text-ink2/70"}`}>{Number(iso.slice(8))}</span>
                     {isi.length > 0 && (
@@ -152,6 +176,8 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
                         {!pilih && (
                           <span className="mt-1 hidden space-y-[3px] sm:block">
                             {penuh > 0 && <span className={`block truncate rounded-[5px] px-1 py-[2px] text-[10.5px] font-extrabold leading-[1.3] ${on ? "bg-white/20" : "bg-kabut/60 text-navy"}`}>{penuh} open trip penuh</span>}
+                            {hsBentrok > 0 && <span className={`block truncate rounded-[5px] px-1 py-[2px] text-[10.5px] font-extrabold leading-[1.3] ${on ? "bg-white/20" : "bg-[#FBE4DD] text-[#A63A22]"}`}>{hsBentrok === 1 ? `${singkat(hsPenuh.find((h) => h.bentrok)!.nama)} bentrok` : `${hsBentrok} homestay bentrok`}</span>}
+                            {hsPenuh.length - hsBentrok > 0 && <span className={`block truncate rounded-[5px] px-1 py-[2px] text-[10.5px] font-extrabold leading-[1.3] ${on ? "bg-white/20" : "bg-kabut/60 text-navy"}`}>{hsPenuh.length - hsBentrok} homestay penuh</span>}
                             {isi.slice(0, 2).map((g) => (
                               <span key={g.kunci} className={`flex items-center gap-1 rounded-[5px] px-1 py-[2px] text-[10.5px] leading-[1.3] ${on ? "bg-white/20 text-white" : g.pasti ? "text-navy" : "bg-white text-ink2"}`}
                                 style={on ? undefined : g.pasti ? { background: `${JENIS[g.jenis].warna}1F` } : { boxShadow: `inset 0 0 0 1px ${JENIS[g.jenis].warna}55` }}>
@@ -180,7 +206,7 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
             <Saklar label="Tampilkan yang belum pasti" value={belumPasti} onChange={(v) => { setBelumPasti(v); setPilih(null); }} />
           </div>
           <p className="mt-3 max-w-[78ch] text-[13px] leading-relaxed text-ink2">
-            Kalender ini memuat semua pesanan dari meja permintaan dan jadwal open trip. Permintaan berstatus Dikonfirmasi tampil penuh, yang masih Baru atau Sudah dihubungi tampil sebagai belum pasti, dan yang Batal tidak tampil. Kursi open trip mengikuti angka terisi di menu Jadwal open trip.
+            Kalender ini memuat semua pesanan dari meja permintaan, jadwal open trip, dan catatan pemilik homestay di kalender mitra (OTA, tamu langsung, tanggal tutup). Permintaan berstatus Dikonfirmasi tampil penuh, yang masih Baru atau Sudah dihubungi tampil sebagai belum pasti, dan yang Batal tidak tampil. Kursi open trip mengikuti angka terisi di menu Jadwal open trip.
           </p>
         </div>
 
@@ -196,6 +222,11 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
                 </div>
                 <button type="button" onClick={() => setPilih(null)} aria-label="Tutup rincian hari" className="grid h-9 w-9 flex-none place-items-center rounded-full border border-line text-navy hover:bg-buih"><IkonTutup size={16} /></button>
               </div>
+              {penuhPilih.length > 0 && (
+                <ul className="mt-3 grid gap-1.5">
+                  {penuhPilih.map((h) => <li key={h.id} className={`rounded-[10px] px-3 py-2 text-[13px] font-bold ${h.bentrok ? "bg-[#FBE4DD] text-[#7A2614]" : "bg-kabut/50 text-navy"}`}>{h.bentrok ? `${h.nama}, potensi double booking. ${h.terisi} kamar terpakai dari ${h.kamar}.` : `${h.nama} penuh malam ini, ${h.kamar} kamar.`}</li>)}
+                </ul>
+              )}
               {hariPilih.length === 0 ? (
                 <p className="mt-4 text-[14px] text-ink2">Tidak ada kegiatan pada tanggal ini.</p>
               ) : (
@@ -205,7 +236,7 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
                   return (
                     <div key={j} className="mt-4 grid gap-2.5">
                       <p className="text-[12px] font-extrabold uppercase tracking-[0.08em] text-ink2">{JENIS[j].legenda}</p>
-                      {isi.map((g) => <KartuKegiatan key={g.kunci} g={g} iso={pilih} pindah={pindah} boleh={boleh} />)}
+                      {isi.map((g) => <KartuKegiatan key={g.kunci} g={g} iso={pilih} pindah={pindah} boleh={boleh} wa={mitra?.[g.itemId]?.wa ?? ""} />)}
                     </div>
                   );
                 })
@@ -230,8 +261,8 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
                     <li key={g.kunci + kata} className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[14px] text-navy">
                       <Titik g={g} />
                       <span className="font-bold">{kata}</span>
-                      <span>{g.jenis === "opentrip" ? g.judul : `${g.permintaan?.nama}, ${g.judul}`}</span>
-                      <span className="text-ink2">{g.jenis === "opentrip" && g.jadwal ? `${g.jadwal.terisi}/${g.jadwal.kursi} kursi` : `${g.permintaan?.orang} orang${g.pasti ? "" : ", belum pasti"}`}</span>
+                      <span>{g.jenis === "opentrip" ? g.judul : g.entri ? `${g.entri.nama || metaSumber(g.entri.sumber).pendek}, ${g.judul}` : `${g.permintaan?.nama}, ${g.judul}`}</span>
+                      <span className="text-ink2">{g.jenis === "opentrip" && g.jadwal ? `${g.jadwal.terisi}/${g.jadwal.kursi} kursi` : g.entri ? `${g.entri.tamu ?? 0} orang, ${metaSumber(g.entri.sumber).pendek}` : `${g.permintaan?.orang} orang${g.pasti ? "" : ", belum pasti"}`}</span>
                     </li>
                   ))}
                 </ul>
@@ -245,7 +276,34 @@ export default function BagianKalender({ k, permintaan, pindah, boleh }: {
 }
 
 /** Satu kegiatan di rincian hari: open trip beserta yang ikut, atau satu permintaan. */
-function KartuKegiatan({ g, iso, pindah, boleh }: { g: Kegiatan; iso: string; pindah: (t: IdTab, jangkar?: string) => void; boleh: (t: IdTab) => boolean }) {
+function TandaHadir({ g }: { g: Kegiatan }) {
+  if (!g.hadir?.masuk && !g.hadir?.keluar) return null;
+  const jam = (iso: string) => new Intl.DateTimeFormat("id-ID", { timeZone: "Asia/Jayapura", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+  return <p className="mt-1 text-[12.5px] font-bold text-[#2E7D5B]">{g.hadir.keluar ? `Sudah pulang ${jam(g.hadir.keluar)}` : `Sudah datang ${jam(g.hadir.masuk!)}`}, ditandai pemilik</p>;
+}
+
+function KartuKegiatan({ g, iso, pindah, boleh, wa }: { g: Kegiatan; iso: string; pindah: (t: IdTab, jangkar?: string) => void; boleh: (t: IdTab) => boolean; wa: string }) {
+  if (g.jenis === "mitra" && g.entri) {
+    const e = g.entri, m = metaSumber(e.sumber);
+    return (
+      <div className="rounded-in border border-line bg-white px-3.5 py-3">
+        <div className="flex items-start justify-between gap-2.5">
+          <span className="min-w-0">
+            <span className="block truncate text-[14.5px] font-extrabold text-navy">{e.sumber === "tutup" ? "Tanggal tutup" : e.nama || "Tamu tanpa nama"}</span>
+            <span className="block text-[12.5px] leading-[1.45] text-ink2">{g.judul}{e.nomorKamar?.length ? ` · kamar ${e.nomorKamar.join(", ")}` : e.kamar > 1 ? ` · ${e.kamar} kamar` : ""}</span>
+          </span>
+          <span className="flex-none rounded-pill px-2 py-0.5 text-[11.5px] font-extrabold" style={{ background: m.warna, color: m.teks }}>{m.pendek}</span>
+        </div>
+        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-[12.5px] text-ink2">
+          <span className="font-bold text-navy">{saat(g, iso)}</span>
+          <span>{rentangTanggal(e.mulai, e.selesai, "id")}{e.tamu ? ` · ${e.tamu} orang` : ""} · {selisihHari(e.mulai, e.selesai)} malam</span>
+        </div>
+        {e.catatan && <p className="mt-1 text-[12.5px] text-ink2">{e.catatan}</p>}
+        <TandaHadir g={g} />
+        <p className="mt-1 text-[12px] text-ink2">Dicatat pemilik di kalender mitra</p>
+      </div>
+    );
+  }
   if (g.jenis === "opentrip" && g.jadwal) {
     const j = g.jadwal, sisa = sisaKursi(j), o = orangIkut(g);
     return (
@@ -290,10 +348,11 @@ function KartuKegiatan({ g, iso, pindah, boleh }: { g: Kegiatan; iso: string; pi
         <span>{rentangTanggal(g.mulai, g.selesai, "id")} · {p.orang} orang{malam ? ` · ${malam} malam` : ""}</span>
       </div>
       <p className="mt-1 text-[12px] text-ink2">{p.kode}</p>
+      <TandaHadir g={g} />
       <div className="mt-2.5 flex flex-wrap gap-2">
         <button type="button" onClick={() => pindah("permintaan", `permintaan-${p.id}`)} className="rounded-pill bg-buih px-3 py-1.5 text-[12.5px] font-bold text-navy hover:bg-line">Buka di Permintaan</button>
         {g.jenis === "homestay" && (
-          <a href={`https://wa.me/?text=${encodeURIComponent(pesanMitra(p))}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-pill bg-buih px-3 py-1.5 text-[12.5px] font-bold text-navy hover:bg-line">
+          <a href={(wa && tautanWa(wa, pesanMitra(p))) || `https://wa.me/?text=${encodeURIComponent(pesanMitra(p))}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 rounded-pill bg-buih px-3 py-1.5 text-[12.5px] font-bold text-navy hover:bg-line">
             <IkonWhatsapp size={15} />Teruskan ke mitra
           </a>
         )}

@@ -9,6 +9,7 @@ import { tx } from "@/lib/konten";
 import { bacaKonten } from "@/lib/server/konten";
 import { asalSitus } from "@/lib/server/situs";
 import EfekGulir from "@/components/EfekGulir";
+import PencatatPengunjung from "@/components/PencatatPengunjung";
 import { SKRIP_AWAL } from "@/lib/gulir-awal";
 
 // Isi situs dibaca dari folder data tiap permintaan, jadi simpanan dari panel langsung tayang.
@@ -42,6 +43,7 @@ export default async function SiteLayout({ children, params }: { children: React
       <body>
         <I18nProvider locale={l} messages={getMessages(l)}>{children}</I18nProvider>
         <EfekGulir />
+        <PencatatPengunjung />
       </body>
     </html>
   );

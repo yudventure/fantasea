@@ -43,6 +43,19 @@ export function bulanLain(iso: string, langkah: number) {
   return keIso(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + langkah, 1)));
 }
 
+/** Tanggal hari ini di Raja Ampat (WIT), "2026-11-09". */
+export const hariIniWit = (d = new Date()) => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jayapura" }).format(d);
+
+const HARI_BULAN = new Intl.DateTimeFormat("id-ID", { ...UTC, day: "numeric", month: "short" });
+const HARI_SAJA = new Intl.DateTimeFormat("id-ID", { ...UTC, day: "numeric" });
+/** Rentang ringkas, "22 Nov", "24–26 Nov", "29 Nov–2 Des". */
+export function rentangTampil(mulai: string, selesai: string) {
+  const a = hari(mulai), z = hari(selesai);
+  if (mulai === selesai) return HARI_BULAN.format(a);
+  const sama = a.getUTCFullYear() === z.getUTCFullYear() && a.getUTCMonth() === z.getUTCMonth();
+  return sama ? `${HARI_SAJA.format(a)}–${HARI_BULAN.format(z)}` : `${HARI_BULAN.format(a)}–${HARI_BULAN.format(z)}`;
+}
+
 export const NAMA_HARI = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 export const tanggalLengkap = (iso: string) => LENGKAP.format(hari(iso));
 export const tanggalPendek = (iso: string) => HARI_PENDEK.format(hari(iso));

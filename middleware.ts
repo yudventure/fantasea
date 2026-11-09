@@ -7,7 +7,7 @@ import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
  * lengkap dengan menu. Pilihan bahasa dari tombol EN / ID diingat di cookie.
  */
 export const config = {
-  matcher: ["/((?!_next/|brand/|unggahan/|api/|admin|icon\\.png|apple-icon\\.png|favicon\\.ico|opengraph-image|robots\\.txt|sitemap\\.xml).*)"],
+  matcher: ["/((?!_next/|brand/|unggahan/|api/|admin|kalender/|icon\\.png|apple-icon\\.png|favicon\\.ico|opengraph-image|robots\\.txt|sitemap\\.xml).*)"],
 };
 
 export const COOKIE_BAHASA = "fantasea_bahasa";

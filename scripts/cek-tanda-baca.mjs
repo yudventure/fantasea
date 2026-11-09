@@ -67,6 +67,11 @@ function periksaKode(berkas) {
   const catat = (node, teks) => { for (const m of periksaTeks(teks)) temuan.push({ berkas, letak: baris(node), masalah: m, teks: teks.trim() }); };
   const dilewati = (node) => {
     for (let p = node.parent; p; p = p.parent) {
+      // Atribut cookie memakai titik koma menurut protokol, bukan teks tampilan (seperti DAMPIER).
+      if (ts.isBinaryExpression(p) && p.operatorToken.kind === ts.SyntaxKind.EqualsToken && p.left.getText(sumber) === "document.cookie") return true;
+      // Nilai header HTTP (content-type dan sejenisnya) dan awalan kunci di startsWith atau endsWith.
+      if (ts.isPropertyAssignment(p) && p.name.getText(sumber) === "headers") return true;
+      if (ts.isCallExpression(p) && /\.(startsWith|endsWith)$/.test(p.expression.getText(sumber))) return true;
       if (ts.isImportDeclaration(p) || ts.isExportDeclaration(p) || ts.isLiteralTypeNode(p)) return true;
       if (ts.isJsxAttribute(p) && ATRIBUT_BUKAN_TEKS.has(p.name.getText(sumber))) return true;
       if (ts.isCallExpression(p) && /^(console\.|fetch$|new URL|require$)/.test(p.expression.getText(sumber))) return true;
