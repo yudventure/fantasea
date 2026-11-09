@@ -10,8 +10,8 @@ import { KartuPanel } from "./Kolom";
 import type { Sesi } from "./Panel";
 import type { IdTab } from "@/lib/peran";
 
-const NAMA_STATUS: Record<StatusPermintaan, string> = { baru: "Baru", dihubungi: "Sudah dihubungi", dikonfirmasi: "Dikonfirmasi", batal: "Batal" };
-const KELAS_STATUS: Record<StatusPermintaan, string> = { baru: "bg-koral text-navy", dihubungi: "bg-ukir/20 text-tanda", dikonfirmasi: "bg-[#E3F1E9] text-[#2E7D5B]", batal: "bg-[#F1F3F5] text-ink2" };
+export const NAMA_STATUS: Record<StatusPermintaan, string> = { baru: "Baru", dihubungi: "Sudah dihubungi", dikonfirmasi: "Dikonfirmasi", batal: "Batal" };
+export const KELAS_STATUS: Record<StatusPermintaan, string> = { baru: "bg-koral text-navy", dihubungi: "bg-ukir/20 text-tanda", dikonfirmasi: "bg-[#E3F1E9] text-[#2E7D5B]", batal: "bg-[#F1F3F5] text-ink2" };
 const URUTAN: StatusPermintaan[] = ["baru", "dihubungi", "dikonfirmasi", "batal"];
 
 export function BagianRingkasan({ k, permintaan, pindah, bolehUbah = true }: { k: Konten; permintaan: Permintaan[]; pindah: (id: IdTab) => void; bolehUbah?: boolean }) {
@@ -122,7 +122,7 @@ export function BagianPermintaan({ permintaan, setPermintaan, sesi, k }: { permi
           const menginap = p.jenis === "homestay";
           const item = menginap ? k.homestay.find((h) => h.id === p.tripId) : k.trip.find((t) => t.id === p.tripId);
           return (
-            <li key={p.id} className="rounded-card border border-line bg-white p-4 sm:p-5">
+            <li key={p.id} id={`permintaan-${p.id}`} className="rounded-card border border-line bg-white p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[12.5px] font-bold text-ink2">{p.kode} · masuk {tanggalPanjang(p.dibuat.slice(0, 10), "id")}</p>

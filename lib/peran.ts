@@ -4,30 +4,30 @@
  *
  * - pemilik: semua, termasuk akun tim dan menghapus permintaan.
  * - tim: semua isi situs dan permintaan, tanpa mengatur akun orang lain.
- * - meja: Meja permintaan saja, untuk anggota yang hanya menjawab tamu.
+ * - meja: Meja permintaan dan Kalender kegiatan saja, untuk anggota yang hanya menjawab tamu.
  *   Disiapkan November 2026 (permintaan pemilik) untuk tim yang lebih besar.
  */
 export type Peran = "pemilik" | "tim" | "meja";
 export const PERAN: Peran[] = ["pemilik", "tim", "meja"];
 
 /** Halaman panel. Urutannya mengikuti menu (components/admin/MenuPanel.tsx). */
-export type IdTab = "ringkasan" | "permintaan" | "trip" | "jadwal" | "homestay" | "titik" | "beranda" | "ulasan" | "kontak" | "akun";
+export type IdTab = "ringkasan" | "permintaan" | "kalender" | "trip" | "jadwal" | "homestay" | "titik" | "beranda" | "ulasan" | "kontak" | "akun";
 
 export const META_PERAN: Record<Peran, { label: string; ket: string; tabs: IdTab[] }> = {
   pemilik: {
     label: "Pemilik",
     ket: "Akses penuh, termasuk akun tim, peran, dan menghapus permintaan.",
-    tabs: ["ringkasan", "permintaan", "trip", "jadwal", "homestay", "titik", "beranda", "ulasan", "kontak", "akun"],
+    tabs: ["ringkasan", "permintaan", "kalender", "trip", "jadwal", "homestay", "titik", "beranda", "ulasan", "kontak", "akun"],
   },
   tim: {
     label: "Tim",
     ket: "Mengubah semua isi situs dan menjawab permintaan tamu.",
-    tabs: ["ringkasan", "permintaan", "trip", "jadwal", "homestay", "titik", "beranda", "ulasan", "kontak", "akun"],
+    tabs: ["ringkasan", "permintaan", "kalender", "trip", "jadwal", "homestay", "titik", "beranda", "ulasan", "kontak", "akun"],
   },
   meja: {
     label: "Meja permintaan",
-    ket: "Hanya melihat dan menjawab permintaan tamu. Tidak bisa mengubah isi situs.",
-    tabs: ["ringkasan", "permintaan", "akun"],
+    ket: "Hanya melihat dan menjawab permintaan tamu, dan melihat kalender kegiatan. Tidak bisa mengubah isi situs.",
+    tabs: ["ringkasan", "permintaan", "kalender", "akun"],
   },
 };
 

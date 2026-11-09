@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { IdTab } from "@/lib/peran";
-import { IkonAtur, IkonBola, IkonKapal, IkonKisi, IkonKotakMasuk, IkonPanahBawah } from "@/components/Ikon";
+import { IkonAtur, IkonBola, IkonKalender, IkonKapal, IkonKisi, IkonKotakMasuk, IkonPanahBawah } from "@/components/Ikon";
 
 /**
  * Menu panel berkelompok menurut pekerjaan (pola DAMPIER, MenuPanel.tsx).
@@ -17,6 +17,7 @@ export interface KelompokMenu { key: string; label: string; Ikon: Ikon; butir: B
 export const MENU: KelompokMenu[] = [
   { key: "ringkasan", label: "Ringkasan", Ikon: IkonKisi, butir: [{ tab: "ringkasan", label: "Ringkasan" }] },
   { key: "permintaan", label: "Permintaan", Ikon: IkonKotakMasuk, butir: [{ tab: "permintaan", label: "Permintaan" }] },
+  { key: "kalender", label: "Kalender kegiatan", Ikon: IkonKalender, butir: [{ tab: "kalender", label: "Kalender kegiatan" }] },
   {
     key: "produk", label: "Produk", Ikon: IkonKapal,
     butir: [{ tab: "trip", label: "Trip dan harga" }, { tab: "jadwal", label: "Jadwal open trip" }, { tab: "homestay", label: "Homestay" }, { tab: "titik", label: "Titik selam" }],
@@ -32,6 +33,7 @@ export const MENU: KelompokMenu[] = [
 export const KET_TAB: Record<IdTab, string> = {
   ringkasan: "Permintaan yang menunggu, angka situs, dan isi contoh yang masih perlu diganti.",
   permintaan: "Permintaan pesan dari tamu. Ubah status, catat tindak lanjut, dan balas lewat WhatsApp.",
+  kalender: "Semua pesanan per tanggal, yaitu open trip, trip, dan tamu di homestay mitra. Klik tanggalnya untuk melihat siapa yang datang, berangkat, dan pulang.",
   trip: "Trip di beranda dan halaman Trip, harga, foto, pembuka halaman Trip, dan kartu edukasi selam.",
   jadwal: "Tanggal open trip, jumlah kursi, dan yang sudah terisi.",
   homestay: "Homestay di beranda dan halaman Homestay, dengan harga, fasilitas, dan foto.",

@@ -13,6 +13,9 @@ import { BagianPermintaan, BagianRingkasan } from "./BagianPermintaan";
 import { BagianHomestay, BagianJadwal, BagianTitik, BagianTrip } from "./BagianTrip";
 import { BagianBeranda, BagianKontak, BagianUlasanFaq } from "./BagianIsi";
 import BagianAkun from "./BagianAkun";
+import BagianKalender from "./BagianKalender";
+import { susunKegiatan } from "@/lib/kegiatan";
+import { didalam } from "@/lib/tanggal";
 
 export interface Sesi { email: string; nama: string; peran: Peran }
 export type Ubah = (f: (d: Konten) => void) => void;
@@ -214,7 +217,9 @@ export default function Panel() {
     ? <span className={`rounded-pill px-2 py-0.5 text-[12px] font-extrabold ${on ? "bg-white text-navy" : "bg-koral text-navy"}`}>{baru}</span>
     : null;
   const propsMenu = { menu, aktif: tab, berubah: tabBerubah, onPilih: (t: IdTab) => pindah(t), lencana };
-  const mendatang = jadwalMendatang(k.jadwal, hariIniWit());
+  const hariIni = hariIniWit();
+  const mendatang = jadwalMendatang(k.jadwal, hariIni);
+  const kegiatanHariIni = susunKegiatan(k, permintaan).filter((g) => g.pasti && didalam(hariIni, g.mulai, g.selesai)).length;
   const jadwalDekat = mendatang[0];
   const tripDekat = jadwalDekat ? k.trip.find((t) => t.id === jadwalDekat.tripId) : undefined;
   const bawaan = BAWAAN_TAB[tab];
@@ -233,6 +238,11 @@ export default function Panel() {
               <button type="button" onClick={() => pindah("permintaan")} className="mt-2 flex w-full items-center justify-between gap-2 text-left hover:text-navy">
                 <span>Permintaan baru</span><span className="font-extrabold text-navy">{baru}</span>
               </button>
+              {tabs.includes("kalender") && (
+                <button type="button" onClick={() => pindah("kalender")} className="mt-1.5 flex w-full items-center justify-between gap-2 text-left hover:text-navy">
+                  <span>Kegiatan pasti hari ini</span><span className="font-extrabold text-navy">{kegiatanHariIni}</span>
+                </button>
+              )}
               {jadwalDekat && (
                 <p className="mt-2">Open trip terdekat <span className="block font-bold text-navy">{tanggalPanjang(jadwalDekat.mulai, "id")}{tripDekat ? `, ${tx(tripDekat.nama, "id")}` : ""}</span></p>
               )}
@@ -252,6 +262,7 @@ export default function Panel() {
           {isiTab && temuanTab.length > 0 && <KotakTanda temuan={temuanTab} lain={temuanLain} />}
 
           {tab === "ringkasan" && <BagianRingkasan k={k} permintaan={permintaan} pindah={pindah} bolehUbah={bolehUbah} />}
+          {tab === "kalender" && <BagianKalender k={k} permintaan={permintaan} pindah={pindah} boleh={(t) => tabs.includes(t)} />}
           {tab === "permintaan" && <BagianPermintaan permintaan={permintaan} setPermintaan={setPermintaan} sesi={sesi} k={k} />}
           {tab === "trip" && <BagianTrip k={k} ubah={ubah} />}
           {tab === "jadwal" && <BagianJadwal k={k} ubah={ubah} />}
