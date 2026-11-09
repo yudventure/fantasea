@@ -119,20 +119,27 @@ const namaKategori = (kategori: KategoriAktivitas[], id: string, l: Locale) => {
 
 /**
  * Trip di beranda. Paling banyak 6 kartu di semua ukuran layar, sisanya
- * lewat Load more, dan tombol ke halaman Trip di atas kartu.
+ * lewat Load more, dan tombol ke halaman Trip di atas kartu. Jadwal open
+ * trip masuk sebagai `children` di bagian yang sama (permintaan pemilik,
+ * November 2026, "trip dan open trip di gabung saja").
  */
-export function DaftarTrip({ b, trip, kategori, l }: { b: KepalaBagian; trip: Trip[]; kategori: KategoriAktivitas[]; l: Locale }) {
+export function DaftarTrip({ b, trip, kategori, l, children }: { b: KepalaBagian; trip: Trip[]; kategori: KategoriAktivitas[]; l: Locale; children?: React.ReactNode }) {
   const t = buatT(getMessages(l));
   const tampil = trip.filter((x) => x.tampil);
-  if (!tampil.length) return null;
+  if (!tampil.length && !children) return null;
   return (
     <section id="trip" className="bg-soft py-16 sm:py-24">
       <div className="wrap">
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
-          <KepalaBagianSitus b={b} l={l} />
-          <TombolSemua href={`/${l}/trip`} label={t("trip.lihatSemua")} />
-        </div>
-        <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} kategori={namaKategori(kategori, x.kategori, l)} lebar={p.lebar} sempit={p.sempit} />)} />
+        {tampil.length > 0 && (
+          <>
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5">
+              <KepalaBagianSitus b={b} l={l} />
+              <TombolSemua href={`/${l}/trip`} label={t("trip.lihatSemua")} />
+            </div>
+            <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} kategori={namaKategori(kategori, x.kategori, l)} lebar={p.lebar} sempit={p.sempit} />)} />
+          </>
+        )}
+        {children}
       </div>
     </section>
   );
@@ -309,13 +316,19 @@ export function Liveaboard({ b, trip, l, href, kartu = true, beranda = true }: {
   );
 }
 
-export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya }: { b: KepalaBagian; jadwal: Jadwal[]; trip: Trip[]; l: Locale; hrefTanya: string }) {
+/**
+ * Jadwal open trip. Di beranda `sisip`, yaitu menyatu di bagian Trip di bawah
+ * kartunya. Di halaman Liveaboard berdiri sebagai bagian sendiri.
+ */
+export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya, sisip = false }: { b: KepalaBagian; jadwal: Jadwal[]; trip: Trip[]; l: Locale; hrefTanya: string; sisip?: boolean }) {
   const t = buatT(getMessages(l));
   const tripDari = new Map(trip.filter((x) => x.tampil).map((x) => [x.id, x]));
   const daftar = jadwal.filter((j) => tripDari.has(j.tripId));
+  const Bungkus = ({ children }: { children: React.ReactNode }) => sisip
+    ? <div id="jadwal" className="mt-16 grid scroll-mt-24 gap-10 sm:mt-24 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">{children}</div>
+    : <section id="jadwal" className="py-16 sm:py-24"><div className="wrap grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">{children}</div></section>;
   return (
-    <section id="jadwal" className="py-16 sm:py-24">
-      <div className="wrap grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
+    <Bungkus>
         <div className="lg:sticky lg:top-28 lg:self-start">
           <KepalaBagianSitus b={b} l={l} />
         </div>
@@ -354,8 +367,7 @@ export function JadwalOpenTrip({ b, jadwal, trip, l, hrefTanya }: { b: KepalaBag
             );
           })}
         </div>
-      </div>
-    </section>
+    </Bungkus>
   );
 }
 
