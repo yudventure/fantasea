@@ -1,19 +1,20 @@
 import { SANDI_MIN, aturSandi, cocokSandi, emailSah, hashSandi, publik, rapikanEmail, semuaAkun, ubahAkun } from "@/lib/server/akun";
 import { buatToken, jsonTanpaCache, pasangCookieSesi, wajib, wajibJson } from "@/lib/server/sesi";
 import { statusEmail } from "@/lib/server/email";
-import type { Peran } from "@/lib/peran";
+import { PERAN, aksesPenuh, type Peran } from "@/lib/peran";
 
-/** Peran yang boleh diberikan pemilik ke anggota tim. Pemilik tetap satu, dari penyiapan. */
-const PERAN_TIM: Peran[] = ["tim", "meja"];
+/** Peran tersimpan yang sah. */
+const sah = (v: unknown): v is Peran => PERAN.includes(v as Peran);
 
 /**
- * Akun tim. GET, POST, PUT (ganti peran), dan DELETE hanya pemilik. PATCH
- * mengganti sandi sendiri (semua peran), dan sesi lain milik akun itu ikut
- * terputus karena versinya naik. GET juga memberi status email sistem
- * (tanpa kata sandinya), untuk kartu Email sistem di menu Akun.
+ * Akun panel. GET, POST, PUT (ganti peran atau sandi sementara), dan DELETE
+ * hanya untuk akses penuh, yaitu developer dan pemilik (permintaan pemilik,
+ * November 2026). PATCH mengganti sandi sendiri (semua peran), dan sesi lain
+ * milik akun itu ikut terputus karena versinya naik. GET juga memberi status
+ * email sistem (tanpa kata sandinya), untuk kartu Email sistem di menu Akun.
  */
 export async function GET(req: Request) {
-  const s = await wajib(req, (x) => x.peran === "pemilik");
+  const s = await wajib(req, (x) => aksesPenuh(x.peran));
   if (s instanceof Response) return s;
   return jsonTanpaCache({ akun: (await semuaAkun()).map(publik), email: statusEmail() });
 }
@@ -21,13 +22,13 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const bukanJson = wajibJson(req);
   if (bukanJson) return bukanJson;
-  const s = await wajib(req, (x) => x.peran === "pemilik");
+  const s = await wajib(req, (x) => aksesPenuh(x.peran));
   if (s instanceof Response) return s;
   const o = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const email = rapikanEmail(o.email);
   const nama = typeof o.nama === "string" ? o.nama.trim().slice(0, 60) : "";
   const sandi = typeof o.sandi === "string" ? o.sandi : "";
-  const peran: Peran = PERAN_TIM.includes(o.peran as Peran) ? (o.peran as Peran) : "tim";
+  const peran: Peran = sah(o.peran) ? o.peran : "tim";
   if (!nama) return jsonTanpaCache({ galat: "Isi nama." }, { status: 400 });
   if (!emailSah(email)) return jsonTanpaCache({ galat: "Periksa alamat email." }, { status: 400 });
   if (sandi.length < SANDI_MIN) return jsonTanpaCache({ galat: `Kata sandi sementara paling sedikit ${SANDI_MIN} huruf.` }, { status: 400 });
@@ -42,42 +43,48 @@ export async function POST(req: Request) {
 }
 
 /**
- * Ubah anggota tim, khusus pemilik. `peran` mengganti perannya (Tim atau
- * Meja permintaan), `sandi` memberi kata sandi sementara untuk anggota yang
- * lupa sandinya selama email sistem belum dipasang. Keduanya mengeluarkan
- * sesi anggota itu, supaya menu atau sandi barunya langsung berlaku.
+ * Ubah akun lain atau peran sendiri. `peran` mengganti peran, `sandi` memberi
+ * kata sandi sementara untuk akun lain yang lupa sandinya selama email sistem
+ * belum dipasang. Akun yang diubah ikut keluar supaya menu atau sandinya
+ * langsung berlaku. Peran sendiri hanya bisa pindah di antara akses penuh
+ * (developer dan pemilik), jadi selalu ada akun yang bisa mengatur akun.
  */
 export async function PUT(req: Request) {
   const bukanJson = wajibJson(req);
   if (bukanJson) return bukanJson;
-  const s = await wajib(req, (x) => x.peran === "pemilik");
+  const s = await wajib(req, (x) => aksesPenuh(x.peran));
   if (s instanceof Response) return s;
   const o = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const email = rapikanEmail(o.email);
-  if (email === s.email) return jsonTanpaCache({ galat: "Akun sendiri diubah di kartu Akun saya." }, { status: 400 });
+  const sendiri = email === s.email;
   const sasaran = (await semuaAkun()).find((a) => a.email === email);
-  if (!sasaran || sasaran.peran === "pemilik") return jsonTanpaCache({ galat: "Anggota itu tidak ditemukan." }, { status: 404 });
+  if (!sasaran) return jsonTanpaCache({ galat: "Akun itu tidak ditemukan." }, { status: 404 });
 
   if (typeof o.sandi === "string") {
+    if (sendiri) return jsonTanpaCache({ galat: "Sandi sendiri diganti di kartu Akun saya." }, { status: 400 });
     if (o.sandi.length < SANDI_MIN) return jsonTanpaCache({ galat: `Kata sandi sementara paling sedikit ${SANDI_MIN} huruf.` }, { status: 400 });
     await aturSandi(email, o.sandi);
     return jsonTanpaCache({ akun: (await semuaAkun()).map(publik) });
   }
-  const peran = o.peran as Peran;
-  if (!PERAN_TIM.includes(peran)) return jsonTanpaCache({ galat: "Peran tidak dikenal." }, { status: 400 });
-  const daftar = await ubahAkun((lama) => lama.map((a) => (a.email === email && a.peran !== "pemilik" && a.peran !== peran ? { ...a, peran, versi: a.versi + 1 } : a)));
-  return jsonTanpaCache({ akun: daftar.map(publik) });
+  if (!sah(o.peran)) return jsonTanpaCache({ galat: "Peran tidak dikenal." }, { status: 400 });
+  const peran = o.peran;
+  if (sendiri && !aksesPenuh(peran)) return jsonTanpaCache({ galat: "Peran sendiri hanya bisa Developer atau Pemilik." }, { status: 400 });
+  const daftar = await ubahAkun((lama) => lama.map((a) => (a.email === email && a.peran !== peran ? { ...a, peran, versi: a.versi + 1 } : a)));
+  const res = jsonTanpaCache({ akun: daftar.map(publik) });
+  // Sesi sendiri dipasang ulang dengan versi baru, supaya tidak ikut keluar.
+  const kini = daftar.find((a) => a.email === s.email);
+  return sendiri && kini ? pasangCookieSesi(res, await buatToken(kini.email, kini.versi), req) : res;
 }
 
 export async function DELETE(req: Request) {
   const bukanJson = wajibJson(req);
   if (bukanJson) return bukanJson;
-  const s = await wajib(req, (x) => x.peran === "pemilik");
+  const s = await wajib(req, (x) => aksesPenuh(x.peran));
   if (s instanceof Response) return s;
   const o = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   const email = rapikanEmail(o.email);
   if (email === s.email) return jsonTanpaCache({ galat: "Akun sendiri tidak bisa dihapus." }, { status: 400 });
-  const daftar = await ubahAkun((lama) => lama.filter((a) => a.email !== email || a.peran === "pemilik"));
+  const daftar = await ubahAkun((lama) => lama.filter((a) => a.email !== email));
   return jsonTanpaCache({ akun: daftar.map(publik) });
 }
 

@@ -2,6 +2,7 @@ import { isLocale } from "@/lib/i18n/config";
 import { hariIniWit, jadwalMendatang, sisaKursi, tx } from "@/lib/konten";
 import { bacaKonten } from "@/lib/server/konten";
 import { alamatPeminta, catat, jsonTanpaCache, wajib, wajibJson } from "@/lib/server/sesi";
+import { bolehHapusPermintaan } from "@/lib/peran";
 import { STATUS_PERMINTAAN, hapusPermintaan, semuaPermintaan, tambahPermintaan, ubahPermintaan, type StatusPermintaan } from "@/lib/server/permintaan";
 
 /**
@@ -92,7 +93,7 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   const bukanJson = wajibJson(req);
   if (bukanJson) return bukanJson;
-  const s = await wajib(req, (x) => x.peran === "pemilik");
+  const s = await wajib(req, (x) => bolehHapusPermintaan(x.peran));
   if (s instanceof Response) return s;
   const o = (await req.json().catch(() => ({}))) as Record<string, unknown>;
   await hapusPermintaan(str(o.id, 40));

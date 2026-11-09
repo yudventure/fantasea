@@ -10,7 +10,8 @@ type Langkah = "masuk" | "lupa" | "kode" | "kunci";
  * dan Lupa kata sandi (pola DAMPIER). Lupa kata sandi mengirim kode 6 angka
  * lewat email sistem (SMTP di hPanel). Selama email sistem belum dipasang,
  * pemilik memakai kunci penyiapan (FANTASEA_KUNCI) sebagai gantinya, dan
- * anggota tim meminta pemilik mengatur ulang dari menu Akun.
+ * developer dan pemilik memakai kunci penyiapan, dan akun lain meminta
+ * developer atau pemilik mengatur ulang dari menu Akun.
  */
 export default function Gerbang({ mode, kunciPerlu, onMasuk }: { mode: "masuk" | "siapkan"; kunciPerlu: boolean; onMasuk: (s: Sesi) => void }) {
   const [langkah, setLangkah] = useState<Langkah>("masuk");
@@ -65,7 +66,7 @@ export default function Gerbang({ mode, kunciPerlu, onMasuk }: { mode: "masuk" |
     : langkah === "masuk" ? "Panel pengelola situs Fantasea Dive Travel."
     : langkah === "lupa" ? "Tulis email akunmu. Kami kirim kode 6 angka untuk membuat kata sandi baru."
     : langkah === "kode" ? `Kode sudah dikirim ke ${email} kalau email itu terdaftar. Berlaku ${menit} menit. Periksa juga folder spam.`
-    : "Khusus pemilik. Isi kunci penyiapan FANTASEA_KUNCI yang tersimpan di hPanel, lalu kata sandi baru.";
+    : "Khusus developer dan pemilik. Isi kunci penyiapan FANTASEA_KUNCI yang tersimpan di hPanel, lalu kata sandi baru.";
 
   return (
     <main className="grid min-h-screen place-items-center bg-soft px-4 py-12">
@@ -122,7 +123,7 @@ export default function Gerbang({ mode, kunciPerlu, onMasuk }: { mode: "masuk" |
           {tanpaEmail && langkah === "lupa" && (
             <div className="rounded-in bg-[#FFF4DD] px-4 py-3 text-[13.5px] text-navy" role="status">
               <p className="font-bold">Email sistem belum dipasang, jadi kode belum bisa dikirim.</p>
-              <p className="mt-1">Pemilik bisa memakai kunci penyiapan dari hPanel. Anggota tim minta pemilik mengatur ulang sandinya di menu Akun dan peran.</p>
+              <p className="mt-1">Developer dan pemilik bisa memakai kunci penyiapan dari hPanel. Akun lain minta developer atau pemilik mengatur ulang sandinya di menu Akun dan peran.</p>
               <button type="button" onClick={() => ke("kunci")} className="mt-2 font-bold text-tanda">Pakai kunci penyiapan</button>
             </div>
           )}
@@ -135,7 +136,7 @@ export default function Gerbang({ mode, kunciPerlu, onMasuk }: { mode: "masuk" |
           {mode === "masuk" && langkah !== "masuk" && (
             <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-[13px] font-bold">
               {langkah === "kode" && <button type="button" onClick={() => ke("lupa")} className="text-tanda">Kirim kode lagi</button>}
-              {langkah === "lupa" && !tanpaEmail && <button type="button" onClick={() => ke("kunci")} className="text-ink2 hover:text-navy">Pemilik tanpa email? Pakai kunci penyiapan</button>}
+              {langkah === "lupa" && !tanpaEmail && <button type="button" onClick={() => ke("kunci")} className="text-ink2 hover:text-navy">Developer atau pemilik? Pakai kunci penyiapan</button>}
               <button type="button" onClick={() => ke("masuk")} className="text-ink2 hover:text-navy">Kembali ke Masuk</button>
             </div>
           )}
