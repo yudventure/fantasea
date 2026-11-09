@@ -2,6 +2,9 @@ import "server-only";
 import { randomBytes, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import { bacaJson, ubahJson } from "./gudang";
+import { rapikanPeran, type Peran } from "@/lib/peran";
+
+export type { Peran };
 
 const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number) => Promise<Buffer>;
 
@@ -10,7 +13,6 @@ const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number) =>
  * bawaan. Akun pemilik pertama dibuat lewat penyiapan dengan kunci
  * FANTASEA_KUNCI dari hPanel, lalu pemilik menambah anggota tim dari panel.
  */
-export type Peran = "pemilik" | "tim";
 export interface Akun { email: string; nama: string; peran: Peran; sandi: string; versi: number; dibuat: string }
 export type AkunPublik = Omit<Akun, "sandi" | "versi">;
 
@@ -37,7 +39,15 @@ export async function cocokSandi(sandi: string, simpanan: string): Promise<boole
 
 export async function semuaAkun(): Promise<Akun[]> {
   const o = await bacaJson(BERKAS, bawaan);
-  return Array.isArray(o.akun) ? o.akun : [];
+  return (Array.isArray(o.akun) ? o.akun : []).map((a) => ({ ...a, peran: rapikanPeran(a.peran) }));
+}
+
+/** Atur kata sandi baru (lupa sandi). Versi naik, jadi sesi lama di perangkat lain keluar. */
+export async function aturSandi(email: string, sandi: string): Promise<Akun | null> {
+  const hash = await hashSandi(sandi);
+  const e = rapikanEmail(email);
+  const daftar = await ubahAkun((semua) => semua.map((a) => (a.email === e ? { ...a, sandi: hash, versi: a.versi + 1 } : a)));
+  return daftar.find((a) => a.email === e) ?? null;
 }
 
 export async function cariAkun(email: string): Promise<Akun | null> {

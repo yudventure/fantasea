@@ -1,9 +1,10 @@
 import { MAKS_BITA, simpanFoto } from "@/lib/server/unggahan";
 import { jsonTanpaCache, wajib } from "@/lib/server/sesi";
+import { bolehUbahIsi } from "@/lib/peran";
 
 /** Unggah satu foto dari panel (sudah diperkecil di peramban). */
 export async function POST(req: Request) {
-  const s = await wajib(req);
+  const s = await wajib(req, (x) => bolehUbahIsi(x.peran));
   if (s instanceof Response) return s;
   const panjang = Number(req.headers.get("content-length") ?? 0);
   if (panjang > MAKS_BITA + 64 * 1024) return jsonTanpaCache({ galat: "Foto terlalu besar. Paling besar 8 MB." }, { status: 413 });

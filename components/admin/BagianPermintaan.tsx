@@ -8,12 +8,13 @@ import type { Permintaan, StatusPermintaan } from "@/lib/server/permintaan";
 import { IkonSampah, IkonWhatsapp } from "@/components/Ikon";
 import { KartuPanel } from "./Kolom";
 import type { Sesi } from "./Panel";
+import type { IdTab } from "@/lib/peran";
 
 const NAMA_STATUS: Record<StatusPermintaan, string> = { baru: "Baru", dihubungi: "Sudah dihubungi", dikonfirmasi: "Dikonfirmasi", batal: "Batal" };
 const KELAS_STATUS: Record<StatusPermintaan, string> = { baru: "bg-koral text-navy", dihubungi: "bg-ukir/20 text-tanda", dikonfirmasi: "bg-[#E3F1E9] text-[#2E7D5B]", batal: "bg-[#F1F3F5] text-ink2" };
 const URUTAN: StatusPermintaan[] = ["baru", "dihubungi", "dikonfirmasi", "batal"];
 
-export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; permintaan: Permintaan[]; pindah: (id: "permintaan" | "trip" | "jadwal" | "homestay" | "titik" | "beranda" | "kontak") => void }) {
+export function BagianRingkasan({ k, permintaan, pindah, bolehUbah = true }: { k: Konten; permintaan: Permintaan[]; pindah: (id: IdTab) => void; bolehUbah?: boolean }) {
   const hariIni = hariIniWit();
   const mendatang = jadwalMendatang(k.jadwal, hariIni);
   const baru = permintaan.filter((p) => p.status === "baru");
@@ -25,11 +26,11 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
     edukasi: k.halamanTrip.edukasi.butir.filter((e) => e.contoh).length,
   };
   const kursi = mendatang.reduce((n, j) => n + sisaKursi(j), 0);
-  const angka = [
-    { label: "Permintaan baru", nilai: baru.length, ke: "permintaan" as const },
-    { label: "Trip tampil", nilai: k.trip.filter((t) => t.tampil).length, ke: "trip" as const },
-    { label: "Open trip mendatang", nilai: mendatang.length, ke: "jadwal" as const },
-    { label: "Kursi masih kosong", nilai: kursi, ke: "jadwal" as const },
+  const angka: { label: string; nilai: number; ke: IdTab }[] = [
+    { label: "Permintaan baru", nilai: baru.length, ke: "permintaan" },
+    { label: "Trip tampil", nilai: k.trip.filter((t) => t.tampil).length, ke: "trip" },
+    { label: "Open trip mendatang", nilai: mendatang.length, ke: "jadwal" },
+    { label: "Kursi masih kosong", nilai: kursi, ke: "jadwal" },
   ];
   const kontakContoh = kontakMasihContoh(k);
   const fotoBawaan = [k.hero.kartu, k.jelajah.kartu].flat().filter((c) => c.foto.startsWith("/brand/")).length + k.gerbang.foto.filter((f) => f.foto.startsWith("/brand/")).length;
@@ -37,15 +38,15 @@ export function BagianRingkasan({ k, permintaan, pindah }: { k: Konten; perminta
   return (
     <div className="grid gap-6">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {angka.map((a) => (
-          <button key={a.label} type="button" onClick={() => pindah(a.ke)} className="rounded-card border border-line bg-white p-5 text-left shadow-card hover:border-ukir">
-            <span className="block font-display text-[44px] leading-none text-navy">{a.nilai}</span>
-            <span className="mt-2 block text-[13.5px] font-bold text-ink2">{a.label}</span>
-          </button>
-        ))}
+        {angka.map((a) => {
+          const isi = (<><span className="block font-display text-[44px] leading-none text-navy">{a.nilai}</span><span className="mt-2 block text-[13.5px] font-bold text-ink2">{a.label}</span></>);
+          return bolehUbah || a.ke === "permintaan"
+            ? <button key={a.label} type="button" onClick={() => pindah(a.ke)} className="rounded-card border border-line bg-white p-5 text-left shadow-card hover:border-ukir">{isi}</button>
+            : <div key={a.label} className="rounded-card border border-line bg-white p-5 shadow-card">{isi}</div>;
+        })}
       </div>
 
-      {(contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay + contoh.edukasi > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
+      {bolehUbah && (contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay + contoh.edukasi > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0) && (
         <KartuPanel judul="Yang perlu dilengkapi sebelum promosi" keterangan="Isi berikut masih contoh bawaan, bukan data Fantasea. Ganti atau sembunyikan supaya tamu tidak salah paham.">
           <ul className="grid gap-2.5 text-[14.5px] text-navy">
             {kontakContoh.wa && <li className="flex flex-wrap items-center justify-between gap-2 rounded-in bg-[#FFF4DD] px-4 py-3"><span>{k.situs.kontak.whatsapp ? "Nomor WhatsApp masih contoh. Footer menampilkan nomor contoh, dan permintaan tamu belum diteruskan ke WhatsApp." : "Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi."}</span><button type="button" onClick={() => pindah("kontak")} className="font-bold text-tanda">Isi kontak</button></li>}
