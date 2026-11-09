@@ -20,7 +20,7 @@ export const MENU: KelompokMenu[] = [
   { key: "kalender", label: "Kalender kegiatan", Ikon: IkonKalender, butir: [{ tab: "kalender", label: "Kalender kegiatan" }] },
   {
     key: "produk", label: "Produk", Ikon: IkonKapal,
-    butir: [{ tab: "trip", label: "Trip dan harga" }, { tab: "jadwal", label: "Jadwal open trip" }, { tab: "homestay", label: "Homestay" }, { tab: "titik", label: "Titik selam" }],
+    butir: [{ tab: "trip", label: "Trip dan harga" }, { tab: "jadwal", label: "Jadwal open trip" }, { tab: "homestay", label: "Homestay" }, { tab: "kalendermitra", label: "Kalender mitra" }, { tab: "titik", label: "Titik selam" }],
   },
   {
     key: "situs", label: "Situs web", Ikon: IkonBola,
@@ -37,6 +37,7 @@ export const KET_TAB: Record<IdTab, string> = {
   trip: "Trip di beranda dan halaman Trip, harga, foto, pembuka halaman Trip, dan kartu edukasi selam.",
   jadwal: "Tanggal open trip, jumlah kursi, dan yang sudah terisi.",
   homestay: "Homestay di beranda dan halaman Homestay, dengan harga, fasilitas, dan foto.",
+  kalendermitra: "Kalender tiap homestay mitra. Buat tautan untuk pemiliknya, kirim lewat WhatsApp, isi jumlah kamar, dan lihat kapan kalendernya terakhir dibuka.",
   titik: "Titik selam di halaman Trip, dengan kedalaman, arus, dan level.",
   beranda: "Hero, bagian homestay, galeri, Liveaboard, judul bagian lain, ajakan, menu, dan footer.",
   ulasan: "Ulasan tamu asli dan pertanyaan yang sering ditanyakan.",

@@ -9,11 +9,13 @@ import { tanggalPanjang } from "@/lib/format";
 import Gerbang from "./Gerbang";
 import KepalaPanel from "./KepalaPanel";
 import { KET_TAB, MenuPonsel, NavMenu, cariHalaman, menuPeran, tunggal } from "./MenuPanel";
-import { BagianPermintaan, BagianRingkasan } from "./BagianPermintaan";
+import { BagianPermintaan } from "./BagianPermintaan";
+import BagianRingkasan from "./BagianRingkasan";
 import { BagianHomestay, BagianJadwal, BagianTitik, BagianTrip } from "./BagianTrip";
 import { BagianBeranda, BagianKontak, BagianUlasanFaq } from "./BagianIsi";
 import BagianAkun from "./BagianAkun";
 import BagianKalender from "./BagianKalender";
+import BagianKalenderMitra from "./BagianKalenderMitra";
 import { susunKegiatan } from "@/lib/kegiatan";
 import { didalam } from "@/lib/tanggal";
 
@@ -253,20 +255,21 @@ export default function Panel() {
         <main className="min-w-0">
           <MenuPonsel {...propsMenu} />
 
-          <div className="mb-6">
+          {tab !== "ringkasan" && <div className="mb-6">
             {temu && !tunggal(temu.kelompok) && <p className="font-aksen text-[15px] uppercase tracking-[0.16em] text-tanda">{temu.kelompok.label}</p>}
             <h1 className="mt-0.5 text-[clamp(30px,4vw,40px)] leading-tight text-navy">{temu?.butir.label ?? "Panel"}</h1>
             <p className="mt-1.5 max-w-[70ch] text-[14.5px] text-ink2">{KET_TAB[tab]}</p>
-          </div>
+          </div>}
 
           {isiTab && temuanTab.length > 0 && <KotakTanda temuan={temuanTab} lain={temuanLain} />}
 
-          {tab === "ringkasan" && <BagianRingkasan k={k} permintaan={permintaan} pindah={pindah} bolehUbah={bolehUbah} />}
+          {tab === "ringkasan" && <BagianRingkasan k={k} permintaan={permintaan} sesi={sesi} pindah={pindah} boleh={(t) => tabs.includes(t)} />}
           {tab === "kalender" && <BagianKalender k={k} permintaan={permintaan} pindah={pindah} boleh={(t) => tabs.includes(t)} />}
           {tab === "permintaan" && <BagianPermintaan permintaan={permintaan} setPermintaan={setPermintaan} sesi={sesi} k={k} />}
           {tab === "trip" && <BagianTrip k={k} ubah={ubah} />}
           {tab === "jadwal" && <BagianJadwal k={k} ubah={ubah} />}
           {tab === "homestay" && <BagianHomestay k={k} ubah={ubah} />}
+          {tab === "kalendermitra" && <BagianKalenderMitra />}
           {tab === "titik" && <BagianTitik k={k} ubah={ubah} />}
           {tab === "beranda" && <BagianBeranda k={k} ubah={ubah} />}
           {tab === "ulasan" && <BagianUlasanFaq k={k} ubah={ubah} />}
