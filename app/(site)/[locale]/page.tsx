@@ -37,7 +37,7 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
           video={k.gerbang.video} tag={k.gerbang.tag} warna={k.gerbang.warna}
         />
         {/* Trip liveaboard tampil di bagian Liveaboard, jadi tidak diulang di sini selama bagian itu menyala. */}
-        <DaftarTrip b={k.bagian.trip} trip={k.liveaboard.tampil ? k.trip.filter((x) => x.kategori !== "liveaboard") : k.trip} l={l} />
+        <DaftarTrip b={k.bagian.trip} trip={k.liveaboard.tampil ? k.trip.filter((x) => x.kategori !== "liveaboard") : k.trip} kategori={k.kategori} l={l} />
         <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwal} trip={k.trip} l={l} hrefTanya={hrefTanya} />
         <Liveaboard b={k.liveaboard} trip={k.trip} l={l} href={waUmum || `/${l}/trip`} />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />

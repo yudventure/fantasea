@@ -21,7 +21,7 @@ const masalah = (s: string) => {
 const NAMA_BAGIAN: Record<string, string> = {
   situs: "Kontak dan SEO", menu: "Menu", hero: "Hero", jelajah: "Bagian homestay", gerbang: "Galeri", bagian: "Judul bagian",
   ajakan: "Ajakan", liveaboard: "Liveaboard", footer: "Footer", trip: "Trip", jadwal: "Jadwal", homestay: "Homestay", titik: "Titik selam",
-  ulasan: "Ulasan", faq: "FAQ", halamanTrip: "Halaman Trip", halamanHomestay: "Halaman Homestay",
+  ulasan: "Ulasan", faq: "FAQ", halamanTrip: "Halaman Trip", halamanHomestay: "Halaman Homestay", halamanLiveaboard: "Halaman Liveaboard", kategori: "Kategori aktivitas",
 };
 const NAMA_KOLOM: Record<string, string> = {
   judul: "judul", lead: "kalimat", label: "label", ringkas: "ringkasan", deskripsi: "deskripsi", nama: "nama", tombol: "tombol",

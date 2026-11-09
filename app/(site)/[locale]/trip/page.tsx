@@ -7,12 +7,13 @@ import { muatSitus } from "@/lib/server/situs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { polos } from "@/components/Judul";
-import { DaftarEdukasi, DaftarTitik, KatalogTrip, KepalaHalaman } from "@/components/Bagian";
+import { DaftarEdukasi, DaftarTitik, KatalogTrip, KepalaHalaman, KisiKategori } from "@/components/Bagian";
 
 /**
- * Halaman Trip (permintaan pemilik, November 2026): katalog semua trip,
- * edukasi selam, lalu titik selam yang dulu ada di beranda. Semua isi dari
- * panel (Trip dan harga, Titik selam).
+ * Halaman Trip (permintaan pemilik, November 2026): kotak kategori berfoto
+ * dan aktivitas yang dikelompokkan per kategori seperti website lama
+ * Fantasea, edukasi selam, lalu titik selam. Semua isi dari panel (Trip dan
+ * harga, Titik selam).
  */
 type Params = { params: Promise<{ locale: string }> };
 
@@ -40,7 +41,8 @@ export default async function HalamanTrip({ params }: Params) {
       <Header menu={menu} pesan={pesan} jalur="/trip" />
       <main id="isi">
         <KepalaHalaman b={k.halamanTrip.kepala} l={l} />
-        <KatalogTrip trip={k.trip} l={l} />
+        <KisiKategori b={k.halamanTrip.kategori} kategori={k.kategori} trip={k.trip} l={l} adaLiveaboard={k.liveaboard.tampil} />
+        <KatalogTrip kategori={k.kategori} trip={k.trip} l={l} adaLiveaboard={k.liveaboard.tampil} />
         <DaftarEdukasi b={e} butir={e.butir} l={l} />
         <DaftarTitik b={k.bagian.titik} titik={k.titik} l={l} latar="bg-white" />
       </main>

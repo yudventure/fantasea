@@ -8,8 +8,8 @@ import { rupiah, potonganTanggal } from "@/lib/format";
 import { KISI_TIGA, KISI_TIGA_TEKS, tempatTiga } from "@/lib/kisi";
 import KisiKartu from "./KisiKartu";
 import Gelembung from "./Gelembung";
-import { sisaKursi, tx, txDaftar, type Edukasi, type Konten, type Faq, type Homestay, type Jadwal, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
-import { IkonBintang, IkonJam, IkonMasker, IkonPanahKanan, IkonPin } from "./Ikon";
+import { ID_LIVEABOARD, sisaKursi, tx, txDaftar, type Edukasi, type Konten, type Faq, type Homestay, type Jadwal, type KategoriAktivitas, type KepalaBagian, type TitikSelam, type Trip, type Ulasan } from "@/lib/konten";
+import { IkonBintang, IkonCentang, IkonJam, IkonMasker, IkonPanahKanan, IkonPin } from "./Ikon";
 import { isiJudul } from "./Judul";
 
 const unopt = (src: string) => src.startsWith("/unggahan/");
@@ -26,10 +26,10 @@ export function KepalaBagianSitus({ b, l, tengah = false }: { b: KepalaBagian; l
 }
 
 /** Harga mulai di kartu dan halaman. `sempit` untuk kartu dua kolom di ponsel. */
-function HargaMulai({ harga, l, label, besar = false, sempit = false }: { harga: number; l: Locale; label: { dari: string; per: string; tanya: string }; besar?: boolean; sempit?: boolean }) {
+function HargaMulai({ harga, l, label, besar = false, sempit = false, tengah = false }: { harga: number; l: Locale; label: { dari: string; per: string; tanya: string }; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   if (!harga) return <span className={`font-display leading-none text-navy ${besar ? "text-[32px]" : "text-[24px]"} ${sempit ? "max-sm:text-[18px]" : ""}`}>{label.tanya}</span>;
   return (
-    <span className="grid leading-none">
+    <span className={`grid leading-none ${tengah ? "justify-items-center text-center" : ""}`}>
       <span className={`text-[12.5px] font-bold text-ink2 ${sempit ? "max-sm:text-[11.5px]" : ""}`}>{label.dari}</span>
       <span className={`mt-1 font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"} ${sempit ? "max-sm:text-[20px]" : ""}`}>{rupiah(harga, l)}</span>
       <span className={`mt-1 text-[12.5px] font-semibold text-ink2 ${sempit ? "max-sm:text-[11.5px]" : ""}`}>{label.per}</span>
@@ -50,59 +50,62 @@ export function KepalaHalaman({ b, l }: { b: KepalaBagian; l: Locale }) {
   );
 }
 
-/** Tombol menuju halaman sendiri, di atas kisi kartu beranda (permintaan pemilik, November 2026). */
-export function TombolSemua({ href, label }: { href: string; label: string }) {
+/** Tombol menuju halaman sendiri, di atas kisi kartu beranda (permintaan pemilik, November 2026). `terang` untuk latar navy. */
+export function TombolSemua({ href, label, terang = false }: { href: string; label: string; terang?: boolean }) {
   return (
-    <Link href={href} data-muncul="" className="btn btn-garis min-h-[44px] flex-none px-5 text-[14px]">
+    <Link href={href} data-muncul="" className={`btn min-h-[44px] flex-none px-5 text-[14px] ${terang ? "text-white ring-2 ring-inset ring-white hover:bg-white hover:text-navy" : "btn-garis"}`}>
       {label}<IkonPanahKanan size={16} />
     </Link>
   );
 }
 
-export function HargaTrip({ trip, l, besar = false, sempit = false }: { trip: Trip; l: Locale; besar?: boolean; sempit?: boolean }) {
+export function HargaTrip({ trip, l, besar = false, sempit = false, tengah = false }: { trip: Trip; l: Locale; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   const t = buatT(getMessages(l));
-  return <HargaMulai harga={trip.hargaMulai} l={l} besar={besar} sempit={sempit} label={{ dari: t("trip.dari"), per: t("trip.perOrang"), tanya: t("trip.tanyaHarga") }} />;
+  return <HargaMulai harga={trip.hargaMulai} l={l} besar={besar} sempit={sempit} tengah={tengah} label={{ dari: t("trip.dari"), per: t("trip.perOrang"), tanya: t("trip.tanyaHarga") }} />;
 }
 
 /**
- * Kerangka kartu berfoto untuk trip dan homestay. `lebar` untuk kartu yang
- * melebar mendatar di layar lebar. `sempit` untuk kartu yang berbagi baris
- * di ponsel (dua kolom, permintaan pemilik November 2026): tulisan
- * diperkecil, ringkasan dipotong tiga baris, pil disembunyikan, dan tombol
- * selebar kartu.
+ * Kerangka kartu berfoto untuk aktivitas dan homestay, seperti kartu di
+ * website lama Fantasea (permintaan pemilik, November 2026): foto lebar,
+ * judul di tengah, baris ikon (durasi, jumlah selam, alat), satu baris
+ * keterangan, lalu harga per orang. Seluruh kartu bisa diketuk. `lebar` untuk
+ * kartu yang melebar mendatar, `sempit` untuk kartu dua kolom di ponsel.
  */
-function KartuFoto({ href, sampul, pil, nama, ringkas, pilBawah, harga, tombol, lebar = false, sempit = false }: {
-  href: string; sampul?: string; pil?: React.ReactNode; nama: string; ringkas: string; pilBawah?: React.ReactNode; harga: React.ReactNode; tombol: string; lebar?: boolean; sempit?: boolean;
+function KartuFoto({ href, sampul, pil, nama, meta, sorot, harga, lebar = false, sempit = false }: {
+  href: string; sampul?: string; pil?: React.ReactNode; nama: string; meta: React.ReactNode[]; sorot?: string; harga: React.ReactNode; lebar?: boolean; sempit?: boolean;
 }) {
   const hp = (kelas: string) => (sempit ? kelas : "");
   return (
-    <article className={`group flex h-full overflow-hidden rounded-card bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lift ${lebar ? "flex-col md:flex-row" : "flex-col"}`}>
-      <Link href={href} className={`relative block flex-none overflow-hidden bg-kabut ${lebar ? "aspect-[4/3] md:aspect-auto md:w-[46%]" : "aspect-[4/3]"}`} tabIndex={-1} aria-hidden>
-        {sampul && <Image src={sampul} alt="" fill sizes={sempit ? "(max-width: 640px) 50vw, 420px" : "(max-width: 768px) 100vw, 420px"} unoptimized={unopt(sampul)} className="object-cover transition duration-700 group-hover:scale-[1.04]" />}
-        {pil && <span className={`pill pill-terang absolute left-3 top-3 max-w-[calc(100%-24px)] bg-white/95 ${hp("max-sm:left-2 max-sm:top-2 max-sm:max-w-[calc(100%-16px)] max-sm:px-2 max-sm:text-[11px]")}`}>{pil}</span>}
-      </Link>
-      <div className={`flex flex-1 flex-col p-5 sm:p-6 ${hp("max-sm:p-3.5")}`}>
-        <h3 className={`text-[28px] sm:text-[30px] ${hp("max-sm:text-[19px] max-sm:leading-[1.05]")}`}><Link href={href} className="hover:text-tanda">{nama}</Link></h3>
-        {ringkas && <p className={`mt-2 text-[15px] text-ink2 ${hp("max-sm:line-clamp-3 max-sm:text-[13px]")}`}>{ringkas}</p>}
-        {pilBawah && <div className={`mt-4 flex flex-wrap gap-2 ${hp("max-sm:hidden")}`}>{pilBawah}</div>}
-        <div className={`mt-auto flex items-end justify-between gap-3 pt-6 ${hp("max-sm:flex-col max-sm:items-stretch max-sm:gap-2.5 max-sm:pt-4")}`}>
-          {harga}
-          <Link href={href} className={`btn btn-navy min-h-[44px] px-5 text-[14px] ${hp("max-sm:min-h-[38px] max-sm:w-full max-sm:px-3 max-sm:text-[13px]")}`}>{tombol}</Link>
-        </div>
+    <article className={`group relative flex h-full overflow-hidden rounded-card bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lift ${lebar ? "flex-col md:flex-row" : "flex-col"}`}>
+      <div className={`relative flex-none overflow-hidden bg-kabut ${lebar ? "aspect-[16/10] md:aspect-auto md:min-h-[300px] md:w-1/2" : `aspect-[16/10] ${hp("max-sm:aspect-[4/3]")}`}`}>
+        {sampul && <Image src={sampul} alt="" fill sizes={sempit ? "(max-width: 640px) 50vw, 420px" : "(max-width: 768px) 100vw, 480px"} unoptimized={unopt(sampul)} className="object-cover transition duration-700 group-hover:scale-[1.04]" />}
+        {pil && <span className={`pill pill-terang absolute left-3 top-3 max-w-[calc(100%-24px)] bg-white/95 ${hp("max-sm:hidden")}`}>{pil}</span>}
+      </div>
+      <div className={`flex flex-1 flex-col items-center px-5 pb-6 pt-5 text-center sm:px-6 ${lebar ? "md:justify-center md:px-10" : ""} ${hp("max-sm:px-3 max-sm:pb-4 max-sm:pt-3.5")}`}>
+        <h3 className={`text-[26px] leading-[1.05] sm:text-[28px] ${hp("max-sm:text-[18px]")}`}>
+          <Link href={href} className="after:absolute after:inset-0 after:rounded-card hover:text-tanda focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-tanda">{nama}</Link>
+        </h3>
+        {meta.length > 0 && <p className={`mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[14.5px] font-semibold text-ink2 ${hp("max-sm:mt-2 max-sm:gap-x-2.5 max-sm:text-[11.5px]")}`}>{meta}</p>}
+        {sorot && <p className={`mt-2 text-[14.5px] text-ink2 ${hp("max-sm:line-clamp-2 max-sm:text-[12px]")}`}>{sorot}</p>}
+        <div className={`mt-auto pt-5 ${lebar ? "md:mt-0" : ""} ${hp("max-sm:pt-3")}`}>{harga}</div>
       </div>
     </article>
   );
 }
 
-export function KartuTrip({ trip, l, lebar = false, sempit = false }: { trip: Trip; l: Locale; lebar?: boolean; sempit?: boolean }) {
+const Meta = ({ ikon, teks }: { ikon: React.ReactNode; teks: string }) => <span className="inline-flex items-center gap-1.5">{ikon}{teks}</span>;
+
+export function KartuTrip({ trip, l, kategori, lebar = false, sempit = false }: { trip: Trip; l: Locale; kategori?: string; lebar?: boolean; sempit?: boolean }) {
   const t = buatT(getMessages(l));
-  const pil = [
-    tx(trip.durasi, l) && <span key="d" className="pill pill-terang"><IkonJam size={15} />{tx(trip.durasi, l)}</span>,
-    trip.selam > 0 && <span key="s" className="pill pill-terang"><IkonMasker size={15} />{t("trip.selam", { n: trip.selam })}</span>,
-  ].filter(Boolean);
+  const ik = "flex-none text-tanda";
+  const meta = [
+    tx(trip.durasi, l) && <Meta key="d" ikon={<IkonJam size={16} className={ik} />} teks={tx(trip.durasi, l)} />,
+    trip.selam > 0 && <Meta key="s" ikon={<IkonMasker size={16} className={ik} />} teks={t("trip.selam", { n: trip.selam })} />,
+    trip.alat && <Meta key="a" ikon={<IkonCentang size={16} className={ik} />} teks={t("trip.alat")} />,
+  ].filter(Boolean) as React.ReactNode[];
   return (
-    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} pil={t(`trip.kategori.${trip.kategori}`)} nama={tx(trip.nama, l)} ringkas={tx(trip.ringkas, l)}
-      pilBawah={pil.length ? pil : undefined} harga={<HargaTrip trip={trip} l={l} sempit={sempit} />} tombol={t("trip.lihat")} lebar={lebar} sempit={sempit} />
+    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} pil={kategori} nama={tx(trip.nama, l)} meta={meta} sorot={tx(trip.sorot, l)}
+      harga={<HargaTrip trip={trip} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
 }
 
@@ -112,11 +115,13 @@ function kisi<T>(daftar: T[], kartu: (x: T, p: ReturnType<typeof tempatTiga>) =>
   return { kartu: daftar.map((x, i) => <Fragment key={i}>{kartu(x, tempat[i])}</Fragment>), kelasKartu: tempat.map((p) => p.kelas) };
 }
 
+const namaKategori = (kategori: KategoriAktivitas[], id: string, l: Locale) => { const k = kategori.find((x) => x.id === id); return k ? tx(k.nama, l) : undefined; };
+
 /**
  * Trip di beranda. Paling banyak 6 kartu di semua ukuran layar, sisanya
  * lewat Load more, dan tombol ke halaman Trip di atas kartu.
  */
-export function DaftarTrip({ b, trip, l }: { b: KepalaBagian; trip: Trip[]; l: Locale }) {
+export function DaftarTrip({ b, trip, kategori, l }: { b: KepalaBagian; trip: Trip[]; kategori: KategoriAktivitas[]; l: Locale }) {
   const t = buatT(getMessages(l));
   const tampil = trip.filter((x) => x.tampil);
   if (!tampil.length) return null;
@@ -127,22 +132,76 @@ export function DaftarTrip({ b, trip, l }: { b: KepalaBagian; trip: Trip[]; l: L
           <KepalaBagianSitus b={b} l={l} />
           <TombolSemua href={`/${l}/trip`} label={t("trip.lihatSemua")} />
         </div>
-        <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+        <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} kategori={namaKategori(kategori, x.kategori, l)} lebar={p.lebar} sempit={p.sempit} />)} />
       </div>
     </section>
   );
 }
 
-/** Katalog semua trip di halaman Trip. */
-export function KatalogTrip({ trip, l }: { trip: Trip[]; l: Locale }) {
-  const tampil = trip.filter((x) => x.tampil);
-  if (!tampil.length) return null;
+/** Kategori yang tampil: punya aktivitas yang tampil, atau Liveaboard yang punya halaman sendiri. */
+export const kategoriTampil = (kategori: KategoriAktivitas[], trip: Trip[], adaLiveaboard: boolean) =>
+  kategori.filter((k) => k.tampil && (trip.some((x) => x.tampil && x.kategori === k.id) || (k.id === ID_LIVEABOARD && adaLiveaboard)));
+
+/** Lebar kotak di baris terakhir supaya kotak sisa melebar rata (kisi 2 kolom di ponsel, 4 di layar lebar). */
+const LEBAR_LG: Record<number, string> = { 1: "lg:col-span-12", 2: "lg:col-span-6", 3: "lg:col-span-4", 4: "lg:col-span-3" };
+
+/**
+ * Kotak kategori berfoto di halaman Trip, seperti Categories di website lama
+ * Fantasea. Liveaboard menuju halamannya sendiri, yang lain ke kelompoknya.
+ */
+export function KisiKategori({ b, kategori, trip, l, adaLiveaboard }: { b: KepalaBagian; kategori: KategoriAktivitas[]; trip: Trip[]; l: Locale; adaLiveaboard: boolean }) {
+  const daftar = kategoriTampil(kategori, trip, adaLiveaboard);
+  if (!daftar.length) return null;
+  const n = daftar.length, sisaLg = n % 4, awalSisaLg = n - (sisaLg || 4);
   return (
-    <section id="katalog" className="pb-16 sm:pb-24">
+    <section id="kategori" className="pb-12 sm:pb-16">
       <div className="wrap">
-        <KisiKartu kelas={KISI_TIGA} {...kisi(tampil, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+        <KepalaBagianSitus b={b} l={l} />
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-12">
+          {daftar.map((k, i) => {
+            const lg = i >= awalSisaLg ? LEBAR_LG[sisaLg || 4] : LEBAR_LG[4];
+            const hp = n % 2 === 1 && i === n - 1 ? "col-span-2" : "";
+            const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard` : `#kategori-${k.id}`;
+            return (
+              <Link key={k.id} href={href} data-muncul="" style={{ "--tunda": `${(i % 4) * 70}ms` } as React.CSSProperties}
+                className={`group relative block h-[132px] overflow-hidden rounded-[18px] bg-navy shadow-card sm:h-[170px] lg:h-[190px] ${lg} ${hp}`}>
+                {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 1024px) 50vw, 360px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
+                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-malam/85 via-malam/25 to-transparent" />
+                <span className="absolute inset-x-3 bottom-3 text-center font-display text-[18px] leading-tight text-white sm:bottom-4 sm:text-[23px]">{tx(k.nama, l)}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Katalog di halaman Trip, dikelompokkan per kategori (permintaan pemilik,
+ * November 2026). Kelompok Liveaboard punya tombol ke halamannya sendiri.
+ */
+export function KatalogTrip({ kategori, trip, l, adaLiveaboard }: { kategori: KategoriAktivitas[]; trip: Trip[]; l: Locale; adaLiveaboard: boolean }) {
+  const t = buatT(getMessages(l));
+  const grup = kategori.filter((k) => k.tampil).map((k) => ({ k, isi: trip.filter((x) => x.tampil && x.kategori === k.id) })).filter((g) => g.isi.length);
+  if (!grup.length) return null;
+  return (
+    <>
+      {grup.map(({ k, isi }, i) => (
+        <section key={k.id} id={`kategori-${k.id}`} className={`scroll-mt-24 py-12 sm:py-16 ${i % 2 === 0 ? "bg-soft" : ""}`}>
+          <div className="wrap">
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4" data-muncul="">
+              <div>
+                <h2 className="text-[clamp(32px,4.4vw,50px)]">{tx(k.nama, l)}</h2>
+                {tx(k.ringkas, l) && <p className="mt-2 max-w-[58ch] text-[16px] text-ink2">{tx(k.ringkas, l)}</p>}
+              </div>
+              {k.id === ID_LIVEABOARD && adaLiveaboard && <TombolSemua href={`/${l}/liveaboard`} label={t("liveaboard.lihatSemua")} />}
+            </div>
+            <KisiKartu kelas={`mt-8 ${KISI_TIGA}`} {...kisi(isi, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+          </div>
+        </section>
+      ))}
+    </>
   );
 }
 
@@ -167,21 +226,19 @@ export function DaftarEdukasi({ b, butir, l }: { b: KepalaBagian; butir: Edukasi
   );
 }
 
-export function HargaHomestay({ h, l, besar = false, sempit = false }: { h: Homestay; l: Locale; besar?: boolean; sempit?: boolean }) {
+export function HargaHomestay({ h, l, besar = false, sempit = false, tengah = false }: { h: Homestay; l: Locale; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   const t = buatT(getMessages(l));
-  return <HargaMulai harga={h.hargaMulai} l={l} besar={besar} sempit={sempit} label={{ dari: t("homestay.dari"), per: t("homestay.perMalam"), tanya: t("homestay.tanyaHarga") }} />;
+  return <HargaMulai harga={h.hargaMulai} l={l} besar={besar} sempit={sempit} tengah={tengah} label={{ dari: t("homestay.dari"), per: t("homestay.perMalam"), tanya: t("homestay.tanyaHarga") }} />;
 }
 
 /** Kartu homestay, rupanya sama dengan kartu trip (permintaan pemilik, November 2026). */
 export function KartuHomestay({ h, l, lebar = false, sempit = false }: { h: Homestay; l: Locale; lebar?: boolean; sempit?: boolean }) {
-  const t = buatT(getMessages(l));
-  const fasilitas = txDaftar(h.fasilitas, l).slice(0, 3);
   const lokasi = tx(h.lokasi, l);
+  const fasilitas = txDaftar(h.fasilitas, l).slice(0, 3).join(" · ");
   return (
-    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)} ringkas={tx(h.ringkas, l)}
-      pil={lokasi ? <><IkonPin size={15} className="flex-none" /><span className="truncate">{lokasi}</span></> : undefined}
-      pilBawah={fasilitas.length ? fasilitas.map((f) => <span key={f} className="pill pill-terang">{f}</span>) : undefined}
-      harga={<HargaHomestay h={h} l={l} sempit={sempit} />} tombol={t("homestay.lihat")} lebar={lebar} sempit={sempit} />
+    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)}
+      meta={lokasi ? [<Meta key="l" ikon={<IkonPin size={16} className="flex-none text-tanda" />} teks={lokasi} />] : []} sorot={fasilitas}
+      harga={<HargaHomestay h={h} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
 }
 
@@ -207,9 +264,10 @@ export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Home
  * navy dengan Ukir Sayap samar, foto besar, daftar keunggulan, dan tombol
  * tanya jadwal. Trip berkategori liveaboard tampil sebagai kartu di bawahnya.
  */
-export function Liveaboard({ b, trip, l, href }: { b: Konten["liveaboard"]; trip: Trip[]; l: Locale; href: string }) {
+export function Liveaboard({ b, trip, l, href, kartu = true, beranda = true }: { b: Konten["liveaboard"]; trip: Trip[]; l: Locale; href: string; kartu?: boolean; beranda?: boolean }) {
   if (!b.tampil) return null;
-  const daftar = trip.filter((x) => x.tampil && x.kategori === "liveaboard");
+  const t = buatT(getMessages(l));
+  const daftar = kartu ? trip.filter((x) => x.tampil && x.kategori === ID_LIVEABOARD) : [];
   const butir = txDaftar(b.butir, l);
   return (
     <section id="liveaboard" className="relative overflow-hidden bg-navy py-16 text-white sm:py-24">
@@ -236,12 +294,15 @@ export function Liveaboard({ b, trip, l, href }: { b: Konten["liveaboard"]; trip
               ))}
             </ul>
           )}
-          {tx(b.tombol, l) && <Link href={href} className="btn btn-koral mt-8">{tx(b.tombol, l)}<IkonPanahKanan size={16} /></Link>}
+          <div className="mt-8 flex flex-wrap gap-3">
+            {tx(b.tombol, l) && <Link href={href} className="btn btn-koral">{tx(b.tombol, l)}<IkonPanahKanan size={16} /></Link>}
+            {beranda && <TombolSemua href={`/${l}/liveaboard`} label={t("liveaboard.lihatSemua")} terang />}
+          </div>
         </div>
       </div>
       {daftar.length > 0 && (
         <div className="wrap relative mt-12 sm:mt-16">
-          <KisiKartu kelas={KISI_TIGA} {...kisi(daftar, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+          <KisiKartu semuaUkuran={beranda} kelas={KISI_TIGA} {...kisi(daftar, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
         </div>
       )}
     </section>

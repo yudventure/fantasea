@@ -43,6 +43,7 @@ export const KONTEN_BAWAAN: Konten = {
   },
   menu: {
     trip: { en: "Trips", id: "Trip" },
+    liveaboard: { en: "Liveaboard", id: "Liveaboard" },
     jadwal: { en: "Open trips", id: "Open trip" },
     homestay: { en: "Homestays", id: "Homestay" },
     titik: { en: "Dive sites", id: "Titik selam" },
@@ -166,6 +167,11 @@ export const KONTEN_BAWAAN: Konten = {
         id: "Semua trip selam dan snorkeling kami di satu tempat, ditambah yang perlu kamu tahu sebelum menyelam di Raja Ampat dan titik selam yang kami kunjungi.",
       },
     },
+    kategori: {
+      label: { en: "Categories", id: "Kategori" },
+      judul: { en: "Pick your\n*adventure.*", id: "Pilih\n*petualanganmu.*" },
+      lead: { en: "", id: "" },
+    },
     edukasi: {
       label: { en: "Before you dive", id: "Sebelum menyelam" },
       judul: { en: "Diving in\n*Raja Ampat.*", id: "Menyelam di\n*Raja Ampat.*" },
@@ -235,12 +241,94 @@ export const KONTEN_BAWAAN: Konten = {
       },
     },
   },
+  // Halaman Liveaboard (permintaan pemilik, November 2026). Kartu pengetahuan
+  // umum bertanda contoh supaya diperiksa tim sebelum dipromosikan.
+  halamanLiveaboard: {
+    kepala: {
+      label: { en: "Liveaboard", id: "Liveaboard" },
+      judul: { en: "Days at sea,\n*nights on deck.*", id: "Hari di laut,\n*malam di dek.*" },
+      lead: {
+        en: "Our liveaboard trips in one place. Stay on the boat for several days and reach the far reefs of Raja Ampat that day trips cannot.",
+        id: "Semua trip liveaboard kami di satu tempat. Tinggal di kapal beberapa hari dan capai karang Raja Ampat yang jauh dan tidak terjangkau trip harian.",
+      },
+    },
+    edukasi: {
+      label: { en: "Before you board", id: "Sebelum naik kapal" },
+      judul: { en: "Life on\n*a liveaboard.*", id: "Hidup di\n*kapal selam.*" },
+      lead: {
+        en: "What a few days on board usually look like, so you can pack and plan with ease.",
+        id: "Gambaran beberapa hari di kapal, supaya kamu lebih mudah berkemas dan bersiap.",
+      },
+      butir: [
+        {
+          id: "e-la-hari", contoh: true,
+          judul: { en: "A day on board", id: "Sehari di kapal" },
+          isi: {
+            en: "You sleep in a cabin, eat on board, and the boat moves between sites while you rest. Days are built around the dives.",
+            id: "Kamu tidur di kabin, makan di kapal, dan kapal berpindah titik selagi kamu beristirahat. Hari-harinya disusun mengikuti jadwal selam.",
+          },
+        },
+        {
+          id: "e-la-selam", contoh: true,
+          judul: { en: "How many dives", id: "Berapa kali menyelam" },
+          isi: {
+            en: "Usually three or four dives a day, sometimes with a night dive. You can skip a dive whenever you want to rest.",
+            id: "Biasanya tiga atau empat kali sehari, kadang dengan selam malam. Kamu boleh melewatkan penyelaman kapan saja untuk istirahat.",
+          },
+        },
+        {
+          id: "e-la-level", contoh: true,
+          judul: { en: "Experience", id: "Pengalaman menyelam" },
+          isi: {
+            en: "Many routes are fine with an Open Water certificate. Routes with strong currents are more comfortable with Advanced. Ask us about the route.",
+            id: "Banyak rute cukup dengan sertifikat Open Water. Rute berarus kuat lebih nyaman dengan Advanced. Tanyakan rutenya ke kami.",
+          },
+        },
+        {
+          id: "e-la-mabuk", contoh: true,
+          judul: { en: "Seasickness", id: "Mabuk laut" },
+          isi: {
+            en: "The boat crosses open water between islands. If you get seasick easily, bring medicine and take it before the crossing.",
+            id: "Kapal menyeberangi laut terbuka antar pulau. Kalau mudah mabuk laut, bawa obat dan minum sebelum menyeberang.",
+          },
+        },
+        {
+          id: "e-la-bawa", contoh: true,
+          judul: { en: "What to pack", id: "Yang perlu dibawa" },
+          isi: {
+            en: "Light clothes, a thin jacket for evenings on deck, reef safe sunscreen, and a power bank for your camera.",
+            id: "Baju ringan, jaket tipis untuk malam di dek, tabir surya ramah karang, dan power bank untuk kamera.",
+          },
+        },
+        {
+          id: "e-la-musim", contoh: true,
+          judul: { en: "Season", id: "Musim" },
+          isi: {
+            en: "Most boats sail Raja Ampat around October to April, when the sea is calmer. Outside those months there are fewer departures.",
+            id: "Kebanyakan kapal berlayar di Raja Ampat sekitar Oktober sampai April, saat laut lebih tenang. Di luar bulan itu keberangkatannya lebih sedikit.",
+          },
+        },
+      ],
+    },
+  },
   footer: {
     tentang: {
       en: "Dive and snorkel trips in Raja Ampat for small groups, with local guides.",
       id: "Trip selam dan snorkeling di Raja Ampat untuk rombongan kecil, bersama pemandu lokal.",
     },
   },
+  // Kategori aktivitas seperti website lama Fantasea (permintaan pemilik,
+  // November 2026). Fotonya ilustrasi bawaan, ganti di panel Trip dan harga.
+  kategori: [
+    { id: "homestay-selam", tampil: true, foto: F("pantai-karst"), nama: { en: "Dive Homestay", id: "Homestay selam" }, ringkas: { en: "Dive packages with a stay at a homestay by the sea.", id: "Paket selam sekaligus menginap di homestay tepi laut." } },
+    { id: "kursus", tampil: true, foto: F("penyelam-ok"), nama: { en: "Diving Courses", id: "Kursus selam" }, ringkas: { en: "Courses to start diving or take the next step.", id: "Kursus untuk mulai menyelam atau naik ke tingkat berikutnya." } },
+    { id: "liveaboard", tampil: true, foto: F("kapal-penyelam"), nama: { en: "Liveaboards", id: "Liveaboard" }, ringkas: { en: "Several days on a boat to the far reefs.", id: "Beberapa hari di kapal menuju karang yang jauh." } },
+    { id: "spesialti", tampil: true, foto: F("penyelam-gua"), nama: { en: "Specialty Courses", id: "Kursus spesialti" }, ringkas: { en: "Focused courses after your first certificate.", id: "Kursus khusus setelah sertifikat pertamamu." } },
+    { id: "selam", tampil: true, foto: F("penyelam-karang"), nama: { en: "Fun Diving (Certified Diver)", id: "Fun diving (penyelam bersertifikat)" }, ringkas: { en: "Guided dives for certified divers.", id: "Penyelaman bersama pemandu untuk penyelam bersertifikat." } },
+    { id: "try-scuba", tampil: true, foto: F("penyelam-biru"), nama: { en: "Try Scuba (Non-certified)", id: "Try scuba (belum bersertifikat)" }, ringkas: { en: "A first dive with an instructor, no certificate needed.", id: "Selam pertama bersama instruktur, tanpa sertifikat." } },
+    { id: "snorkel", tampil: true, foto: F("snorkel-laguna"), nama: { en: "Snorkeling", id: "Snorkeling" }, ringkas: { en: "Reefs and lagoons from the surface.", id: "Karang dan laguna dari permukaan." } },
+    { id: "ekstra", tampil: true, foto: F("speedboat-laguna"), nama: { en: "Extra Service", id: "Layanan tambahan" }, ringkas: { en: "Transfers, gear rental, and other help for your trip.", id: "Antar jemput, sewa alat, dan bantuan lain untuk perjalananmu." } },
+  ],
   trip: [
     {
       id: "t-escape",
@@ -257,6 +345,8 @@ export const KONTEN_BAWAAN: Konten = {
       },
       durasi: { en: "4 days 3 nights", id: "4 hari 3 malam" },
       selam: 8,
+      alat: false,
+      sorot: { en: "", id: "" },
       level: { en: "Open Water and up", id: "Open Water ke atas" },
       hargaMulai: 8500000,
       termasuk: {
@@ -286,6 +376,8 @@ export const KONTEN_BAWAAN: Konten = {
       },
       durasi: { en: "3 days 2 nights", id: "3 hari 2 malam" },
       selam: 0,
+      alat: false,
+      sorot: { en: "", id: "" },
       level: { en: "No certification needed", id: "Tanpa sertifikat" },
       hargaMulai: 4500000,
       termasuk: {
@@ -312,6 +404,8 @@ export const KONTEN_BAWAAN: Konten = {
       },
       durasi: { en: "6 days 5 nights", id: "6 hari 5 malam" },
       selam: 12,
+      alat: false,
+      sorot: { en: "", id: "" },
       level: { en: "Open Water and up", id: "Open Water ke atas" },
       hargaMulai: 13900000,
       termasuk: {
@@ -330,7 +424,7 @@ export const KONTEN_BAWAAN: Konten = {
       id: "t-private",
       slug: "private-dive-trip",
       nama: { en: "Private Dive Trip", id: "Private Dive Trip" },
-      kategori: "privat",
+      kategori: "selam",
       ringkas: {
         en: "Your own boat and guide on the dates you choose. We build the route with you.",
         id: "Kapal dan pemandu sendiri di tanggal pilihanmu. Rutenya kita susun bersama.",
@@ -341,6 +435,8 @@ export const KONTEN_BAWAAN: Konten = {
       },
       durasi: { en: "Your dates", id: "Tanggal pilihanmu" },
       selam: 0,
+      alat: false,
+      sorot: { en: "", id: "" },
       level: { en: "All levels", id: "Semua level" },
       hargaMulai: 0,
       termasuk: {

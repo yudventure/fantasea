@@ -11,18 +11,18 @@ export type Peran = "pemilik" | "tim" | "meja";
 export const PERAN: Peran[] = ["pemilik", "tim", "meja"];
 
 /** Halaman panel. Urutannya mengikuti menu (components/admin/MenuPanel.tsx). */
-export type IdTab = "ringkasan" | "permintaan" | "kalender" | "trip" | "jadwal" | "homestay" | "kalendermitra" | "titik" | "beranda" | "ulasan" | "kontak" | "akun";
+export type IdTab = "ringkasan" | "permintaan" | "kalender" | "trip" | "liveaboard" | "jadwal" | "homestay" | "kalendermitra" | "titik" | "beranda" | "ulasan" | "kontak" | "akun";
 
 export const META_PERAN: Record<Peran, { label: string; ket: string; tabs: IdTab[] }> = {
   pemilik: {
     label: "Pemilik",
     ket: "Akses penuh, termasuk akun tim, peran, dan menghapus permintaan.",
-    tabs: ["ringkasan", "permintaan", "kalender", "trip", "jadwal", "homestay", "kalendermitra", "titik", "beranda", "ulasan", "kontak", "akun"],
+    tabs: ["ringkasan", "permintaan", "kalender", "trip", "liveaboard", "jadwal", "homestay", "kalendermitra", "titik", "beranda", "ulasan", "kontak", "akun"],
   },
   tim: {
     label: "Tim",
     ket: "Mengubah semua isi situs dan menjawab permintaan tamu.",
-    tabs: ["ringkasan", "permintaan", "kalender", "trip", "jadwal", "homestay", "kalendermitra", "titik", "beranda", "ulasan", "kontak", "akun"],
+    tabs: ["ringkasan", "permintaan", "kalender", "trip", "liveaboard", "jadwal", "homestay", "kalendermitra", "titik", "beranda", "ulasan", "kontak", "akun"],
   },
   meja: {
     label: "Meja permintaan",

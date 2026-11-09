@@ -18,20 +18,32 @@ export interface Kartu { foto: string; tag: string; warna: WarnaTag }
 export interface FotoBerketerangan { foto: string; keterangan: Teks }
 export interface KepalaBagian { label: Teks; judul: Teks; lead: Teks }
 
-export type KategoriTrip = "selam" | "snorkel" | "liveaboard" | "privat";
-export const KATEGORI_TRIP: KategoriTrip[] = ["selam", "snorkel", "liveaboard", "privat"];
+/**
+ * Kategori aktivitas seperti website lama Fantasea (permintaan pemilik,
+ * November 2026, "aktivitasnya seperti ini dan kelompokan per kategori").
+ * Diatur di panel Trip dan harga. Kategori `liveaboard` punya halaman sendiri
+ * dan tidak bisa dihapus.
+ */
+export interface KategoriAktivitas { id: string; nama: Teks; ringkas: Teks; foto: string; tampil: boolean }
+export const ID_LIVEABOARD = "liveaboard";
+export const MAKS_KATEGORI = 16;
 
 export interface Trip {
   id: string;
   slug: string;
   nama: Teks;
-  kategori: KategoriTrip;
+  /** Id kategori aktivitas (`Konten.kategori`). */
+  kategori: string;
   ringkas: Teks;
   /** Paragraf dipisah baris kosong. */
   deskripsi: Teks;
   durasi: Teks;
   /** Jumlah selam dalam satu trip. 0 untuk trip tanpa selam. */
   selam: number;
+  /** Alat selam termasuk, tampil sebagai Gear included di kartu. */
+  alat: boolean;
+  /** Satu baris pendek di kartu di bawah durasi, mis. All-included atau nama pulau. */
+  sorot: Teks;
   level: Teks;
   /** Harga mulai per orang dalam rupiah. 0 berarti tanya harga. */
   hargaMulai: number;
@@ -107,7 +119,7 @@ export interface Konten {
     sosial: { instagram: string; facebook: string; tiktok: string; youtube: string };
     seo: { judul: Teks; deskripsi: Teks };
   };
-  menu: { trip: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
+  menu: { trip: Teks; liveaboard: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
   hero: { judul: Teks; lead: Teks; tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
   /** Bagian kartu bertumpuk, sekarang pembuka homestay. Kartu homestay tampil di bawahnya. */
   jelajah: KepalaBagian & { kartu: Kartu[] };
@@ -125,9 +137,16 @@ export interface Konten {
    * 2026). Halaman Trip berisi katalog trip, edukasi selam, dan titik selam.
    * Halaman Homestay berisi semua homestay.
    */
-  halamanTrip: { kepala: KepalaBagian; edukasi: KepalaBagian & { butir: Edukasi[] } };
+  halamanTrip: { kepala: KepalaBagian; kategori: KepalaBagian; edukasi: KepalaBagian & { butir: Edukasi[] } };
   halamanHomestay: { kepala: KepalaBagian };
+  /**
+   * Halaman Liveaboard sendiri seperti halaman Trip (permintaan pemilik,
+   * November 2026). Katalog trip berjenis Liveaboard, keunggulan dari bagian
+   * Liveaboard, jadwal, dan kartu pengetahuan sebelum naik kapal.
+   */
+  halamanLiveaboard: { kepala: KepalaBagian; edukasi: KepalaBagian & { butir: Edukasi[] } };
   footer: { tentang: Teks };
+  kategori: KategoriAktivitas[];
   trip: Trip[];
   jadwal: Jadwal[];
   homestay: Homestay[];
@@ -264,9 +283,26 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
   const liveaboard = obj(o.liveaboard);
   const halamanTrip = obj(o.halamanTrip), edukasi = obj(halamanTrip.edukasi), halamanHomestay = obj(o.halamanHomestay);
+  const halamanLiveaboard = obj(o.halamanLiveaboard), edukasiLa = obj(halamanLiveaboard.edukasi);
+  const butirEdukasi = (sumber: Record<string, unknown>, bawaan: Edukasi[]) => ("butir" in sumber ? arr(sumber.butir) : bawaan).map((e) => {
+    const x = obj(e);
+    return { id: id(x.id, "e"), judul: teks(x.judul, undefined, 80), isi: teks(x.isi, undefined, 600), ...(x.contoh === true ? { contoh: true } : {}) };
+  }).filter((e) => e.judul.en || e.judul.id);
 
   const kartuList = (x: unknown, jumlah: number, bawaan: Kartu[]) =>
     Array.from({ length: jumlah }, (_, i) => kartu(arr(x)[i], bawaan[i]));
+
+  const kategori: KategoriAktivitas[] = ("kategori" in o ? arr(o.kategori) : b.kategori).map((kt) => {
+    const x = obj(kt);
+    return { id: slugDari(str(x.id, 40)) || idBaru("k"), nama: teks(x.nama, undefined, 60), ringkas: teks(x.ringkas, undefined, 300), foto: fotoSah(x.foto), tampil: bool(x.tampil, true) };
+  }).filter((kt, i, semua) => (kt.nama.en || kt.nama.id) && semua.findIndex((y) => y.id === kt.id) === i).slice(0, MAKS_KATEGORI);
+  // Kategori liveaboard selalu ada, karena punya halaman sendiri.
+  if (!kategori.some((kt) => kt.id === ID_LIVEABOARD)) kategori.push(structuredClone(b.kategori.find((kt) => kt.id === ID_LIVEABOARD)!));
+  // Simpanan lama memakai jenis tetap. "privat" menjadi Fun diving.
+  const kategoriTrip = (v: unknown) => {
+    const s = str(v, 40) === "privat" ? "selam" : str(v, 40);
+    return kategori.some((kt) => kt.id === s) ? s : kategori.find((kt) => kt.id === "selam")?.id ?? kategori[0].id;
+  };
 
   const trip: Trip[] = ("trip" in o ? arr(o.trip) : b.trip).map((t) => {
     const x = obj(t);
@@ -275,11 +311,13 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       id: id(x.id, "t"),
       slug: slugDari(str(x.slug, 80) || nama.en || nama.id),
       nama,
-      kategori: KATEGORI_TRIP.includes(x.kategori as KategoriTrip) ? (x.kategori as KategoriTrip) : "selam",
+      kategori: kategoriTrip(x.kategori),
       ringkas: teks(x.ringkas, undefined, 300),
       deskripsi: teks(x.deskripsi, undefined, 6000),
       durasi: teks(x.durasi, undefined, 60),
       selam: num(x.selam, 0, 99),
+      alat: bool(x.alat, false),
+      sorot: teks(x.sorot, undefined, 60),
       level: teks(x.level, undefined, 80),
       hargaMulai: num(x.hargaMulai, 0, 1e11),
       termasuk: daftarTeks(x.termasuk),
@@ -347,7 +385,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       seo: { judul: teks(seo.judul, b.situs.seo.judul, 90), deskripsi: teks(seo.deskripsi, b.situs.seo.deskripsi, 300) },
     },
     menu: {
-      trip: teks(menu.trip, b.menu.trip, 30), jadwal: teks(menu.jadwal, b.menu.jadwal, 30), homestay: teks(menu.homestay, b.menu.homestay, 30), titik: teks(menu.titik, b.menu.titik, 30),
+      trip: teks(menu.trip, b.menu.trip, 30), liveaboard: teks(menu.liveaboard, b.menu.liveaboard, 30), jadwal: teks(menu.jadwal, b.menu.jadwal, 30), homestay: teks(menu.homestay, b.menu.homestay, 30), titik: teks(menu.titik, b.menu.titik, 30),
       ulasan: teks(menu.ulasan, b.menu.ulasan, 30), faq: teks(menu.faq, b.menu.faq, 30), pesan: teks(menu.pesan, b.menu.pesan, 30),
     },
     hero: {
@@ -385,16 +423,19 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     },
     halamanTrip: {
       kepala: kepala(obj(halamanTrip.kepala), b.halamanTrip.kepala),
+      kategori: kepala(obj(halamanTrip.kategori), b.halamanTrip.kategori),
       edukasi: {
         ...kepala(edukasi, b.halamanTrip.edukasi),
-        butir: ("butir" in edukasi ? arr(edukasi.butir) : b.halamanTrip.edukasi.butir).map((e) => {
-          const x = obj(e);
-          return { id: id(x.id, "e"), judul: teks(x.judul, undefined, 80), isi: teks(x.isi, undefined, 600), ...(x.contoh === true ? { contoh: true } : {}) };
-        }).filter((e) => e.judul.en || e.judul.id),
+        butir: butirEdukasi(edukasi, b.halamanTrip.edukasi.butir),
       },
     },
     halamanHomestay: { kepala: kepala(obj(halamanHomestay.kepala), b.halamanHomestay.kepala) },
+    halamanLiveaboard: {
+      kepala: kepala(obj(halamanLiveaboard.kepala), b.halamanLiveaboard.kepala),
+      edukasi: { ...kepala(edukasiLa, b.halamanLiveaboard.edukasi), butir: butirEdukasi(edukasiLa, b.halamanLiveaboard.edukasi.butir) },
+    },
     footer: { tentang: teks(footer.tentang, b.footer.tentang, 400) },
+    kategori,
     trip,
     jadwal: ("jadwal" in o ? arr(o.jadwal) : b.jadwal).map((j) => {
       const x = obj(j);
