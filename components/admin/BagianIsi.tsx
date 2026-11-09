@@ -84,9 +84,9 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
       </KartuPanel>
 
       <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, urutannya mengikuti bagian beranda, dan kalimat tentang Fantasea di footer."
-        lipat ringkas={`Menu ${[k.menu.homestay, k.menu.trip, k.menu.titik, k.menu.liveaboard, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
+        lipat ringkas={`Menu ${[k.menu.homestay, k.menu.trip, k.menu.liveaboard, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
-          {([["homestay", "Menu homestay (halaman Homestay)"], ["trip", "Menu trip (halaman Trip)"], ["titik", "Menu titik selam (halaman Trip)"], ["liveaboard", "Menu liveaboard (halaman Liveaboard)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
+          {([["homestay", "Menu homestay (halaman Homestay)"], ["trip", "Menu trip (halaman Trip)"], ["liveaboard", "Menu liveaboard (halaman Liveaboard)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
           ))}
         </div>
