@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/lib/i18n/config";
-import { hariIniWit, sisaKursi, tx, txDaftar } from "@/lib/konten";
+import { hariIniWit, sisaKursi, tx, txDaftar, ID_LIVEABOARD } from "@/lib/konten";
 import { bacaKonten } from "@/lib/server/konten";
 import { muatSitus } from "@/lib/server/situs";
 import { rentangTanggal } from "@/lib/format";
@@ -41,7 +41,10 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
 
   const jadwalTrip = jadwal.filter((j) => j.tripId === trip.id);
   const paragraf = tx(trip.deskripsi, l).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-  const lainnya = k.trip.filter((x) => x.tampil && x.id !== trip.id).slice(0, 2);
+  // Trip lain dari kategori yang sama dulu.
+  const lainnya = k.trip.filter((x) => x.tampil && x.id !== trip.id).sort((a, b) => Number(b.kategori === trip.kategori) - Number(a.kategori === trip.kategori)).slice(0, 2);
+  const kategori = k.kategori.find((x) => x.id === trip.kategori);
+  const keLiveaboard = trip.kategori === ID_LIVEABOARD && k.liveaboard.tampil;
   const nama = tx(trip.nama, l);
 
   return (
@@ -50,10 +53,10 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
       <main id="isi" className="pb-8">
         <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-10 pt-[92px] sm:pt-[112px]">
           <div className="wrap">
-            <Link href={`/${l}/trip`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
-              <IkonPanahKiri size={16} />{t("trip.semua")}
+            <Link href={keLiveaboard ? `/${l}/liveaboard` : `/${l}/trip#kategori-${trip.kategori}`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
+              <IkonPanahKiri size={16} />{keLiveaboard ? t("liveaboard.semua") : t("trip.semua")}
             </Link>
-            <p className="aksen mt-6">{t(`trip.kategori.${trip.kategori}`)}</p>
+            {kategori && <p className="aksen mt-6">{tx(kategori.nama, l)}</p>}
             <h1 className="mt-2 max-w-[18ch] text-[clamp(44px,7.4vw,84px)]">{nama}</h1>
             {tx(trip.ringkas, l) && <p className="mt-4 max-w-[56ch] text-[17px] text-ink2">{tx(trip.ringkas, l)}</p>}
           </div>

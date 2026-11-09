@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { KATEGORI_TRIP, MAKS_FOTO_TRIP, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Edukasi, type Homestay, type Jadwal, type KategoriTrip, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
+import { ID_LIVEABOARD, MAKS_FOTO_TRIP, MAKS_KATEGORI, hariIniWit, idBaru, slugDari, sisaKursi, tx, type Edukasi, type Homestay, type Jadwal, type KategoriAktivitas, type Konten, type TitikSelam, type Trip } from "@/lib/konten";
 import { rentangTanggal, rupiah } from "@/lib/format";
 import DatePicker from "@/components/DatePicker";
 import Dropdown from "@/components/Dropdown";
@@ -10,7 +10,7 @@ import { KartuPanel, ringkasTeks, KolomAngka, KolomBanyakFoto, KolomDaftar, Kolo
 import type { Ubah } from "./Panel";
 import { KepalaEditor } from "./BagianIsi";
 
-const NAMA_KATEGORI: Record<KategoriTrip, string> = { selam: "Trip selam", snorkel: "Trip snorkeling", liveaboard: "Liveaboard", privat: "Trip privat" };
+const namaKategori = (k: Konten, id: string) => tx(k.kategori.find((x) => x.id === id)?.nama ?? { en: "", id: "" }, "id") || "Tanpa kategori";
 const kosong = { en: "", id: "" };
 const TEKS_KALENDER = { pilih: "Pilih tanggal", sebelum: "Bulan sebelumnya", berikut: "Bulan berikutnya", hariIni: "Hari ini", hapus: "Hapus" };
 
@@ -34,27 +34,87 @@ function geserDaftar<T>(daftar: T[], i: number, arah: number) {
 }
 
 
-/** Kartu edukasi selam di halaman Trip. */
-function EditorEdukasi({ k, ubah }: { k: Konten; ubah: Ubah }) {
-  const e = k.halamanTrip.edukasi;
-  const ubahButir = (id: string, f: (x: Edukasi) => void) => ubah((d) => { const x = d.halamanTrip.edukasi.butir.find((b) => b.id === id); if (x) { f(x); delete x.contoh; } });
+/** Kartu edukasi di halaman Trip (selam) atau halaman Liveaboard (sebelum naik kapal). */
+export function EditorEdukasi({ k, ubah, halaman = "halamanTrip" }: { k: Konten; ubah: Ubah; halaman?: "halamanTrip" | "halamanLiveaboard" }) {
+  const e = k[halaman].edukasi;
+  const ambil = (d: Konten) => d[halaman].edukasi;
+  const ubahButir = (id: string, f: (x: Edukasi) => void) => ubah((d) => { const x = ambil(d).butir.find((b) => b.id === id); if (x) { f(x); delete x.contoh; } });
+  const trip = halaman === "halamanTrip";
   return (
-    <KartuPanel judul="Edukasi selam di halaman Trip" keterangan="Kartu pengetahuan selam di atas daftar titik selam. Isi bawaan bertanda Contoh, minta pemandu memeriksanya."
+    <KartuPanel judul={trip ? "Edukasi selam di halaman Trip" : "Kartu sebelum naik kapal"}
+      keterangan={trip ? "Kartu pengetahuan selam di atas daftar titik selam. Isi bawaan bertanda Contoh, minta pemandu memeriksanya." : "Kartu pengetahuan di halaman Liveaboard, misalnya sehari di kapal dan yang perlu dibawa. Isi bawaan bertanda Contoh, minta tim memeriksanya."}
       lipat ringkas={`${e.butir.length} kartu${e.butir.some((b) => b.contoh) ? `, ${e.butir.filter((b) => b.contoh).length} masih contoh` : ""}. ${ringkasTeks(e.judul)}`}
-      aksi={<button type="button" onClick={() => ubah((d) => { d.halamanTrip.edukasi.butir.push({ id: idBaru("e"), judul: { en: "New tip", id: "Kartu baru" }, isi: kosong }); })} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah kartu</button>}>
-      <KepalaEditor b={e} set={(f) => ubah((d) => f(d.halamanTrip.edukasi))} />
+      aksi={<button type="button" onClick={() => ubah((d) => { ambil(d).butir.push({ id: idBaru("e"), judul: { en: "New tip", id: "Kartu baru" }, isi: kosong }); })} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah kartu</button>}>
+      <KepalaEditor b={e} set={(f) => ubah((d) => f(ambil(d)))} />
       <ul className="grid gap-3">
         {e.butir.map((b, i) => (
           <li key={b.id} className="grid gap-4 rounded-card border border-line bg-soft p-4">
             <div className="flex flex-wrap items-center gap-2">
               <p className="flex flex-1 flex-wrap items-center gap-2 text-[15px] font-extrabold text-navy">{tx(b.judul, "id") || "Tanpa judul"}<TandaContoh ada={b.contoh} /></p>
-              <Geser i={i} n={e.butir.length} onGeser={(a) => ubah((d) => geserDaftar(d.halamanTrip.edukasi.butir, i, a))} />
-              <button type="button" onClick={() => ubah((d) => { d.halamanTrip.edukasi.butir = d.halamanTrip.edukasi.butir.filter((x) => x.id !== b.id); })} className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-[13px] font-bold text-[#A63A22] hover:bg-[#FBE4DD]"><IkonSampah size={16} />Hapus</button>
+              <Geser i={i} n={e.butir.length} onGeser={(a) => ubah((d) => geserDaftar(ambil(d).butir, i, a))} />
+              <button type="button" onClick={() => ubah((d) => { ambil(d).butir = ambil(d).butir.filter((x) => x.id !== b.id); })} className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-[13px] font-bold text-[#A63A22] hover:bg-[#FBE4DD]"><IkonSampah size={16} />Hapus</button>
             </div>
             <KolomDua label="Judul kartu" value={b.judul} onChange={(v) => ubahButir(b.id, (x) => { x.judul = v; })} maks={80} />
             <KolomDua label="Isi" value={b.isi} onChange={(v) => ubahButir(b.id, (x) => { x.isi = v; })} panjang maks={600} />
           </li>
         ))}
+      </ul>
+    </KartuPanel>
+  );
+}
+
+/**
+ * Kategori aktivitas seperti website lama Fantasea (permintaan pemilik,
+ * November 2026). Kotak berfoto di halaman Trip dan kelompok aktivitasnya.
+ * Liveaboard tidak bisa dihapus karena punya halaman sendiri, dan kategori
+ * yang masih dipakai aktivitas tidak bisa dihapus.
+ */
+function EditorKategori({ k, ubah }: { k: Konten; ubah: Ubah }) {
+  const [buka, setBuka] = useState<string | null>(null);
+  const ubahK = (id: string, f: (x: KategoriAktivitas) => void) => ubah((d) => { const x = d.kategori.find((y) => y.id === id); if (x) f(x); });
+  const jumlah = (id: string) => k.trip.filter((t) => t.kategori === id).length;
+  const diSitus = k.kategori.filter((x) => x.tampil && (k.trip.some((t) => t.tampil && t.kategori === x.id) || (x.id === ID_LIVEABOARD && k.liveaboard.tampil))).length;
+  function tambah() {
+    const id = idBaru("k");
+    ubah((d) => { d.kategori.push({ id, nama: { en: "New category", id: "Kategori baru" }, ringkas: kosong, foto: "", tampil: true }); });
+    setBuka(id);
+  }
+  return (
+    <KartuPanel judul="Kategori aktivitas" keterangan="Kotak berfoto di halaman Trip dan kelompok aktivitasnya, seperti website lama. Kategori baru tampil di situs setelah punya aktivitas yang tampil. Liveaboard menuju halamannya sendiri."
+      lipat ringkas={`${k.kategori.length} kategori, ${diSitus} tampil di halaman Trip`}
+      aksi={k.kategori.length < MAKS_KATEGORI ? <button type="button" onClick={tambah} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah kategori</button> : undefined}>
+      <ul className="grid gap-3">
+        {k.kategori.map((x, i) => {
+          const n = jumlah(x.id);
+          return (
+            <li key={x.id} className="rounded-card border border-line bg-white">
+              <div className="flex flex-wrap items-center gap-3 p-3 sm:p-4">
+                <div className="relative h-12 w-20 flex-none overflow-hidden rounded-[10px] bg-buih">{x.foto && <Image src={x.foto} alt="" fill sizes="80px" unoptimized className="object-cover" />}</div>
+                <div className="min-w-0 flex-1">
+                  <p className="flex flex-wrap items-center gap-2 text-[15.5px] font-extrabold text-navy">{tx(x.nama, "id") || "Tanpa nama"}{!x.tampil && <span className="rounded-pill bg-[#F1F3F5] px-2 py-0.5 text-[11.5px] font-extrabold text-ink2">Disembunyikan</span>}</p>
+                  <p className="text-[13px] text-ink2">{n} aktivitas{x.id === ID_LIVEABOARD ? " · punya halaman Liveaboard" : n === 0 ? " · belum tampil di situs" : ""}</p>
+                </div>
+                <Geser i={i} n={k.kategori.length} onGeser={(a) => ubah((d) => geserDaftar(d.kategori, i, a))} />
+                <button type="button" onClick={() => setBuka(buka === x.id ? null : x.id)} aria-expanded={buka === x.id} className="rounded-pill bg-buih px-4 py-2 text-[13.5px] font-bold text-navy hover:bg-line">{buka === x.id ? "Tutup" : "Ubah"}</button>
+              </div>
+              {buka === x.id && (
+                <div className="grid gap-5 bg-soft p-4 sm:p-5">
+                  <Saklar label="Tampil di halaman Trip" value={x.tampil} onChange={(v) => ubahK(x.id, (y) => { y.tampil = v; })} hint="Aktivitas di kategori yang disembunyikan tidak ikut tampil di halaman Trip." />
+                  <KolomDua label="Nama kategori" value={x.nama} onChange={(v) => ubahK(x.id, (y) => { y.nama = v; })} maks={60} />
+                  <KolomDua label="Kalimat di bawah nama" value={x.ringkas} onChange={(v) => ubahK(x.id, (y) => { y.ringkas = v; })} maks={300} />
+                  <KolomFoto label="Foto kotak kategori" value={x.foto} onChange={(v) => ubahK(x.id, (y) => { y.foto = v; })} />
+                  {x.id !== ID_LIVEABOARD && (
+                    <div className="flex items-center justify-end gap-3">
+                      {n > 0 && <p className="text-[13px] text-ink2">Pindahkan dulu {n} aktivitas ke kategori lain untuk menghapusnya.</p>}
+                      <button type="button" disabled={n > 0} onClick={() => { if (window.confirm("Hapus kategori ini?")) ubah((d) => { d.kategori = d.kategori.filter((y) => y.id !== x.id); }); }}
+                        className="inline-flex items-center gap-1.5 rounded-pill px-4 py-2 text-[13.5px] font-bold text-[#A63A22] hover:bg-[#FBE4DD] disabled:opacity-40"><IkonSampah size={16} />Hapus kategori</button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </KartuPanel>
   );
@@ -68,18 +128,23 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
   function tambah() {
     const id = idBaru("t");
-    ubah((d) => { d.trip.push({ id, slug: `trip-${d.trip.length + 1}`, nama: { en: "New trip", id: "Trip baru" }, kategori: "selam", ringkas: kosong, deskripsi: kosong, durasi: kosong, selam: 0, level: kosong, hargaMulai: 0, termasuk: { en: [], id: [] }, belum: { en: [], id: [] }, foto: [], tampil: false }); });
+    ubah((d) => { d.trip.push({ id, slug: `trip-${d.trip.length + 1}`, nama: { en: "New trip", id: "Trip baru" }, kategori: d.kategori.find((x) => x.id === "selam")?.id ?? d.kategori[0].id, ringkas: kosong, deskripsi: kosong, durasi: kosong, selam: 0, alat: false, sorot: kosong, level: kosong, hargaMulai: 0, termasuk: { en: [], id: [] }, belum: { en: [], id: [] }, foto: [], tampil: false }); });
     setBuka(id);
   }
 
   return (
     <div className="grid gap-6">
-    <KartuPanel judul="Halaman Trip" keterangan="Pembuka halaman /trip, berisi katalog semua trip, edukasi selam, dan titik selam. Di beranda trip tampil paling banyak 6 dengan tombol Lihat semua trip."
+    <KartuPanel judul="Halaman Trip" keterangan="Pembuka halaman /trip, judul kotak kategori, lalu aktivitas dikelompokkan per kategori, edukasi selam, dan titik selam. Di beranda trip tampil paling banyak 6 dengan tombol Lihat semua trip."
       lipat ringkas={`Judul ${ringkasTeks(k.halamanTrip.kepala.judul)}`}>
       <KepalaEditor b={k.halamanTrip.kepala} set={(f) => ubah((d) => f(d.halamanTrip.kepala))} />
+      <div className="rounded-card border border-line bg-soft p-4">
+        <p className="mb-3 text-[15px] font-extrabold text-navy">Judul kotak kategori</p>
+        <KepalaEditor b={k.halamanTrip.kategori} set={(f) => ubah((d) => f(d.halamanTrip.kategori))} />
+      </div>
     </KartuPanel>
+    <EditorKategori k={k} ubah={ubah} />
     <EditorEdukasi k={k} ubah={ubah} />
-    <KartuPanel judul="Trip dan harga" keterangan="Trip yang tampil di beranda dan punya halaman sendiri dengan formulir pesan. Urutan di sini sama dengan urutan di situs."
+    <KartuPanel judul="Trip dan harga" keterangan="Aktivitas yang tampil di beranda dan halaman Trip, masing-masing dengan halaman sendiri dan formulir pesan. Urutan di sini sama dengan urutan di situs, dalam kelompok kategorinya."
       aksi={<button type="button" onClick={tambah} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah trip</button>}>
       <ul className="grid gap-3">
         {k.trip.map((t, i) => (
@@ -90,7 +155,7 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-2 text-[16px] font-extrabold text-navy">{tx(t.nama, "id") || "Tanpa nama"}<TandaContoh ada={t.contoh} />{!t.tampil && <span className="rounded-pill bg-[#F1F3F5] px-2 py-0.5 text-[11.5px] font-extrabold text-ink2">Disembunyikan</span>}</p>
-                <p className="text-[13px] text-ink2">{NAMA_KATEGORI[t.kategori]} · {t.hargaMulai ? `mulai ${rupiah(t.hargaMulai, "id")}` : "tanya harga"} · /trip/{t.slug}</p>
+                <p className="text-[13px] text-ink2">{namaKategori(k, t.kategori)} · {t.hargaMulai ? `mulai ${rupiah(t.hargaMulai, "id")}` : "tanya harga"} · /trip/{t.slug}</p>
               </div>
               <Geser i={i} n={k.trip.length} onGeser={(a) => ubah((d) => geserDaftar(d.trip, i, a))} />
               <button type="button" onClick={() => setBuka(buka === t.id ? null : t.id)} aria-expanded={buka === t.id} className="rounded-pill bg-buih px-4 py-2 text-[13.5px] font-bold text-navy hover:bg-line">{buka === t.id ? "Tutup" : "Ubah"}</button>
@@ -101,9 +166,9 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
                 <KolomDua label="Nama trip" value={t.nama} onChange={(v) => ubahTrip(t.id, (x) => { x.nama = v; })} maks={120} />
                 <div className="grid gap-4 md:grid-cols-2">
                   <KolomTeks label="Alamat halaman" value={t.slug} onChange={(v) => ubahTrip(t.id, (x) => { x.slug = slugDari(v) || x.slug; })} hint={`Tampil sebagai /en/trip/${t.slug}`} jenis="tautan" maks={60} />
-                  <Dropdown label="Jenis trip" value={t.kategori} onChange={(v) => ubahTrip(t.id, (x) => { x.kategori = v as KategoriTrip; })} kosong="Pilih jenis" pilihan={KATEGORI_TRIP.map((c) => ({ nilai: c, label: NAMA_KATEGORI[c] }))} />
+                  <Dropdown label="Kategori" value={t.kategori} onChange={(v) => ubahTrip(t.id, (x) => { x.kategori = v; })} kosong="Pilih kategori" pilihan={k.kategori.map((c) => ({ nilai: c.id, label: tx(c.nama, "id") || c.id }))} />
                 </div>
-                <KolomDua label="Ringkasan di kartu" value={t.ringkas} onChange={(v) => ubahTrip(t.id, (x) => { x.ringkas = v; })} panjang maks={300} />
+                <KolomDua label="Ringkasan" hint="Tampil di bawah judul halaman trip dan di hasil pencarian Google." value={t.ringkas} onChange={(v) => ubahTrip(t.id, (x) => { x.ringkas = v; })} panjang maks={300} />
                 <KolomDua label="Deskripsi lengkap" hint="Pisahkan paragraf dengan satu baris kosong." value={t.deskripsi} onChange={(v) => ubahTrip(t.id, (x) => { x.deskripsi = v; })} panjang maks={6000} />
                 <div className="grid gap-4 md:grid-cols-2">
                   <KolomDua label="Durasi" value={t.durasi} onChange={(v) => ubahTrip(t.id, (x) => { x.durasi = v; })} maks={60} />
@@ -112,6 +177,10 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
                 <div className="grid gap-4 md:grid-cols-2">
                   <KolomAngka label="Harga mulai per orang" hint="Rupiah. Isi 0 untuk menampilkan Tanya harga." awalan="Rp" value={t.hargaMulai} onChange={(v) => ubahTrip(t.id, (x) => { x.hargaMulai = v; })} />
                   <KolomAngka label="Jumlah selam" hint="Isi 0 untuk trip tanpa selam." value={t.selam} maks={99} onChange={(v) => ubahTrip(t.id, (x) => { x.selam = v; })} />
+                </div>
+                <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+                  <KolomDua label="Keterangan di kartu" hint="Satu baris pendek di bawah durasi, misalnya All-included atau nama pulau." value={t.sorot} onChange={(v) => ubahTrip(t.id, (x) => { x.sorot = v; })} maks={60} />
+                  <Saklar label="Alat selam termasuk" value={t.alat} onChange={(v) => ubahTrip(t.id, (x) => { x.alat = v; })} hint="Kartu menampilkan Gear included." />
                 </div>
                 <KolomDaftar label="Sudah termasuk" value={t.termasuk} onChange={(v) => ubahTrip(t.id, (x) => { x.termasuk = v; })} />
                 <KolomDaftar label="Belum termasuk" value={t.belum} onChange={(v) => ubahTrip(t.id, (x) => { x.belum = v; })} />

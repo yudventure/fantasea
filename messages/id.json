@@ -23,12 +23,6 @@
     "tanyaHarga": "Tanya harga",
     "lihat": "Lihat trip",
     "selam": "{n} kali selam",
-    "kategori": {
-      "selam": "Trip selam",
-      "snorkel": "Trip snorkeling",
-      "liveaboard": "Liveaboard",
-      "privat": "Trip privat"
-    },
     "semua": "Semua trip",
     "durasi": "Durasi",
     "jumlahSelam": "Selam",
@@ -39,7 +33,8 @@
     "jadwal": "Tanggal open trip",
     "tanpaJadwal": "Belum ada tanggal open trip untuk trip ini. Pilih tanggal sendiri di formulir.",
     "lainnya": "Trip lainnya",
-    "lihatSemua": "Lihat semua trip"
+    "lihatSemua": "Lihat semua trip",
+    "alat": "Alat termasuk"
   },
   "jadwal": {
     "sisa": "Sisa {n} kursi",
@@ -138,5 +133,9 @@
   "kartu": {
     "lagi": "Lihat lebih banyak",
     "sedikit": "Lihat lebih sedikit"
+  },
+  "liveaboard": {
+    "lihatSemua": "Lihat semua liveaboard",
+    "semua": "Semua liveaboard"
   }
 }

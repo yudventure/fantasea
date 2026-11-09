@@ -16,6 +16,7 @@ import { BagianBeranda, BagianKontak, BagianUlasanFaq } from "./BagianIsi";
 import BagianAkun from "./BagianAkun";
 import BagianKalender from "./BagianKalender";
 import BagianKalenderMitra from "./BagianKalenderMitra";
+import BagianLiveaboard from "./BagianLiveaboard";
 import { susunKegiatan } from "@/lib/kegiatan";
 import { didalam } from "@/lib/tanggal";
 
@@ -27,11 +28,12 @@ export type Ubah = (f: (d: Konten) => void) => void;
  * belum disimpan dan kalimat bilah simpan (pola DAMPIER, kategoriBerbeda).
  */
 const KUNCI_TAB: Partial<Record<IdTab, (keyof Konten)[]>> = {
-  trip: ["trip", "halamanTrip"],
+  trip: ["kategori", "trip", "halamanTrip"],
+  liveaboard: ["liveaboard", "halamanLiveaboard"],
   jadwal: ["jadwal"],
   homestay: ["homestay", "halamanHomestay"],
   titik: ["titik"],
-  beranda: ["hero", "jelajah", "gerbang", "bagian", "liveaboard", "ajakan", "menu", "footer"],
+  beranda: ["hero", "jelajah", "gerbang", "bagian", "ajakan", "menu", "footer"],
   ulasan: ["ulasan", "faq"],
   kontak: ["situs"],
 };
@@ -44,6 +46,7 @@ const TAB_ISI = Object.keys(KUNCI_TAB) as IdTab[];
  */
 const BAWAAN_TAB: Partial<Record<IdTab, { kunci: (keyof Konten)[]; ket: string } | { situsSeo: true; ket: string }>> = {
   trip: { kunci: ["halamanTrip"], ket: "Pembuka halaman Trip dan kartu edukasi selam kembali ke bawaan. Daftar trip tidak berubah." },
+  liveaboard: { kunci: ["liveaboard", "halamanLiveaboard"], ket: "Bagian Liveaboard, pembuka halaman Liveaboard, dan kartu sebelum naik kapal kembali ke bawaan. Trip liveaboard tidak berubah." },
   homestay: { kunci: ["halamanHomestay"], ket: "Pembuka halaman Homestay kembali ke bawaan. Daftar homestay tidak berubah." },
   beranda: { kunci: KUNCI_TAB.beranda!, ket: "Semua teks dan foto beranda, menu, dan footer kembali ke bawaan." },
   ulasan: { kunci: ["faq"], ket: "Pertanyaan yang sering ditanyakan kembali ke bawaan. Ulasan tamu tidak berubah." },
@@ -267,6 +270,7 @@ export default function Panel() {
           {tab === "kalender" && <BagianKalender k={k} permintaan={permintaan} pindah={pindah} boleh={(t) => tabs.includes(t)} />}
           {tab === "permintaan" && <BagianPermintaan permintaan={permintaan} setPermintaan={setPermintaan} sesi={sesi} k={k} />}
           {tab === "trip" && <BagianTrip k={k} ubah={ubah} />}
+          {tab === "liveaboard" && <BagianLiveaboard k={k} ubah={ubah} pindah={pindah} />}
           {tab === "jadwal" && <BagianJadwal k={k} ubah={ubah} />}
           {tab === "homestay" && <BagianHomestay k={k} ubah={ubah} />}
           {tab === "kalendermitra" && <BagianKalenderMitra />}

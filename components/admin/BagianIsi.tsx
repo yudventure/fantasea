@@ -66,20 +66,6 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         </div>
       </KartuPanel>
 
-      <KartuPanel id="liveaboard" judul="Liveaboard" keterangan="Bagian navy di antara open trip dan FAQ. Trip berjenis Liveaboard di menu Trip dan harga tampil di sini sebagai kartu dan tidak diulang di daftar trip beranda. Tombolnya membuka WhatsApp bila nomor sudah diisi, kalau belum menuju halaman Trip.">
-        <Saklar label="Tampil di beranda" value={k.liveaboard.tampil} onChange={(v) => ubah((d) => { d.liveaboard.tampil = v; })} />
-        <KepalaEditor b={k.liveaboard} set={(f) => ubah((d) => f(d.liveaboard))} />
-        <div className="grid gap-4 md:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-          <KolomFoto label="Foto" value={k.liveaboard.foto} onChange={(v) => ubah((d) => { d.liveaboard.foto = v; })} />
-          <div className="grid content-start gap-2">
-            <KolomTeks label="Gelembung tag" hint="Contoh @misool. Kosongkan untuk menyembunyikan." value={k.liveaboard.tag} onChange={(v) => ubah((d) => { d.liveaboard.tag = v; })} maks={40} />
-            <PilihWarna value={k.liveaboard.warna} onChange={(v) => ubah((d) => { d.liveaboard.warna = v; })} />
-          </div>
-        </div>
-        <KolomDaftar label="Daftar keunggulan" value={k.liveaboard.butir} onChange={(v) => ubah((d) => { d.liveaboard.butir = v; })} />
-        <KolomDua label="Tombol" value={k.liveaboard.tombol} onChange={(v) => ubah((d) => { d.liveaboard.tombol = v; })} maks={40} />
-      </KartuPanel>
-
       <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip."
         lipat ringkas="Trip, Jadwal open trip, Titik selam, Ulasan, dan FAQ. Jarang perlu diubah.">
         {([["trip", "Trip"], ["jadwal", "Jadwal open trip"], ["titik", "Titik selam (halaman Trip)"], ["ulasan", "Ulasan"], ["faq", "FAQ"]] as const).map(([kunci, nama]) => (
@@ -98,9 +84,9 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
       </KartuPanel>
 
       <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, dan kalimat tentang Fantasea di footer."
-        lipat ringkas={`Menu ${[k.menu.trip, k.menu.jadwal, k.menu.homestay, k.menu.titik, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
+        lipat ringkas={`Menu ${[k.menu.trip, k.menu.liveaboard, k.menu.jadwal, k.menu.homestay, k.menu.titik, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
-          {([["trip", "Menu trip (halaman Trip)"], ["jadwal", "Menu open trip"], ["homestay", "Menu homestay (halaman Homestay)"], ["titik", "Menu titik selam (halaman Trip)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
+          {([["trip", "Menu trip (halaman Trip)"], ["liveaboard", "Menu liveaboard (halaman Liveaboard)"], ["jadwal", "Menu open trip"], ["homestay", "Menu homestay (halaman Homestay)"], ["titik", "Menu titik selam (halaman Trip)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
           ))}
         </div>

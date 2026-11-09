@@ -16,6 +16,8 @@ export async function muatSitus(l: Locale) {
   const adaUlasan = k.ulasan.some((u) => u.tampil);
   const menu: TautanMenu[] = [
     { href: `${awal}/trip`, label: tx(k.menu.trip, l) },
+    // Halaman Liveaboard sendiri (permintaan pemilik, November 2026).
+    ...(k.liveaboard.tampil ? [{ href: `${awal}/liveaboard`, label: tx(k.menu.liveaboard, l) }] : []),
     { href: `${awal}#jadwal`, label: tx(k.menu.jadwal, l) },
     ...(k.homestay.some((h) => h.tampil) ? [{ href: `${awal}/homestay`, label: tx(k.menu.homestay, l) }] : []),
     // Titik selam pindah ke halaman Trip (permintaan pemilik, November 2026).

@@ -117,11 +117,11 @@ export default function BagianRingkasan({ k, permintaan, sesi, pindah, boleh }: 
     jadwal: mendatang.filter((j) => j.contoh).length,
     titik: k.titik.filter((t) => t.contoh && t.tampil).length,
     homestay: homestayTampil.filter((h) => h.contoh).length,
-    edukasi: k.halamanTrip.edukasi.butir.filter((e) => e.contoh).length,
+    edukasi: k.halamanTrip.edukasi.butir.filter((e) => e.contoh).length + k.halamanLiveaboard.edukasi.butir.filter((e) => e.contoh).length,
   };
   const kontakContoh = kontakMasihContoh(k);
   const fotoBawaan = [k.hero.kartu, k.jelajah.kartu].flat().filter((c) => c.foto.startsWith("/brand/")).length + k.gerbang.foto.filter((f) => f.foto.startsWith("/brand/")).length;
-  const adaContoh = contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay + contoh.edukasi > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0;
+  const adaContoh = (k.liveaboard.tampil && !k.trip.some((t) => t.tampil && t.kategori === "liveaboard")) || contoh.trip + contoh.jadwal + contoh.titik + contoh.homestay + contoh.edukasi > 0 || kontakContoh.wa || kontakContoh.lain.length > 0 || fotoBawaan > 0;
   const Butir = ({ teks, tombol, ke, lembut = false }: { teks: string; tombol: string; ke: IdTab; lembut?: boolean }) => (
     <li className={`flex flex-wrap items-center justify-between gap-2 rounded-in px-4 py-3 ${lembut ? "bg-buih" : "bg-[#FFF4DD]"}`}><span>{teks}</span><button type="button" onClick={() => pindah(ke)} className="font-bold text-tanda">{tombol}</button></li>
   );
@@ -189,10 +189,11 @@ export default function BagianRingkasan({ k, permintaan, sesi, pindah, boleh }: 
           <ul className="grid gap-2.5 text-[14.5px] text-navy">
             {kontakContoh.wa && <Butir teks={k.situs.kontak.whatsapp ? "Nomor WhatsApp masih contoh. Footer menampilkan nomor contoh, dan permintaan tamu belum diteruskan ke WhatsApp." : "Nomor WhatsApp belum diisi, jadi tombol WhatsApp di situs tersembunyi."} tombol="Isi kontak" ke="kontak" />}
             {kontakContoh.lain.length > 0 && <Butir teks={`${kontakContoh.lain.join(", ")} di footer masih alamat contoh fantaseadivetravel. Ganti dengan akun asli atau kosongkan.`} tombol="Isi kontak" ke="kontak" />}
+            {k.liveaboard.tampil && !k.trip.some((t) => t.tampil && t.kategori === "liveaboard") && <Butir teks="Halaman Liveaboard belum punya trip. Tambahkan trip dengan kategori Liveaboards supaya kartunya tampil." tombol="Tambah trip" ke="trip" />}
             {contoh.trip > 0 && <Butir teks={`${contoh.trip} trip contoh masih tampil dengan harga contoh.`} tombol="Ubah trip" ke="trip" />}
             {contoh.jadwal > 0 && <Butir teks={`${contoh.jadwal} jadwal open trip contoh masih tampil.`} tombol="Ubah jadwal" ke="jadwal" />}
             {contoh.homestay > 0 && <Butir teks={`${contoh.homestay} homestay contoh masih tampil. Ganti dengan homestay mitra asli beserta foto dan harganya, atau sembunyikan.`} tombol="Ubah homestay" ke="homestay" />}
-            {contoh.edukasi > 0 && <Butir teks={`${contoh.edukasi} kartu edukasi selam di halaman Trip masih contoh. Minta pemandu memeriksa isinya.`} tombol="Periksa edukasi" ke="trip" />}
+            {contoh.edukasi > 0 && <Butir teks={`${contoh.edukasi} kartu edukasi di halaman Trip dan Liveaboard masih contoh. Minta pemandu memeriksa isinya.`} tombol="Periksa edukasi" ke="trip" />}
             {contoh.titik > 0 && <Butir teks={`${contoh.titik} titik selam contoh. Minta pemandu memeriksa kedalaman, arus, dan level.`} tombol="Periksa titik" ke="titik" />}
             {fotoBawaan > 0 && <Butir teks={`${fotoBawaan} foto beranda masih ilustrasi bawaan. Ganti dengan foto trip Fantasea.`} tombol="Ganti foto" ke="beranda" lembut />}
           </ul>

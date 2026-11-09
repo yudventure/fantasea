@@ -23,12 +23,6 @@
     "tanyaHarga": "Price on request",
     "lihat": "View trip",
     "selam": "{n} dives",
-    "kategori": {
-      "selam": "Dive trip",
-      "snorkel": "Snorkel trip",
-      "liveaboard": "Liveaboard",
-      "privat": "Private trip"
-    },
     "semua": "All trips",
     "durasi": "Duration",
     "jumlahSelam": "Dives",
@@ -39,7 +33,8 @@
     "jadwal": "Open trip dates",
     "tanpaJadwal": "No open trip dates for this trip yet. Pick your own date in the form.",
     "lainnya": "Other trips",
-    "lihatSemua": "See all trips"
+    "lihatSemua": "See all trips",
+    "alat": "Gear included"
   },
   "jadwal": {
     "sisa": "{n} seats left",
@@ -138,5 +133,9 @@
   "kartu": {
     "lagi": "Load more",
     "sedikit": "Show less"
+  },
+  "liveaboard": {
+    "lihatSemua": "See all liveaboards",
+    "semua": "All liveaboards"
   }
 }
