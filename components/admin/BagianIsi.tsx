@@ -1,7 +1,7 @@
 "use client";
 import { MAKS_FOTO_GERBANG, idBaru, type Konten, type KepalaBagian } from "@/lib/konten";
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
-import { KartuPanel, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
+import { KartuPanel, ringkasTeks, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
 import type { Ubah } from "./Panel";
 import { kontakMasihContoh } from "@/data/bawaan";
 
@@ -80,7 +80,8 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         <KolomDua label="Tombol" value={k.liveaboard.tombol} onChange={(v) => ubah((d) => { d.liveaboard.tombol = v; })} maks={40} />
       </KartuPanel>
 
-      <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip.">
+      <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip."
+        lipat ringkas="Trip, Jadwal open trip, Titik selam, Ulasan, dan FAQ. Jarang perlu diubah.">
         {([["trip", "Trip"], ["jadwal", "Jadwal open trip"], ["titik", "Titik selam (halaman Trip)"], ["ulasan", "Ulasan"], ["faq", "FAQ"]] as const).map(([kunci, nama]) => (
           <div key={kunci} className="rounded-card border border-line bg-soft p-4">
             <p className="mb-3 text-[15px] font-extrabold text-navy">{nama}</p>
@@ -89,13 +90,15 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         ))}
       </KartuPanel>
 
-      <KartuPanel judul="Ajakan di bawah" keterangan="Panel navy sebelum footer. Tombolnya membuka WhatsApp bila nomor sudah diisi, kalau belum menuju daftar trip.">
+      <KartuPanel judul="Ajakan di bawah" keterangan="Panel navy sebelum footer. Tombolnya membuka WhatsApp bila nomor sudah diisi, kalau belum menuju daftar trip."
+        lipat ringkas={`Judul ${ringkasTeks(k.ajakan.judul)}, tombol ${ringkasTeks(k.ajakan.tombol, 30)}`}>
         <KolomDua label="Judul" hint={HINT_JUDUL} value={k.ajakan.judul} onChange={(v) => ubah((d) => { d.ajakan.judul = v; })} maks={200} />
         <KolomDua label="Kalimat" value={k.ajakan.lead} onChange={(v) => ubah((d) => { d.ajakan.lead = v; })} panjang maks={400} />
         <KolomDua label="Tombol" value={k.ajakan.tombol} onChange={(v) => ubah((d) => { d.ajakan.tombol = v; })} maks={40} />
       </KartuPanel>
 
-      <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, dan kalimat tentang Fantasea di footer.">
+      <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, dan kalimat tentang Fantasea di footer."
+        lipat ringkas={`Menu ${[k.menu.trip, k.menu.jadwal, k.menu.homestay, k.menu.titik, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
           {([["trip", "Menu trip (halaman Trip)"], ["jadwal", "Menu open trip"], ["homestay", "Menu homestay (halaman Homestay)"], ["titik", "Menu titik selam (halaman Trip)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
@@ -191,7 +194,8 @@ export function BagianKontak({ k, ubah }: { k: Konten; ubah: Ubah }) {
           ))}
         </div>
       </KartuPanel>
-      <KartuPanel judul="Pencarian Google" keterangan="Judul dan deskripsi beranda di hasil pencarian dan pratinjau tautan. Halaman trip memakai nama dan ringkasan tripnya.">
+      <KartuPanel judul="Pencarian Google" keterangan="Judul dan deskripsi beranda di hasil pencarian dan pratinjau tautan. Halaman trip memakai nama dan ringkasan tripnya."
+        lipat ringkas={ringkasTeks(s.seo.judul, 90)}>
         <KolomDua label="Judul situs" value={s.seo.judul} onChange={(v) => ubah((d) => { d.situs.seo.judul = v; })} maks={90} />
         <KolomDua label="Deskripsi" value={s.seo.deskripsi} onChange={(v) => ubah((d) => { d.situs.seo.deskripsi = v; })} panjang maks={300} />
       </KartuPanel>

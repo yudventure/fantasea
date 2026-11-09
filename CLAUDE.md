@@ -13,8 +13,8 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 ## Struktur
 
 - `app/(site)/[locale]/` situs tamu (root layout sendiri, `force-dynamic`, jadi simpanan panel langsung tayang). `page.tsx` beranda, `trip/page.tsx` halaman Trip (katalog semua trip, edukasi selam, titik selam), `trip/[slug]` detail trip dengan formulir permintaan, `homestay/page.tsx` halaman semua homestay, `homestay/[slug]` detail homestay dengan formulir menginap (tanggal masuk dan keluar).
-- `app/(admin)/admin/` panel pengelola (root layout sendiri, selalu bahasa Indonesia). UI di `components/admin/`.
-- `app/api/` route: `permintaan` (POST tamu, GET/PUT/DELETE panel), `konten`, `unggah`, `masuk`, `keluar`, `sesi`, `penyiapan`, `akun`, `health`. Foto unggahan disajikan `app/unggahan/[nama]`.
+- `app/(admin)/admin/` panel pengelola (root layout sendiri, selalu bahasa Indonesia). UI di `components/admin/`, kerangkanya `Panel.tsx`.
+- `app/api/` route: `permintaan` (POST tamu, GET/PUT/DELETE panel), `konten`, `unggah`, `masuk`, `keluar`, `sesi`, `penyiapan`, `akun`, `lupa-sandi`, `health`. Foto unggahan disajikan `app/unggahan/[nama]`.
 - `lib/konten.ts` bentuk isi situs (`Konten`) dan `normalkanKonten` yang merapikan apa pun dari panel. `data/bawaan.ts` isi bawaan. `lib/server/` gudang JSON, sesi, akun, permintaan, unggahan.
 - `messages/en.json`, `messages/id.json` hanya label tetap antarmuka. Kunci baru wajib di kedua berkas.
 - `middleware.ts` mengantar alamat tanpa kode bahasa ke bahasa pengunjung (cookie `fantasea_bahasa`).
@@ -31,6 +31,19 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - Trip, jadwal, titik selam, homestay, dan kartu edukasi selam bawaan bertanda `contoh: true`. Homestay contoh tanpa harga (Tanya harga) dan fotonya ilustrasi. Tanda itu hilang saat item diubah di panel, dan Ringkasan panel mengingatkan isi contoh yang masih tampil. Jangan menulis harga, jadwal, atau klaim bisnis baru di kode. Ulasan tidak boleh dikarang, bawaannya kosong.
 - Kontak dan media sosial bawaan adalah contoh (permintaan pemilik, November 2026), supaya footer sudah lengkap sebelum diisi di panel Kontak. Email dan akun memakai handle usulan `fantaseadivetravel`. Nomor WhatsApp contoh `NOMOR_WA_CONTOH` (+62 800 0000 0000) sengaja tidak mungkin ada, dan `nomorWaAsli` mengosongkannya untuk formulir permintaan dan tombol ajakan, jadi data tamu tidak terkirim ke nomor itu. Ringkasan dan editor Kontak mengingatkan selama masih contoh (`kontakMasihContoh`). Simpanan panel sebelum `VERSI_KONTAK` 2 mendapat contoh untuk kolom yang kosong, sesudahnya kolom kosong berarti disembunyikan.
 - Foto bawaan `public/brand/foto` adalah ilustrasi AI dari proyek lain milik pemilik (Zanclus, Dragonet), bukan dokumentasi Fantasea.
+
+## Panel pengelola
+
+Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di terapkan yang belum bisa disiapkan").
+
+- Menu berkelompok (`MENU` di `components/admin/MenuPanel.tsx`): Ringkasan, Permintaan, Produk, Situs web, Sistem. Kelompok yang hanya punya satu butir tampil sebagai butir tunggal, satu kelompok terbuka sekaligus. Halaman baru didaftarkan di `IdTab` (`lib/peran.ts`), `MENU`, `KET_TAB`, dan tab peran yang boleh membukanya.
+- Di bawah xl menunya satu kartu yang menempel di bawah header (`MenuPonsel`, tinggi header dari `--kepala-panel` yang diukur `KepalaPanel`). Header putih padat tanpa blur, dengan lonceng permintaan baru dan menu akun (Ganti kata sandi, Keluar). Permintaan diambil ulang tiap menit, kecuali di halaman Permintaan supaya catatan tim tidak tertimpa.
+- Tiap halaman punya kepala, label kelompok, judul, dan satu kalimat `KET_TAB`.
+- Semua isi situs satu draf. Titik merah di menu dan kalimat bilah simpan menyebut halaman yang belum disimpan (`KUNCI_TAB` di `Panel.tsx`, kunci `Konten` per halaman). Isi baru di `Konten` ditambahkan ke `KUNCI_TAB` halamannya. Bilah simpan menempel di bawah kolom isi dengan Kembalikan ke bawaan, Batalkan, dan Simpan perubahan. Kembalikan ke bawaan (`BAWAAN_TAB`) hanya untuk teks halaman, tidak untuk daftar milik pemilik (trip, jadwal, homestay, titik selam, ulasan, kontak), dan tetap draf sampai disimpan.
+- Bagian yang jarang diubah dilipat (`KartuPanel lipat ringkas`), tertutup saat dibuka dengan ringkasan nilainya di kepala. Yang sering diisi (trip, homestay, jadwal, hero, kontak) tetap terbuka.
+- Kotak tanda baca di atas halaman (`temuanTandaBaca`, `lib/tanda-panel.ts`) menyebut isian yang memakai titik dua, titik koma, atau tanda pisah beserta letaknya. Hanya mengingatkan, simpanan tidak ditolak. Peringatan per kolom memakai aturan yang sama (`adaTandaTerlarang`).
+- Peran (`META_PERAN`, `lib/peran.ts`). Pemilik semua, Tim mengubah isi situs dan menjawab permintaan, Meja permintaan hanya Ringkasan, Permintaan, dan Akun. Server memeriksa ulang (`bolehUbahIsi` di `/api/konten` dan `/api/unggah`, pemilik saja untuk akun dan hapus permintaan). Pemilik mengganti peran dan memberi sandi sementara anggota di Sistem, Akun dan peran, dan sesi anggota itu ikut keluar.
+- Lupa kata sandi di halaman masuk. Kode 6 angka lewat email sistem (`lib/server/email.ts`, nodemailer, key `SMTP_*` dan `EMAIL_DARI` di hPanel), berlaku 15 menit, 5 kali coba (`lib/server/kode-sandi.ts`). Selama email belum dipasang pemilik memakai kunci penyiapan `FANTASEA_KUNCI`, jadi kunci itu jangan dihapus dari hPanel. Kartu Email sistem di menu Akun menunjukkan statusnya tanpa sandinya.
 
 ## Gaya (wajib, juga di panel)
 

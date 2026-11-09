@@ -3,17 +3,17 @@ import Image from "next/image";
 import { useId, useRef, useState } from "react";
 import { WARNA_TAG, type DaftarTeks, type Teks, type WarnaTag } from "@/lib/konten";
 import { FOTO_BAWAAN } from "@/data/foto-bawaan";
-import { IkonPanahKanan, IkonPanahKiri, IkonSampah, IkonUnggah } from "@/components/Ikon";
+import { IkonPanahBawah, IkonPanahKanan, IkonPanahKiri, IkonSampah, IkonUnggah } from "@/components/Ikon";
 import { unggahFoto } from "./unggah";
+import { adaTandaTerlarang } from "@/lib/tanda-panel";
 
 /**
  * Kolom isian panel pengelola. Label di atas kolom (tanpa titik dua),
  * peringatan lembut bila isian memakai titik dua, titik koma, atau tanda
  * pisah panjang, karena situs tidak memakai tanda itu (CLAUDE.md, Gaya).
  */
-const TANDA_TERLARANG = /[;—]|:(?!\/\/)|\s–\s/;
 function PeringatanTanda({ nilai }: { nilai: string }) {
-  if (!TANDA_TERLARANG.test(nilai.replace(/\b\d{1,2}:\d{2}\b/g, ""))) return null;
+  if (!adaTandaTerlarang(nilai)) return null;
   return <p className="mt-1 text-[12.5px] font-semibold text-[#9A6714]">Situs tidak memakai titik dua, titik koma, atau tanda pisah panjang. Pecah jadi kalimat atau pakai koma.</p>;
 }
 
@@ -232,17 +232,41 @@ export function KolomBanyakFoto({ label, value, onChange, maks, hint }: { label:
 }
 
 /** Kartu bagian di panel: judul, keterangan, lalu isinya. */
-export function KartuPanel({ judul, keterangan, children, aksi, id }: { judul: string; keterangan?: string; children: React.ReactNode; aksi?: React.ReactNode; id?: string }) {
+/** Teks satu baris untuk ringkasan kepala kartu terlipat, tanpa tanda warna judul. */
+export const ringkasTeks = (t: { en: string; id: string }, maks = 70) => {
+  const x = (t.id || t.en).replace(/\*/g, "").replace(/\s+/g, " ").trim();
+  return x.length > maks ? `${x.slice(0, maks - 1).trimEnd()}…` : x;
+};
+
+/**
+ * Kartu bagian di panel. `lipat` membuatnya tertutup saat halaman dibuka,
+ * untuk isian yang jarang diubah (pola DAMPIER, BagianLipat). Kepalanya
+ * menampilkan `ringkas`, nilainya sekarang dalam satu kalimat, dan isinya
+ * baru dimuat saat dibuka.
+ */
+export function KartuPanel({ judul, keterangan, children, aksi, id, lipat = false, ringkas }: {
+  judul: string; keterangan?: string; children: React.ReactNode; aksi?: React.ReactNode; id?: string; lipat?: boolean; ringkas?: React.ReactNode;
+}) {
+  const [buka, setBuka] = useState(!lipat);
+  const kepala = (
+    <div className="min-w-0">
+      <h2 className="font-body text-[19px] font-extrabold leading-tight tracking-normal">{judul}</h2>
+      {keterangan && (buka || !ringkas) && <p className="mt-1 max-w-[70ch] text-[13.5px] text-ink2">{keterangan}</p>}
+      {lipat && !buka && ringkas && <p className="mt-1 max-w-[70ch] text-[13.5px] text-ink2">{ringkas}</p>}
+    </div>
+  );
   return (
-    <section id={id} className="rounded-card border border-line bg-white p-5 shadow-card sm:p-6">
+    <section id={id} className={`rounded-card border bg-white p-5 shadow-card sm:p-6 ${lipat && buka ? "border-ukir/40" : "border-line"}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 className="font-body text-[19px] font-extrabold leading-tight tracking-normal">{judul}</h2>
-          {keterangan && <p className="mt-1 max-w-[70ch] text-[13.5px] text-ink2">{keterangan}</p>}
-        </div>
-        {aksi}
+        {lipat ? (
+          <button type="button" onClick={() => setBuka((x) => !x)} aria-expanded={buka} className="flex min-w-0 flex-1 items-start gap-3 text-left">
+            {kepala}
+            <span aria-hidden className={`ml-auto mt-0.5 flex-none text-ink2 transition-transform ${buka ? "rotate-180" : ""}`}><IkonPanahBawah size={18} /></span>
+          </button>
+        ) : kepala}
+        {buka && aksi}
       </div>
-      <div className="mt-5 grid gap-5">{children}</div>
+      {buka && <div className="mt-5 grid gap-5">{children}</div>}
     </section>
   );
 }

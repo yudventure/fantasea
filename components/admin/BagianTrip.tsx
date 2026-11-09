@@ -6,7 +6,7 @@ import { rentangTanggal, rupiah } from "@/lib/format";
 import DatePicker from "@/components/DatePicker";
 import Dropdown from "@/components/Dropdown";
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
-import { KartuPanel, KolomAngka, KolomBanyakFoto, KolomDaftar, KolomDua, KolomFoto, KolomTeks, Saklar } from "./Kolom";
+import { KartuPanel, ringkasTeks, KolomAngka, KolomBanyakFoto, KolomDaftar, KolomDua, KolomFoto, KolomTeks, Saklar } from "./Kolom";
 import type { Ubah } from "./Panel";
 import { KepalaEditor } from "./BagianIsi";
 
@@ -40,6 +40,7 @@ function EditorEdukasi({ k, ubah }: { k: Konten; ubah: Ubah }) {
   const ubahButir = (id: string, f: (x: Edukasi) => void) => ubah((d) => { const x = d.halamanTrip.edukasi.butir.find((b) => b.id === id); if (x) { f(x); delete x.contoh; } });
   return (
     <KartuPanel judul="Edukasi selam di halaman Trip" keterangan="Kartu pengetahuan selam di atas daftar titik selam. Isi bawaan bertanda Contoh, minta pemandu memeriksanya."
+      lipat ringkas={`${e.butir.length} kartu${e.butir.some((b) => b.contoh) ? `, ${e.butir.filter((b) => b.contoh).length} masih contoh` : ""}. ${ringkasTeks(e.judul)}`}
       aksi={<button type="button" onClick={() => ubah((d) => { d.halamanTrip.edukasi.butir.push({ id: idBaru("e"), judul: { en: "New tip", id: "Kartu baru" }, isi: kosong }); })} className="inline-flex items-center gap-1.5 rounded-pill bg-navy px-4 py-2 text-[13.5px] font-bold text-white"><IkonTambah size={16} />Tambah kartu</button>}>
       <KepalaEditor b={e} set={(f) => ubah((d) => f(d.halamanTrip.edukasi))} />
       <ul className="grid gap-3">
@@ -73,7 +74,8 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
   return (
     <div className="grid gap-6">
-    <KartuPanel judul="Halaman Trip" keterangan="Pembuka halaman /trip, berisi katalog semua trip, edukasi selam, dan titik selam. Di beranda trip tampil paling banyak 6 dengan tombol Lihat semua trip.">
+    <KartuPanel judul="Halaman Trip" keterangan="Pembuka halaman /trip, berisi katalog semua trip, edukasi selam, dan titik selam. Di beranda trip tampil paling banyak 6 dengan tombol Lihat semua trip."
+      lipat ringkas={`Judul ${ringkasTeks(k.halamanTrip.kepala.judul)}`}>
       <KepalaEditor b={k.halamanTrip.kepala} set={(f) => ubah((d) => f(d.halamanTrip.kepala))} />
     </KartuPanel>
     <EditorEdukasi k={k} ubah={ubah} />
@@ -143,7 +145,8 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
   return (
     <div className="grid gap-6">
-    <KartuPanel judul="Halaman Homestay" keterangan="Pembuka halaman /homestay yang memuat semua homestay. Di beranda homestay tampil paling banyak 6 dengan tombol Lihat semua homestay di atasnya.">
+    <KartuPanel judul="Halaman Homestay" keterangan="Pembuka halaman /homestay yang memuat semua homestay. Di beranda homestay tampil paling banyak 6 dengan tombol Lihat semua homestay di atasnya."
+      lipat ringkas={`Judul ${ringkasTeks(k.halamanHomestay.kepala.judul)}`}>
       <KepalaEditor b={k.halamanHomestay.kepala} set={(f) => ubah((d) => f(d.halamanHomestay.kepala))} />
     </KartuPanel>
     <KartuPanel judul="Homestay" keterangan="Kartu homestay di beranda, di bawah bagian Temukan penginapanmu. Tiap homestay punya halaman sendiri dengan formulir permintaan menginap. Urutan di sini sama dengan urutan di situs."

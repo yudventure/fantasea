@@ -40,8 +40,15 @@ Buka **Variabel environment** di pengaturan deployment, tekan **Impor .env**, pi
 | Key | Isi | Wajib |
 | --- | --- | --- |
 | `SITE_URL` | alamat situs lengkap, mis. `https://fantaseadivetravel.com` | ya, untuk sitemap dan pratinjau tautan |
-| `FANTASEA_KUNCI` | kunci penyiapan buatan Anda sendiri, panjang dan acak | ya, sekali untuk membuat akun pemilik |
+| `FANTASEA_KUNCI` | kunci penyiapan buatan Anda sendiri, panjang dan acak | ya, untuk membuat akun pemilik dan untuk Lupa kata sandi pemilik selama email belum dipasang. Jangan dihapus |
 | `FANTASEA_DATA_DIR` | biarkan "-" | tidak. Kosong berarti `~/.fantasea-data` di folder home hosting |
+| `SMTP_HOST` | server email keluar. Email Hostinger `smtp.hostinger.com` | tidak. Untuk kode Lupa kata sandi lewat email |
+| `SMTP_PORT` | `465`, atau biarkan "-" | tidak |
+| `SMTP_USER` | alamat email pengirim lengkap, mis. `halo@fantaseadivetravel.com` | tidak |
+| `SMTP_PASS` | kata sandi kotak email itu | tidak. Rahasia, isi sendiri di hPanel |
+| `EMAIL_DARI` | alamat pengirim yang tampil, biarkan "-" untuk sama dengan `SMTP_USER` | tidak |
+
+Kotak email dibuat di hPanel, **Emails**. Selama key SMTP belum diisi, Lupa kata sandi tetap bisa dipakai pemilik lewat kunci penyiapan, dan anggota tim diberi sandi sementara oleh pemilik di menu **Akun dan peran**. Status email tampil di kartu **Email sistem** di menu itu.
 
 Kunci penyiapan bukan kata sandi masuk dan jangan dikirim lewat chat. Setelah mengubah variabel, tekan **Deploy ulang** supaya aplikasi memakai nilai baru.
 
@@ -56,7 +63,7 @@ Kunci penyiapan bukan kata sandi masuk dan jangan dikirim lewat chat. Setelah me
 1. Buka `https://domainanda.com/admin`.
 2. Karena belum ada akun, tampil **Siapkan akun pemilik**. Isi kunci penyiapan (nilai `FANTASEA_KUNCI`), nama, email, dan kata sandi paling sedikit 10 huruf.
 3. Setelah masuk, buka **Ringkasan**. Daftar **Yang perlu dilengkapi sebelum promosi** menunjukkan isi contoh yang masih tampil, misalnya nomor WhatsApp, trip, harga, jadwal, titik selam, dan foto ilustrasi.
-4. Anggota tim ditambahkan dari menu **Akun**.
+4. Anggota tim ditambahkan dari menu **Sistem**, **Akun dan peran**, dengan peran **Tim** (mengubah isi situs dan menjawab permintaan) atau **Meja permintaan** (hanya menjawab permintaan tamu).
 
 ## Deploy otomatis dari GitHub
 
