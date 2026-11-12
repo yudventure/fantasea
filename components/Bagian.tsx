@@ -27,12 +27,12 @@ export function KepalaBagianSitus({ b, l, tengah = false }: { b: KepalaBagian; l
 }
 
 /** Harga mulai di kartu dan halaman. `sempit` untuk kartu dua kolom di ponsel. */
-function HargaMulai({ harga, l, label, besar = false, sempit = false, tengah = false }: { harga: number; l: Locale; label: { dari: string; per: string; tanya: string }; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
+function HargaMulai({ harga, l, label, besar = false, sempit = false, tengah = false, mataUang = "IDR" }: { harga: number; l: Locale; mataUang?: "IDR" | "USD"; label: { dari: string; per: string; tanya: string }; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   if (!harga) return <span className={`font-display leading-none text-navy ${besar ? "text-[32px]" : "text-[24px]"} ${sempit ? "max-sm:text-[18px]" : ""}`}>{label.tanya}</span>;
   return (
     <span className={`grid leading-none ${tengah ? "justify-items-center text-center" : ""}`}>
       <span className={`text-[12.5px] font-bold text-ink2 ${sempit ? "max-sm:text-[11.5px]" : ""}`}>{label.dari}</span>
-      <span className={`mt-1 font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"} ${sempit ? "max-sm:text-[20px]" : ""}`}>{rupiah(harga, l)}</span>
+      <span className={`mt-1 font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"} ${sempit ? "max-sm:text-[20px]" : ""}`}>{mataUang === "USD" ? new Intl.NumberFormat(l === "id" ? "id-ID" : "en-US", { style: "currency", currency: "USD", currencyDisplay: "code", maximumFractionDigits: 2 }).format(harga) : rupiah(harga, l)}</span>
       <span className={`mt-1 text-[12.5px] font-semibold text-ink2 ${sempit ? "max-sm:text-[11.5px]" : ""}`}>{label.per}</span>
     </span>
   );
@@ -62,7 +62,7 @@ export function TombolSemua({ href, label, terang = false }: { href: string; lab
 
 export function HargaTrip({ trip, l, besar = false, sempit = false, tengah = false }: { trip: Trip; l: Locale; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   const t = buatT(getMessages(l));
-  return <HargaMulai harga={trip.hargaMulai} l={l} besar={besar} sempit={sempit} tengah={tengah} label={{ dari: t("trip.dari"), per: t("trip.perOrang"), tanya: t("trip.tanyaHarga") }} />;
+  return <HargaMulai harga={trip.hargaMulai} mataUang={trip.mataUang} l={l} besar={besar} sempit={sempit} tengah={tengah} label={{ dari: t("trip.dari"), per: t("trip.perOrang"), tanya: t("trip.tanyaHarga") }} />;
 }
 
 /**
@@ -106,7 +106,7 @@ export function KartuTrip({ trip, l, kategori, lebar = false, sempit = false }: 
     trip.alat && <Meta key="a" ikon={<IkonCentang size={16} className={ik} />} teks={t("trip.alat")} />,
   ].filter(Boolean) as React.ReactNode[];
   return (
-    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} pil={kategori} nama={tx(trip.nama, l)} meta={meta} sorot={tx(trip.sorot, l)}
+    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} sampulKosong={<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-buih p-5"><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className="h-auto w-28 opacity-70" /><span className="text-center text-xs font-semibold text-ink2">{t("homestay.photoPending")}</span></div>} pil={kategori} nama={tx(trip.nama, l)} meta={meta} sorot={tx(trip.sorot, l)}
       harga={<HargaTrip trip={trip} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
 }
@@ -189,7 +189,7 @@ export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, 
           {daftar.map((k, i) => {
             const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard`
               : k.id === "kursus" && adaKursus ? `/${l}/dive-course`
-              : k.id === "homestay-selam" ? `/${l}/homestay`
+              : k.id === "homestay-selam" ? `/${l}/dive-homestay`
               : `${beranda ? `/${l}/activities` : ""}#kategori-${k.id}`;
             return (
               <Link key={k.id} href={href} className={`group relative block aspect-[16/10] overflow-hidden rounded-[24px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda xl:aspect-auto xl:h-[280px] ${daftar.length % 3 === 2 && i >= daftar.length - 2 ? "xl:col-span-3" : daftar.length % 3 === 1 && i === daftar.length - 1 ? "xl:col-span-6" : "xl:col-span-2"}`}>

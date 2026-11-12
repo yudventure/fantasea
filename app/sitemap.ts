@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const asal = asalSitus();
   const k = await bacaKonten();
-  const jalur = ["", "/about", ...(k.diveCourse.tampil ? ["/dive-course"] : []), "/activities", ...(k.liveaboard.tampil ? ["/liveaboard"] : []), ...(k.homestay.some((h) => h.tampil) ? ["/homestay"] : []), ...k.trip.filter((t) => t.tampil).map((t) => `/trip/${t.slug}`), ...k.homestay.filter((h) => h.tampil).map((h) => `/homestay/${h.slug}`)];
+  const jalur = ["", "/about", ...(k.diveCourse.tampil ? ["/dive-course"] : []), "/activities", ...(k.kategori.some((x) => x.id === "homestay-selam" && x.tampil) ? ["/dive-homestay"] : []), ...(k.liveaboard.tampil ? ["/liveaboard"] : []), ...(k.homestay.some((h) => h.tampil) ? ["/homestay"] : []), ...k.trip.filter((t) => t.tampil).map((t) => `/trip/${t.slug}`), ...k.homestay.filter((h) => h.tampil).map((h) => `/homestay/${h.slug}`)];
   return jalur.flatMap((j) =>
     LOCALES.map((l) => ({
       url: `${asal}/${l}${j}`,

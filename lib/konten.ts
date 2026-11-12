@@ -45,7 +45,8 @@ export interface Trip {
   /** Satu baris pendek di kartu di bawah durasi, mis. All-included atau nama pulau. */
   sorot: Teks;
   level: Teks;
-  /** Harga mulai per orang dalam rupiah. 0 berarti tanya harga. */
+  mataUang?: "IDR" | "USD";
+  /** Harga per orang dalam mataUang, data lama memakai IDR. 0 berarti tanya harga. */
   hargaMulai: number;
   termasuk: DaftarTeks;
   belum: DaftarTeks;
@@ -119,6 +120,7 @@ export interface KursusSelam {
 }
 
 export interface Konten {
+  versiDiveHomestay?: number;
   situs: {
     /** Penanda simpanan. Di bawah VERSI_KONTAK berarti disimpan sebelum kontak contoh ada. */
     versiKontak: number;
@@ -328,7 +330,14 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     return kategori.some((kt) => kt.id === s) ? s : kategori.find((kt) => kt.id === "selam")?.id ?? kategori[0].id;
   };
 
-  const trip: Trip[] = ("trip" in o ? arr(o.trip) : b.trip).map((t) => {
+  let sumberTrip = "trip" in o ? arr(o.trip) : b.trip;
+  if (num(o.versiDiveHomestay) < 1 && sumberTrip.length) {
+    const ada = new Set(sumberTrip.map((t) => str(obj(t).id)));
+    const alamat = new Set(sumberTrip.map((t) => str(obj(t).slug)));
+    sumberTrip = [...sumberTrip, ...b.trip.filter((t) => t.kategori === "homestay-selam" && !ada.has(t.id) && !alamat.has(t.slug))];
+    if (!kategori.some((kt) => kt.id === "homestay-selam")) kategori.push(structuredClone(b.kategori.find((kt) => kt.id === "homestay-selam")!));
+  }
+  const trip: Trip[] = sumberTrip.map((t) => {
     const x = obj(t);
     const nama = teks(x.nama, undefined, 120);
     return {
@@ -343,7 +352,8 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       alat: bool(x.alat, false),
       sorot: teks(x.sorot, undefined, 60),
       level: teks(x.level, undefined, 80),
-      hargaMulai: num(x.hargaMulai, 0, 1e11),
+      hargaMulai: Math.round(Math.min(1e11, Math.max(0, Number(x.hargaMulai) || 0)) * 100) / 100,
+      mataUang: x.mataUang === "USD" ? "USD" : "IDR",
       termasuk: daftarTeks(x.termasuk),
       belum: daftarTeks(x.belum),
       foto: arr(x.foto).map(fotoSah).filter(Boolean).slice(0, MAKS_FOTO_TRIP),
@@ -406,6 +416,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const emailMentah = str(kontak.email, 120).trim();
 
   return {
+    versiDiveHomestay: 1,
     situs: {
       versiKontak: VERSI_KONTAK,
       kontak: {
