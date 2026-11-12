@@ -92,3 +92,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Beranda tidak lagi memuat seksi Open Trip, Dive Course, dan Liveaboard (permintaan pemilik). Jadwal Open Trip tersedia di halaman Activities, tombol hero menuju `/activities#jadwal`. Halaman khusus kursus dan liveaboard tetap tersedia. Kartu kategori diperbesar menjadi 1 kolom ponsel, 2 kolom tablet, 3 kolom desktop dengan dua kartu terakhir berbagi baris sama rata.
 
 - Menu utama hanya Beranda, Akomodasi, Aktivitas, dan About, konsisten di desktop, ponsel, dan footer. Label Inggris Home, Accommodation, Activities, About. Tujuan `/[locale]`, `/homestay`, `/activities`, `/about`. Label diatur di Beranda, Menu dan footer. Halaman About memakai teks tentang Fantasea dari footer, foto pertama galeri, dan FAQ yang sudah ada agar tidak menambah klaim bisnis.
+
+- Menu Akomodasi dan Aktivitas menuju seksi beranda, masing-masing `/[locale]#homestay` dan `/[locale]#trip`, termasuk dari halaman lain. Berlaku untuk header desktop, menu ponsel, dan footer. Halaman katalog tetap diakses melalui kartu dan tombol lihat semua.
