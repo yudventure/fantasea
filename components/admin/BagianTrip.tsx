@@ -155,7 +155,7 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-2 text-[16px] font-extrabold text-navy">{tx(t.nama, "id") || "Tanpa nama"}<TandaContoh ada={t.contoh} />{!t.tampil && <span className="rounded-pill bg-[#F1F3F5] px-2 py-0.5 text-[11.5px] font-extrabold text-ink2">Disembunyikan</span>}</p>
-                <p className="text-[13px] text-ink2">{namaKategori(k, t.kategori)} · {t.hargaMulai ? `mulai ${rupiah(t.hargaMulai, "id")}` : "tanya harga"} · /trip/{t.slug}</p>
+                <p className="text-[13px] text-ink2">{namaKategori(k, t.kategori)} · {t.hargaMulai ? `mulai ${new Intl.NumberFormat("id-ID", { style: "currency", currency: t.mataUang ?? "IDR" }).format(t.hargaMulai)}` : "tanya harga"} · /trip/{t.slug}</p>
               </div>
               <Geser i={i} n={k.trip.length} onGeser={(a) => ubah((d) => geserDaftar(d.trip, i, a))} />
               <button type="button" onClick={() => setBuka(buka === t.id ? null : t.id)} aria-expanded={buka === t.id} className="rounded-pill bg-buih px-4 py-2 text-[13.5px] font-bold text-navy hover:bg-line">{buka === t.id ? "Tutup" : "Ubah"}</button>
@@ -175,7 +175,10 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
                   <KolomDua label="Level" value={t.level} onChange={(v) => ubahTrip(t.id, (x) => { x.level = v; })} maks={80} />
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <KolomAngka label="Harga mulai per orang" hint="Rupiah. Isi 0 untuk menampilkan Tanya harga." awalan="Rp" value={t.hargaMulai} onChange={(v) => ubahTrip(t.id, (x) => { x.hargaMulai = v; })} />
+                  <label className="grid gap-2 text-sm font-bold text-navy">Harga per orang
+                    <input className="kolom" type="number" min="0" max="100000000000" step="0.01" value={t.hargaMulai} onChange={(e) => { const n = Number(e.target.value); ubahTrip(t.id, (x) => { x.hargaMulai = Math.max(0, n); }); }} />
+                  </label>
+                  <Dropdown label="Mata uang" kosong="Pilih mata uang" value={t.mataUang ?? "IDR"} onChange={(v) => ubahTrip(t.id, (x) => { x.mataUang = v === "USD" ? "USD" : "IDR"; })} pilihan={[{ nilai: "IDR", label: "IDR, Rupiah" }, { nilai: "USD", label: "USD, Dolar AS" }]} />
                   <KolomAngka label="Jumlah selam" hint="Isi 0 untuk trip tanpa selam." value={t.selam} maks={99} onChange={(v) => ubahTrip(t.id, (x) => { x.selam = v; })} />
                 </div>
                 <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">

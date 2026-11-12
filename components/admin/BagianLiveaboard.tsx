@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { ID_LIVEABOARD, tx, type Konten } from "@/lib/konten";
-import { rupiah } from "@/lib/format";
 import type { IdTab } from "@/lib/peran";
 import { KartuPanel, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, ringkasTeks } from "./Kolom";
 import { KepalaEditor } from "./BagianIsi";
@@ -29,7 +28,7 @@ export default function BagianLiveaboard({ k, ubah, pindah }: { k: Konten; ubah:
                 <span className="relative h-10 w-14 flex-none overflow-hidden rounded-[8px] bg-buih">{t.foto[0] && <Image src={t.foto[0]} alt="" fill sizes="56px" unoptimized className="object-cover" />}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-extrabold text-navy">{tx(t.nama, "id")}</span>
-                  <span className="block text-[12.5px] text-ink2">{[tx(t.durasi, "id"), t.hargaMulai ? `mulai ${rupiah(t.hargaMulai, "id")}` : "tanya harga", t.tampil ? "" : "disembunyikan"].filter(Boolean).join(" · ")}</span>
+                  <span className="block text-[12.5px] text-ink2">{[tx(t.durasi, "id"), t.hargaMulai ? `mulai ${new Intl.NumberFormat("id-ID", { style: "currency", currency: t.mataUang ?? "IDR" }).format(t.hargaMulai)}` : "tanya harga", t.tampil ? "" : "disembunyikan"].filter(Boolean).join(" · ")}</span>
                 </span>
               </li>
             ))}
