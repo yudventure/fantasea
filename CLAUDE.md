@@ -100,3 +100,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Ilustrasi rute menampilkan pesawat dengan jalur pendekatan ke Sorong, landasan pacu beserta marka, dan logo utama Fantasea sebagai penanda Waisai. Gunakan aset logo asli tanpa mengubah proporsi.
 
 - FAQ Before you go tampil setelah peta How to get here, baik di beranda maupun halaman About.
+
+- Daftar Accommodation berasal dari 13 homestay pada gambar pemilik, menggantikan tiga contoh lama (`h-kri`, `h-arborek`, `h-mansuar`) hanya bila masih bertanda `contoh`. Homestay kustom dan daftar kosong tetap dipertahankan. Harga sumber dalam USD per malam untuk dua tamu, kapasitas adalah maksimal penginapan, bukan stok kamar. Kolom `mataUang`, `hargaUntuk`, dan `kapasitas` bisa diubah di panel Homestay; data lama tetap IDR per malam untuk satu tamu. Foto asli belum tersedia, gunakan sampul logo dan keterangan foto menyusul sampai diunggah melalui panel.

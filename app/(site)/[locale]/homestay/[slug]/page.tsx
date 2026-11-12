@@ -81,6 +81,8 @@ export default async function HalamanHomestay({ params }: Params) {
               </div>
             </dl>
 
+            {!!h.kapasitas && <p className="mt-5 font-semibold text-ink2">{t("homestay.capacity", { n: h.kapasitas })}</p>}
+
             {paragraf.length > 0 && (
               <div className="mt-10 grid max-w-[68ch] gap-4 text-[16.5px] leading-relaxed text-navy/90">
                 {paragraf.map((p, i) => <p key={i} className="whitespace-pre-line">{p}</p>)}
