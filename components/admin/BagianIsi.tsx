@@ -1,7 +1,7 @@
 "use client";
 import { MAKS_FOTO_GERBANG, idBaru, type Konten, type KepalaBagian } from "@/lib/konten";
 import { IkonPanahAtas, IkonPanahBawah, IkonSampah, IkonTambah } from "@/components/Ikon";
-import { KartuPanel, ringkasTeks, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
+import { KartuPanel, KolomAngka, ringkasTeks, KolomDaftar, KolomDua, KolomFoto, KolomTeks, PilihWarna, Saklar, Label } from "./Kolom";
 import type { Ubah } from "./Panel";
 import { kontakMasihContoh } from "@/data/bawaan";
 
@@ -71,6 +71,24 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         <KepalaEditor b={k.diveCourse} set={(f) => ubah((d) => f(d.diveCourse))} />
         <KolomFoto label="Foto kursus" value={k.diveCourse.foto} onChange={(v) => ubah((d) => { d.diveCourse.foto = v; })} />
         <KolomDua label="Tombol tanya kursus" value={k.diveCourse.tombol} onChange={(v) => ubah((d) => { d.diveCourse.tombol = v; })} maks={40} />
+        <p className="text-sm text-ink2">Nomor WhatsApp memakai panel Kontak. Isi tautan pembayaran Xendit per kursus setelah tersedia. Harga dalam USD per orang sesuai daftar pemilik, bukan konversi rupiah.</p>
+        {k.diveCourse.kursus.map((x, i) => <div key={x.id} className="grid gap-4 rounded-card border border-line bg-soft p-5">
+          <Saklar label="Tampilkan kursus" value={x.tampil} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].tampil = v; })} />
+          <KolomDua label="Nama kursus" value={x.nama} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].nama = v; })} maks={160} />
+          <KolomFoto label="Foto kursus" value={x.foto} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].foto = v; })} />
+          <label className="grid gap-2 text-sm font-bold text-navy">Harga USD per orang
+            <input className="kolom" type="number" min="0" max="1000000" step="0.01" value={x.hargaUsd} onChange={(e) => { const v = Number(e.target.value); ubah((d) => { d.diveCourse.kursus[i].hargaUsd = Math.max(0, v); }); }} />
+          </label>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <KolomAngka label="Jumlah hari" min={1} maks={365} value={x.hari} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].hari = v; })} />
+            <KolomAngka label="Jumlah selam" maks={1000} value={x.selam} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].selam = v; })} />
+          </div>
+          <Saklar label="Termasuk alat" value={x.alat} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].alat = v; })} />
+          <KolomDua label="Lokasi" value={x.lokasi} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].lokasi = v; })} maks={160} />
+          <KolomTeks label="Tautan pembayaran Xendit" jenis="tautan" hint="Tautan HTTPS untuk kursus dan harga ini. Kosongkan selama pembayaran belum tersedia. Perbarui tautan bila harga berubah." value={x.pembayaran} onChange={(v) => ubah((d) => { d.diveCourse.kursus[i].pembayaran = v; })} />
+          <button type="button" className="justify-self-start text-sm font-bold text-navy underline" onClick={() => ubah((d) => { d.diveCourse.kursus.splice(i, 1); })}>Hapus kursus</button>
+        </div>)}
+        <button type="button" className="btn btn-garis justify-self-start" onClick={() => ubah((d) => { d.diveCourse.kursus.push({ id: idBaru("kursus"), nama: { en: "", id: "" }, foto: "", hargaUsd: 0, hari: 1, selam: 0, alat: false, tampil: false, lokasi: { en: "", id: "" }, pembayaran: "" }); })}>Tambah kursus</button>
       </KartuPanel>
 
       <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip."
