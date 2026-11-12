@@ -123,7 +123,7 @@ export interface Konten {
     sosial: { instagram: string; facebook: string; tiktok: string; youtube: string };
     seo: { judul: Teks; deskripsi: Teks };
   };
-  menu: { trip: Teks; liveaboard: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
+  menu: { beranda: Teks; about: Teks; trip: Teks; liveaboard: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
   hero: { judul: Teks; lead: Teks; tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
   /** Bagian kartu bertumpuk, sekarang pembuka homestay. Kartu homestay tampil di bawahnya. */
   jelajah: KepalaBagian & { kartu: Kartu[] };
@@ -289,6 +289,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     for (const l of ["en", "id"] as const) if (nilai[l] === lama[l]) nilai[l] = baru[l];
   };
   gantiLama(obj(o.menu), "trip", { en: "Trips", id: "Trip" }, b.menu.trip);
+  gantiLama(obj(o.menu), "homestay", { en: "Homestays", id: "Homestay" }, b.menu.homestay);
   const bagianLama = obj(obj(o.bagian).trip);
   gantiLama(bagianLama, "label", { en: "Trips", id: "Trip" }, b.bagian.trip.label);
   gantiLama(bagianLama, "judul", { en: "Pick your *route.*", id: "Pilih *rutemu.*" }, b.bagian.trip.judul);
@@ -402,6 +403,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       seo: { judul: teks(seo.judul, b.situs.seo.judul, 90), deskripsi: teks(seo.deskripsi, b.situs.seo.deskripsi, 300) },
     },
     menu: {
+      beranda: teks(menu.beranda, b.menu.beranda, 30), about: teks(menu.about, b.menu.about, 30),
       trip: teks(menu.trip, b.menu.trip, 30), liveaboard: teks(menu.liveaboard, b.menu.liveaboard, 30), jadwal: teks(menu.jadwal, b.menu.jadwal, 30), homestay: teks(menu.homestay, b.menu.homestay, 30), titik: teks(menu.titik, b.menu.titik, 30),
       ulasan: teks(menu.ulasan, b.menu.ulasan, 30), faq: teks(menu.faq, b.menu.faq, 30), pesan: teks(menu.pesan, b.menu.pesan, 30),
     },
