@@ -37,6 +37,8 @@ Kerangka mengikuti DAMPIER (`yudventure/dampier_system`), atas permintaan pemili
 - Kontak dan media sosial bawaan adalah contoh (permintaan pemilik, November 2026), supaya footer sudah lengkap sebelum diisi di panel Kontak. Email dan akun memakai handle usulan `fantaseadivetravel`. Nomor WhatsApp contoh `NOMOR_WA_CONTOH` (+62 800 0000 0000) sengaja tidak mungkin ada, dan `nomorWaAsli` mengosongkannya untuk formulir permintaan dan tombol ajakan, jadi data tamu tidak terkirim ke nomor itu. Ringkasan dan editor Kontak mengingatkan selama masih contoh (`kontakMasihContoh`). Simpanan panel sebelum `VERSI_KONTAK` 2 mendapat contoh untuk kolom yang kosong, sesudahnya kolom kosong berarti disembunyikan.
 - Foto bawaan `public/brand/foto` adalah ilustrasi AI dari proyek lain milik pemilik (Zanclus, Dragonet), bukan dokumentasi Fantasea.
 
+- Seksi Dive Course (`diveCourse`) di beranda berada setelah Trip dan open trip, sebelum Liveaboard. Teks dua bahasa, foto, tombol, dan saklar tampil diatur di panel Beranda. Menu header dan footer memakai label seksi. Aktivitas kategori `kursus` dan `spesialti` yang tampil beserta kategorinya masuk sebagai kartu. Tombol membuka WhatsApp bila nomor asli tersedia, atau halaman Trip.
+
 ## Panel pengelola
 
 Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di terapkan yang belum bisa disiapkan").

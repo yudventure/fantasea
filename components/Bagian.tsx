@@ -145,6 +145,28 @@ export function DaftarTrip({ b, trip, kategori, l, children }: { b: KepalaBagian
   );
 }
 
+/** Kursus selam di beranda, memakai aktivitas yang sudah diatur dari panel. */
+export function DiveCourse({ b, trip, kategori, l, href }: { b: Konten["diveCourse"]; trip: Trip[]; kategori: KategoriAktivitas[]; l: Locale; href: string }) {
+  if (!b.tampil) return null;
+  const kursus = trip.filter((x) => x.tampil && ["kursus", "spesialti"].includes(x.kategori) && kategori.some((k) => k.id === x.kategori && k.tampil));
+  return (
+    <section id="dive-course" className="relative overflow-hidden bg-white py-16 sm:py-24">
+      <div className="wrap">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div data-muncul="">
+            <KepalaBagianSitus b={b} l={l} />
+            {tx(b.tombol, l) && <Link href={href} className="btn btn-koral mt-8">{tx(b.tombol, l)}<IkonPanahKanan size={16} /></Link>}
+          </div>
+          {b.foto && <div data-muncul="" className="relative aspect-[4/3] overflow-hidden rounded-[28px] bg-kabut shadow-card">
+            <Image src={b.foto} alt="" fill sizes="(max-width: 1024px) 100vw, 640px" unoptimized={unopt(b.foto)} className="object-cover" />
+          </div>}
+        </div>
+        {kursus.length > 0 && <KisiKartu semuaUkuran kelas={`mt-10 ${KISI_TIGA}`} {...kisi(kursus, (x, p) => <KartuTrip trip={x} l={l} kategori={namaKategori(kategori, x.kategori, l)} lebar={p.lebar} sempit={p.sempit} />)} />}
+      </div>
+    </section>
+  );
+}
+
 /** Kategori yang tampil: punya aktivitas yang tampil, atau Liveaboard yang punya halaman sendiri. */
 export const kategoriTampil = (kategori: KategoriAktivitas[], trip: Trip[], adaLiveaboard: boolean) =>
   kategori.filter((k) => k.tampil && (trip.some((x) => x.tampil && x.kategori === k.id) || (k.id === ID_LIVEABOARD && adaLiveaboard)));

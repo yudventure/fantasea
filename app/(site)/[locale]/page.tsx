@@ -7,7 +7,7 @@ import Hero from "@/components/Hero";
 import Jelajah from "@/components/Jelajah";
 import Gerbang from "@/components/Gerbang";
 import Footer from "@/components/Footer";
-import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTrip, DaftarUlasan, JadwalOpenTrip, Liveaboard } from "@/components/Bagian";
+import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTrip, DaftarUlasan, JadwalOpenTrip, DiveCourse, Liveaboard } from "@/components/Bagian";
 
 /**
  * Beranda. Tiga bagian pertama mengikuti referensi desain (hero kartu
@@ -41,6 +41,7 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
         <DaftarTrip b={k.bagian.trip} trip={k.liveaboard.tampil ? k.trip.filter((x) => x.kategori !== "liveaboard") : k.trip} kategori={k.kategori} l={l}>
           <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwal} trip={k.trip} l={l} hrefTanya={hrefTanya} sisip />
         </DaftarTrip>
+        <DiveCourse b={k.diveCourse} trip={k.trip} kategori={k.kategori} l={l} href={waUmum || `/${l}/trip`} />
         <Liveaboard b={k.liveaboard} trip={k.trip} l={l} href={waUmum || `/${l}/trip`} />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />
         <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />

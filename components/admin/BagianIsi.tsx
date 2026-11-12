@@ -66,6 +66,13 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         </div>
       </KartuPanel>
 
+      <KartuPanel id="dive-course" judul="Dive Course" keterangan="Seksi kursus selam di beranda, setelah open trip. Aktivitas kursus diatur di Trip dan harga dengan kategori Kursus selam atau Kursus spesialti.">
+        <Saklar label="Tampil di situs" value={k.diveCourse.tampil} onChange={(v) => ubah((d) => { d.diveCourse.tampil = v; })} />
+        <KepalaEditor b={k.diveCourse} set={(f) => ubah((d) => f(d.diveCourse))} />
+        <KolomFoto label="Foto kursus" value={k.diveCourse.foto} onChange={(v) => ubah((d) => { d.diveCourse.foto = v; })} />
+        <KolomDua label="Tombol tanya kursus" value={k.diveCourse.tombol} onChange={(v) => ubah((d) => { d.diveCourse.tombol = v; })} maks={40} />
+      </KartuPanel>
+
       <KartuPanel judul="Judul bagian lain" keterangan="Label, judul, dan kalimat pembuka untuk bagian Trip, Jadwal open trip, Ulasan, dan FAQ di beranda, dan Titik selam di halaman Trip."
         lipat ringkas="Trip, Jadwal open trip, Titik selam, Ulasan, dan FAQ. Jarang perlu diubah.">
         {([["trip", "Trip"], ["jadwal", "Jadwal open trip"], ["titik", "Titik selam (halaman Trip)"], ["ulasan", "Ulasan"], ["faq", "FAQ"]] as const).map(([kunci, nama]) => (
