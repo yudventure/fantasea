@@ -38,9 +38,9 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
         />
         <KisiKategori b={k.bagian.trip} kategori={k.kategori} l={l} adaLiveaboard={k.liveaboard.tampil} adaKursus={k.diveCourse.tampil} beranda />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />
-        <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />
         <AboutFantasea k={k} l={l} />
         <RuteWaisai k={k} l={l} />
+        <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />
       </main>
       <Footer k={k} l={l} menu={menu} />
     </>

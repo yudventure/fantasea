@@ -56,9 +56,28 @@ function PetaRute({ l }: { l: Locale }) {
       <text x="126" y="273" fontSize="19" fontStyle="italic" fill="#55657A">{t("about.strait")}</text>
       <path d="M704 470C605 493 503 453 432 388S334 207 183 139" fill="none" stroke="#203149" strokeWidth="4" strokeDasharray="2 12" strokeLinecap="round" />
       <g transform="translate(438 368)"><path d="M-24-3H26L16 12H-15Z" fill="#203149" stroke="#FFFFFF" strokeWidth="2" /><path d="M-15-5L-9-19H11L18-5Z" fill="#FFFFFF" stroke="#1264A8" strokeWidth="2" /><path d="M-28 20q12-7 24 0t24 0" stroke="#FFFFFF" strokeWidth="3" fill="none" /></g>
-      {pin(704, 465, "1")}{pin(439, 336, "2")}{pin(183, 140, "3")}
+      {/* Jalur udara masuk ke Sorong, dibedakan dari lintasan feri. */}
+      <path data-peta="jalur-udara" d="M767 70C774 172 754 302 711 450" fill="none" stroke="#55657A" strokeWidth="2.5" strokeDasharray="5 10" strokeLinecap="round" opacity=".55" />
+      <g data-peta="pesawat" transform="translate(753 237) rotate(10)">
+        <path d="M0 38C-5 35-6 23-6 11L-32-4V-11L-6-4V-22L-17-29V-35L-3-31L0-36L3-31L17-35V-29L6-22V-4L32-11V-4L6 11C6 23 5 35 0 38Z" fill="#203149" stroke="#FFFFFF" strokeWidth="2" strokeLinejoin="round" />
+        <path d="M-2 22Q0 27 2 22" fill="none" stroke="#30A6DE" strokeWidth="2" />
+      </g>
+      <g data-peta="landasan" transform="translate(704 474) rotate(-15)">
+        <rect x="-55" y="-13" width="110" height="26" rx="4" fill="#C3D6E2" stroke="#FFFFFF" strokeWidth="3" />
+        <rect x="-50" y="-9" width="100" height="18" rx="2" fill="#55657A" />
+        <path d="M-34 0H34" stroke="#FFFFFF" strokeWidth="2" strokeDasharray="8 6" />
+        <path d="M-44-6V6M-39-6V6M39-6V6M44-6V6" stroke="#FFFFFF" strokeWidth="2" />
+        <path d="M-5 13V25H19" fill="none" stroke="#C3D6E2" strokeWidth="6" />
+        <rect x="17" y="20" width="20" height="12" rx="2" fill="#FFFFFF" stroke="#C3D6E2" strokeWidth="2" />
+      </g>
+      {pin(627, 469, "1")}{pin(439, 336, "2")}
+      <g data-peta="fantasea-waisai">
+        <path d="M173 134L183 147L193 134" fill="#FFFFFF" />
+        <rect x="129" y="62" width="108" height="76" rx="16" fill="#FFFFFF" stroke="#C3D6E2" strokeWidth="2" />
+        <image href="/brand/logo/fantasea-logo-utama.png" x="137" y="71" width="92" height="57" preserveAspectRatio="xMidYMid meet" />
+      </g>
       <text x="605" y="526" fontSize="26" fontWeight="800" letterSpacing="3" fill="#203149">SORONG</text>
-      <text x="225" y="100" fontSize="26" fontWeight="800" letterSpacing="3" fill="#203149">WAISAI</text>
+      <text x="251" y="100" fontSize="26" fontWeight="800" letterSpacing="3" fill="#203149">WAISAI</text>
       <text x="570" y="38" fontSize="12" fontWeight="700" fill="#55657A">{t("about.mapNote")}</text>
     </svg>
     <figcaption className="bg-white px-5 py-3 text-xs text-ink2">{t("about.mapDescription")}</figcaption>

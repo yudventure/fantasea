@@ -7,7 +7,7 @@ import { muatSitus } from "@/lib/server/situs";
 import { bacaKonten } from "@/lib/server/konten";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { KepalaHalaman } from "@/components/Bagian";
+import { KepalaHalaman, DaftarFaq } from "@/components/Bagian";
 
 type Params = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -26,6 +26,7 @@ export default async function About({ params }: Params) {
       <KepalaHalaman b={{ label: k.menu.about, judul: { en: "Fantasea Dive Travel", id: "Fantasea Dive Travel" }, lead: k.about.lead }} l={l} />
       <AboutFantasea k={k} l={l} />
       <RuteWaisai k={k} l={l} />
+      <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />
     </main>
     <Footer k={k} l={l} menu={menu} />
   </>;

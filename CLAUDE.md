@@ -96,3 +96,7 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Menu Akomodasi dan Aktivitas menuju seksi beranda, masing-masing `/[locale]#homestay` dan `/[locale]#trip`, termasuk dari halaman lain. Berlaku untuk header desktop, menu ponsel, dan footer. Halaman katalog tetap diakses melalui kartu dan tombol lihat semua.
 
 - Panel Live the Fantasea di beranda diganti seksi About (`about`), profil dan data legal diberikan pemilik, NIB 2510250035066. Menu About menuju `/[locale]#about`. Peta rute (`rute`) adalah ilustrasi Sorong–Waisai, bukan peta navigasi, tanpa jadwal pasti atau klaim antar jemput. Profil, legal, dan teks rute dapat diubah di Beranda dan dipakai bersama halaman `/about`. Teks ajakan lama tetap tersedia untuk halaman lain.
+
+- Ilustrasi rute menampilkan pesawat dengan jalur pendekatan ke Sorong, landasan pacu beserta marka, dan logo utama Fantasea sebagai penanda Waisai. Gunakan aset logo asli tanpa mengubah proporsi.
+
+- FAQ Before you go tampil setelah peta How to get here, baik di beranda maupun halaman About.
