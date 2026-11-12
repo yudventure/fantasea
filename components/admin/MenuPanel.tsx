@@ -20,7 +20,7 @@ export const MENU: KelompokMenu[] = [
   { key: "kalender", label: "Kalender kegiatan", Ikon: IkonKalender, butir: [{ tab: "kalender", label: "Kalender kegiatan" }] },
   {
     key: "produk", label: "Produk", Ikon: IkonKapal,
-    butir: [{ tab: "trip", label: "Trip dan harga" }, { tab: "liveaboard", label: "Liveaboard" }, { tab: "jadwal", label: "Jadwal open trip" }, { tab: "homestay", label: "Homestay" }, { tab: "kalendermitra", label: "Kalender mitra" }, { tab: "titik", label: "Titik selam" }],
+    butir: [{ tab: "trip", label: "Aktivitas dan harga" }, { tab: "liveaboard", label: "Liveaboard" }, { tab: "jadwal", label: "Jadwal open trip" }, { tab: "homestay", label: "Homestay" }, { tab: "kalendermitra", label: "Kalender mitra" }, { tab: "titik", label: "Titik selam" }],
   },
   {
     key: "situs", label: "Situs web", Ikon: IkonBola,

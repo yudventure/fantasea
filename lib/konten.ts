@@ -283,7 +283,18 @@ function kepala(v: unknown, b: KepalaBagian): KepalaBagian {
 }
 
 export function normalkanKonten(v: unknown, b: Konten): Konten {
-  const o = obj(v);
+  const o = structuredClone(obj(v));
+  const gantiLama = (sumber: Record<string, unknown>, kunci: string, lama: Teks, baru: Teks) => {
+    const nilai = obj(sumber[kunci]);
+    for (const l of ["en", "id"] as const) if (nilai[l] === lama[l]) nilai[l] = baru[l];
+  };
+  gantiLama(obj(o.menu), "trip", { en: "Trips", id: "Trip" }, b.menu.trip);
+  const bagianLama = obj(obj(o.bagian).trip);
+  gantiLama(bagianLama, "label", { en: "Trips", id: "Trip" }, b.bagian.trip.label);
+  gantiLama(bagianLama, "judul", { en: "Pick your *route.*", id: "Pilih *rutemu.*" }, b.bagian.trip.judul);
+  const kepalaLama = obj(obj(o.halamanTrip).kepala);
+  gantiLama(kepalaLama, "label", { en: "Trips and dive sites", id: "Trip dan titik selam" }, b.halamanTrip.kepala.label);
+  gantiLama(kepalaLama, "judul", { en: "Every trip,\n*every reef.*", id: "Semua trip,\n*semua karang.*" }, b.halamanTrip.kepala.judul);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
   const diveCourse = obj(o.diveCourse);

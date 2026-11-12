@@ -172,32 +172,29 @@ export function DiveCourse({ b, trip, kategori, l, href }: { b: Konten["diveCour
 export const kategoriTampil = (kategori: KategoriAktivitas[], trip: Trip[], adaLiveaboard: boolean) =>
   kategori.filter((k) => k.tampil && (trip.some((x) => x.tampil && x.kategori === k.id) || (k.id === ID_LIVEABOARD && adaLiveaboard)));
 
-/** Lebar kotak di baris terakhir supaya kotak sisa melebar rata (kisi 2 kolom di ponsel, 4 di layar lebar). */
-const LEBAR_LG: Record<number, string> = { 1: "lg:col-span-12", 2: "lg:col-span-6", 3: "lg:col-span-4", 4: "lg:col-span-3" };
-
-/**
- * Kotak kategori berfoto di halaman Trip, seperti Categories di website lama
- * Fantasea. Liveaboard menuju halamannya sendiri, yang lain ke kelompoknya.
- */
-export function KisiKategori({ b, kategori, trip, l, adaLiveaboard }: { b: KepalaBagian; kategori: KategoriAktivitas[]; trip: Trip[]; l: Locale; adaLiveaboard: boolean }) {
-  const daftar = kategoriTampil(kategori, trip, adaLiveaboard);
+/** Kisi kategori Activities, empat kolom di desktop seperti referensi pemilik. */
+export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, beranda = false }: { b: KepalaBagian; kategori: KategoriAktivitas[]; trip?: Trip[]; l: Locale; adaLiveaboard: boolean; adaKursus?: boolean; beranda?: boolean }) {
+  const daftar = kategori.filter((k) => k.tampil);
   if (!daftar.length) return null;
-  const n = daftar.length, sisaLg = n % 4, awalSisaLg = n - (sisaLg || 4);
+  const t = buatT(getMessages(l));
   return (
-    <section id="kategori" className="pb-12 sm:pb-16">
+    <section id={beranda ? "trip" : "kategori"} className={beranda ? "bg-soft py-16 sm:py-24" : "pb-12 sm:pb-16"}>
       <div className="wrap">
-        <KepalaBagianSitus b={b} l={l} />
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-12">
-          {daftar.map((k, i) => {
-            const lg = i >= awalSisaLg ? LEBAR_LG[sisaLg || 4] : LEBAR_LG[4];
-            const hp = n % 2 === 1 && i === n - 1 ? "col-span-2" : "";
-            const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard` : `#kategori-${k.id}`;
+        <div className="flex flex-wrap items-end justify-between gap-5">
+          <KepalaBagianSitus b={b} l={l} />
+          {beranda && <TombolSemua href={`/${l}/activities`} label={t("activity.all")} />}
+        </div>
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+          {daftar.map((k) => {
+            const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard`
+              : k.id === "kursus" && adaKursus ? `/${l}/dive-course`
+              : k.id === "homestay-selam" ? `/${l}/homestay`
+              : `${beranda ? `/${l}/activities` : ""}#kategori-${k.id}`;
             return (
-              <Link key={k.id} href={href} data-muncul="" style={{ "--tunda": `${(i % 4) * 70}ms` } as React.CSSProperties}
-                className={`group relative block h-[132px] overflow-hidden rounded-[18px] bg-navy shadow-card sm:h-[170px] lg:h-[190px] ${lg} ${hp}`}>
-                {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 1024px) 50vw, 360px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
-                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-malam/85 via-malam/25 to-transparent" />
-                <span className="absolute inset-x-3 bottom-3 text-center font-display text-[18px] leading-tight text-white sm:bottom-4 sm:text-[23px]">{tx(k.nama, l)}</span>
+              <Link key={k.id} href={href} className="group relative block aspect-[1.85/1] overflow-hidden rounded-[16px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda">
+                {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
+                <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-malam/90 via-malam/10 to-transparent" />
+                <span className="absolute inset-x-2 bottom-3 text-center font-body text-[13px] font-extrabold leading-tight text-white sm:bottom-4 sm:text-[18px]">{tx(k.nama, l)}</span>
               </Link>
             );
           })}
@@ -211,9 +208,9 @@ export function KisiKategori({ b, kategori, trip, l, adaLiveaboard }: { b: Kepal
  * Katalog di halaman Trip, dikelompokkan per kategori (permintaan pemilik,
  * November 2026). Kelompok Liveaboard punya tombol ke halamannya sendiri.
  */
-export function KatalogTrip({ kategori, trip, l, adaLiveaboard }: { kategori: KategoriAktivitas[]; trip: Trip[]; l: Locale; adaLiveaboard: boolean }) {
+export function KatalogTrip({ kategori, trip, l, adaLiveaboard, kosong = false }: { kategori: KategoriAktivitas[]; trip: Trip[]; l: Locale; adaLiveaboard: boolean; kosong?: boolean }) {
   const t = buatT(getMessages(l));
-  const grup = kategori.filter((k) => k.tampil).map((k) => ({ k, isi: trip.filter((x) => x.tampil && x.kategori === k.id) })).filter((g) => g.isi.length);
+  const grup = kategori.filter((k) => k.tampil).map((k) => ({ k, isi: trip.filter((x) => x.tampil && x.kategori === k.id) })).filter((g) => kosong || g.isi.length);
   if (!grup.length) return null;
   return (
     <>
@@ -227,6 +224,7 @@ export function KatalogTrip({ kategori, trip, l, adaLiveaboard }: { kategori: Ka
               </div>
               {k.id === ID_LIVEABOARD && adaLiveaboard && <TombolSemua href={`/${l}/liveaboard`} label={t("liveaboard.lihatSemua")} />}
             </div>
+            {!isi.length && <p className="mt-6 text-ink2">{t("activity.empty")}</p>}
             <KisiKartu kelas={`mt-8 ${KISI_TIGA}`} {...kisi(isi, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
           </div>
         </section>

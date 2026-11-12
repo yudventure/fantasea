@@ -150,5 +150,9 @@
     "paymentPending": "Pembayaran online segera tersedia.",
     "whatsappPending": "Kontak WhatsApp segera tersedia.",
     "message": "Halo Fantasea, saya ingin bertanya tentang dive course ini\n{course}"
+  },
+  "activity": {
+    "all": "Lihat semua aktivitas",
+    "empty": "Hubungi kami untuk menanyakan ketersediaan dan pilihan aktivitas ini."
   }
 }

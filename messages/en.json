@@ -150,5 +150,9 @@
     "paymentPending": "Online payment coming soon.",
     "whatsappPending": "WhatsApp contact coming soon.",
     "message": "Hi Fantasea, I would like to ask about this dive course\n{course}"
+  },
+  "activity": {
+    "all": "See all activities",
+    "empty": "Contact us to ask about availability and options for this activity."
   }
 }
