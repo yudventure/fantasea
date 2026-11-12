@@ -7,7 +7,7 @@ import { muatSitus } from "@/lib/server/situs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { polos } from "@/components/Judul";
-import { DaftarEdukasi, DaftarTitik, KatalogTrip, KepalaHalaman, KisiKategori } from "@/components/Bagian";
+import { DaftarEdukasi, DaftarTitik, JadwalOpenTrip, KatalogTrip, KepalaHalaman, KisiKategori } from "@/components/Bagian";
 
 /**
  * Halaman Trip (permintaan pemilik, November 2026): kotak kategori berfoto
@@ -33,7 +33,7 @@ export default async function HalamanTrip({ params }: Params) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const l: Locale = locale;
-  const { k, menu, pesan } = await muatSitus(l);
+  const { k, menu, pesan, waUmum, jadwal } = await muatSitus(l);
   const e = k.halamanTrip.edukasi;
 
   return (
@@ -43,6 +43,7 @@ export default async function HalamanTrip({ params }: Params) {
         <KepalaHalaman b={k.halamanTrip.kepala} l={l} />
         <KisiKategori b={k.halamanTrip.kategori} kategori={k.kategori} trip={k.trip} l={l} adaLiveaboard={k.liveaboard.tampil} adaKursus={k.diveCourse.tampil} />
         <KatalogTrip kosong kategori={k.kategori.filter((x) => x.id !== "homestay-selam" && !(x.id === "kursus" && k.diveCourse.tampil) && !(x.id === "liveaboard" && k.liveaboard.tampil))} trip={k.trip} l={l} adaLiveaboard={k.liveaboard.tampil} />
+        <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwal} trip={k.trip} l={l} hrefTanya={waUmum || `/${l}/activities`} />
         <DaftarEdukasi b={e} butir={e.butir} l={l} />
         <DaftarTitik b={k.bagian.titik} titik={k.titik} l={l} latar="bg-white" />
       </main>

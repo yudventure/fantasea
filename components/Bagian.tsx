@@ -172,7 +172,7 @@ export function DiveCourse({ b, trip, kategori, l, href }: { b: Konten["diveCour
 export const kategoriTampil = (kategori: KategoriAktivitas[], trip: Trip[], adaLiveaboard: boolean) =>
   kategori.filter((k) => k.tampil && (trip.some((x) => x.tampil && x.kategori === k.id) || (k.id === ID_LIVEABOARD && adaLiveaboard)));
 
-/** Kisi kategori Activities, empat kolom di desktop seperti referensi pemilik. */
+/** Kisi kategori Activities, kartu besar dengan baris terakhir yang seimbang. */
 export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, beranda = false }: { b: KepalaBagian; kategori: KategoriAktivitas[]; trip?: Trip[]; l: Locale; adaLiveaboard: boolean; adaKursus?: boolean; beranda?: boolean }) {
   const daftar = kategori.filter((k) => k.tampil);
   if (!daftar.length) return null;
@@ -184,17 +184,17 @@ export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, 
           <KepalaBagianSitus b={b} l={l} />
           {beranda && <TombolSemua href={`/${l}/activities`} label={t("activity.all")} />}
         </div>
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {daftar.map((k) => {
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-6">
+          {daftar.map((k, i) => {
             const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard`
               : k.id === "kursus" && adaKursus ? `/${l}/dive-course`
               : k.id === "homestay-selam" ? `/${l}/homestay`
               : `${beranda ? `/${l}/activities` : ""}#kategori-${k.id}`;
             return (
-              <Link key={k.id} href={href} className="group relative block aspect-[1.85/1] overflow-hidden rounded-[16px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda">
-                {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
+              <Link key={k.id} href={href} className={`group relative block aspect-[16/10] overflow-hidden rounded-[24px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda xl:aspect-auto xl:h-[280px] ${daftar.length % 3 === 2 && i >= daftar.length - 2 ? "xl:col-span-3" : daftar.length % 3 === 1 && i === daftar.length - 1 ? "xl:col-span-6" : "xl:col-span-2"}`}>
+                {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 600px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
                 <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-malam/90 via-malam/10 to-transparent" />
-                <span className="absolute inset-x-2 bottom-3 text-center font-body text-[13px] font-extrabold leading-tight text-white sm:bottom-4 sm:text-[18px]">{tx(k.nama, l)}</span>
+                <span className="absolute inset-x-5 bottom-5 text-center font-body text-[20px] font-extrabold leading-tight text-white sm:bottom-6 sm:text-[23px]">{tx(k.nama, l)}</span>
               </Link>
             );
           })}
