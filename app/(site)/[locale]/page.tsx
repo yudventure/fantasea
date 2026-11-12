@@ -7,7 +7,7 @@ import Hero from "@/components/Hero";
 import Jelajah from "@/components/Jelajah";
 import Gerbang from "@/components/Gerbang";
 import Footer from "@/components/Footer";
-import { Ajakan, DaftarFaq, DaftarHomestay, DaftarTrip, DaftarUlasan, JadwalOpenTrip, DiveCourse, Liveaboard } from "@/components/Bagian";
+import { Ajakan, DaftarFaq, DaftarHomestay, KisiKategori, DaftarUlasan, JadwalOpenTrip, DiveCourse, Liveaboard } from "@/components/Bagian";
 
 /**
  * Beranda. Tiga bagian pertama mengikuti referensi desain (hero kartu
@@ -36,11 +36,10 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
           foto={k.gerbang.foto.map((f) => ({ foto: f.foto, keterangan: tx(f.keterangan, l) }))}
           video={k.gerbang.video} tag={k.gerbang.tag} warna={k.gerbang.warna}
         />
-        {/* Trip liveaboard tampil di bagian Liveaboard, jadi tidak diulang di sini selama bagian itu menyala. */}
-        {/* Trip dan open trip satu bagian (permintaan pemilik, November 2026). */}
-        <DaftarTrip b={k.bagian.trip} trip={k.liveaboard.tampil ? k.trip.filter((x) => x.kategori !== "liveaboard") : k.trip} kategori={k.kategori} l={l}>
+        <KisiKategori b={k.bagian.trip} kategori={k.kategori} l={l} adaLiveaboard={k.liveaboard.tampil} adaKursus={k.diveCourse.tampil} beranda />
+        <div className="bg-soft pb-16"><div className="wrap">
           <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwal} trip={k.trip} l={l} hrefTanya={hrefTanya} sisip />
-        </DaftarTrip>
+        </div></div>
         <DiveCourse b={k.diveCourse} trip={k.trip} kategori={k.kategori} l={l} href={waUmum || `/${l}/trip`} />
         <Liveaboard b={k.liveaboard} trip={k.trip} l={l} href={waUmum || `/${l}/trip`} />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />

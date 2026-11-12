@@ -42,7 +42,7 @@ export const KONTEN_BAWAAN: Konten = {
     },
   },
   menu: {
-    trip: { en: "Trips", id: "Trip" },
+    trip: { en: "Activities", id: "Aktivitas" },
     liveaboard: { en: "Liveaboard", id: "Liveaboard" },
     jadwal: { en: "Open trips", id: "Open trip" },
     homestay: { en: "Homestays", id: "Homestay" },
@@ -99,8 +99,8 @@ export const KONTEN_BAWAAN: Konten = {
   },
   bagian: {
     trip: {
-      label: { en: "Trips", id: "Trip" },
-      judul: { en: "Pick your *route.*", id: "Pilih *rutemu.*" },
+      label: { en: "Activities", id: "Aktivitas" },
+      judul: { en: "Categories", id: "Kategori" },
       lead: {
         en: "Dive and snorkel trips for small groups, from first timers to seasoned divers.",
         id: "Trip selam dan snorkeling untuk rombongan kecil, dari pemula sampai penyelam berpengalaman.",
@@ -174,8 +174,8 @@ export const KONTEN_BAWAAN: Konten = {
   // selam berisi pengetahuan umum, bertanda contoh supaya diperiksa pemandu.
   halamanTrip: {
     kepala: {
-      label: { en: "Trips and dive sites", id: "Trip dan titik selam" },
-      judul: { en: "Every trip,\n*every reef.*", id: "Semua trip,\n*semua karang.*" },
+      label: { en: "Activities", id: "Aktivitas" },
+      judul: { en: "Find your next\n*adventure.*", id: "Temukan\n*petualanganmu.*" },
       lead: {
         en: "All our dive and snorkel trips in one place, plus what to know before diving Raja Ampat and the sites we visit.",
         id: "Semua trip selam dan snorkeling kami di satu tempat, ditambah yang perlu kamu tahu sebelum menyelam di Raja Ampat dan titik selam yang kami kunjungi.",

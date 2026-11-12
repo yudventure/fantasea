@@ -66,7 +66,7 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         </div>
       </KartuPanel>
 
-      <KartuPanel id="dive-course" judul="Dive Course" keterangan="Seksi kursus selam di beranda, setelah open trip. Aktivitas kursus diatur di Trip dan harga dengan kategori Kursus selam atau Kursus spesialti.">
+      <KartuPanel id="dive-course" judul="Dive Course" keterangan="Seksi kursus selam di beranda, setelah open trip. Aktivitas kursus diatur di Aktivitas dan harga dengan kategori Kursus selam atau Kursus spesialti.">
         <Saklar label="Tampil di situs" value={k.diveCourse.tampil} onChange={(v) => ubah((d) => { d.diveCourse.tampil = v; })} />
         <KepalaEditor b={k.diveCourse} set={(f) => ubah((d) => f(d.diveCourse))} />
         <KolomFoto label="Foto kursus" value={k.diveCourse.foto} onChange={(v) => ubah((d) => { d.diveCourse.foto = v; })} />
@@ -111,7 +111,7 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
       <KartuPanel judul="Menu dan footer" keterangan="Label menu di header dan footer, urutannya mengikuti bagian beranda, dan kalimat tentang Fantasea di footer."
         lipat ringkas={`Menu ${[k.menu.homestay, k.menu.trip, k.menu.liveaboard, k.menu.ulasan, k.menu.faq].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
-          {([["homestay", "Menu homestay (halaman Homestay)"], ["trip", "Menu trip (halaman Trip)"], ["liveaboard", "Menu liveaboard (halaman Liveaboard)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
+          {([["homestay", "Menu homestay (halaman Homestay)"], ["trip", "Menu Activities (halaman Aktivitas)"], ["liveaboard", "Menu liveaboard (halaman Liveaboard)"], ["ulasan", "Menu ulasan"], ["faq", "Menu FAQ"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
           ))}
         </div>
