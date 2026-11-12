@@ -137,5 +137,18 @@
   "liveaboard": {
     "lihatSemua": "Lihat semua liveaboard",
     "semua": "Semua liveaboard"
+  },
+  "course": {
+    "label": "Kursus selam",
+    "explore": "Lihat kursus selam",
+    "days": "{n} hari",
+    "dives": "{n} kali selam",
+    "gear": "Termasuk alat",
+    "perPerson": "Harga per orang",
+    "pay": "Bayar sekarang",
+    "ask": "Tanyakan tentang dive course ini",
+    "paymentPending": "Pembayaran online segera tersedia.",
+    "whatsappPending": "Kontak WhatsApp segera tersedia.",
+    "message": "Halo Fantasea, saya ingin bertanya tentang dive course ini\n{course}"
   }
 }

@@ -111,6 +111,10 @@ export interface Edukasi { id: string; judul: Teks; isi: Teks; contoh?: boolean 
 export interface Ulasan { id: string; nama: string; asal: string; teks: string; bintang: number; tampil: boolean }
 export interface Faq { id: string; tanya: Teks; jawab: Teks }
 
+export interface KursusSelam {
+  id: string; nama: Teks; foto: string; hargaUsd: number; hari: number; selam: number; alat: boolean; tampil: boolean; lokasi: Teks; pembayaran: string;
+}
+
 export interface Konten {
   situs: {
     /** Penanda simpanan. Di bawah VERSI_KONTAK berarti disimpan sebelum kontak contoh ada. */
@@ -131,7 +135,7 @@ export interface Konten {
    * pemilik, November 2026). Trip berkategori liveaboard tampil di sini
    * sebagai kartu, dan tidak diulang di daftar trip beranda.
    */
-  diveCourse: KepalaBagian & { tampil: boolean; foto: string; tombol: Teks };
+  diveCourse: KepalaBagian & { tampil: boolean; foto: string; tombol: Teks; kursus: KursusSelam[] };
   liveaboard: KepalaBagian & { tampil: boolean; foto: string; tag: string; warna: WarnaTag; butir: DaftarTeks; tombol: Teks };
   /**
    * Halaman sendiri untuk trip dan homestay (permintaan pemilik, November
@@ -416,6 +420,14 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
     diveCourse: {
       ...kepala(diveCourse, b.diveCourse),
+      kursus: ("kursus" in diveCourse ? arr(diveCourse.kursus) : b.diveCourse.kursus).slice(0, 50).map((v) => {
+        const x = obj(v);
+        return { id: id(x.id, "kursus"), nama: teks(x.nama, undefined, 160), foto: fotoSah(x.foto),
+          hargaUsd: Math.round(Math.min(1000000, Math.max(0, Number(x.hargaUsd) || 0)) * 100) / 100,
+          hari: Math.min(365, Math.max(1, Math.floor(Number(x.hari) || 1))),
+          selam: Math.min(1000, Math.max(0, Math.floor(Number(x.selam) || 0))),
+          alat: bool(x.alat, false), tampil: bool(x.tampil, true), lokasi: teks(x.lokasi, undefined, 160), pembayaran: tautan(x.pembayaran) };
+      }),
       tampil: bool(diveCourse.tampil, b.diveCourse.tampil),
       foto: "foto" in diveCourse ? fotoSah(diveCourse.foto) : b.diveCourse.foto,
       tombol: teks(diveCourse.tombol, b.diveCourse.tombol, 40),

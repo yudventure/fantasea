@@ -140,6 +140,12 @@ export const KONTEN_BAWAAN: Konten = {
   },
   // Bagian Liveaboard di beranda (permintaan pemilik, November 2026).
   diveCourse: {
+    kursus: [
+      { id: "padi-advanced", nama: { en: "PADI Advanced Open Water Diver Course", id: "PADI Advanced Open Water Diver Course" }, foto: F("penyelam-ok"), hargaUsd: 363, hari: 2, selam: 4, alat: true, tampil: true, lokasi: { en: "Gam Island, Central Raja Ampat", id: "Pulau Gam, Raja Ampat Tengah" }, pembayaran: "" },
+      { id: "padi-open-water", nama: { en: "PADI Open Water Diver Course", id: "PADI Open Water Diver Course" }, foto: F("penyelam-biru"), hargaUsd: 445, hari: 3, selam: 6, alat: true, tampil: true, lokasi: { en: "Gam Island, Central Raja Ampat", id: "Pulau Gam, Raja Ampat Tengah" }, pembayaran: "" },
+      { id: "padi-tanpa-elearning", nama: { en: "PADI Open Water Diver Course without E-learning", id: "PADI Open Water Diver Course tanpa E-learning" }, foto: F("penyelam-biru"), hargaUsd: 442.22, hari: 3, selam: 6, alat: true, tampil: true, lokasi: { en: "Gam Island, Central Raja Ampat", id: "Pulau Gam, Raja Ampat Tengah" }, pembayaran: "" },
+      { id: "ssi-open-water", nama: { en: "SSI Open Water Diver Course", id: "SSI Open Water Diver Course" }, foto: F("penyelam-karang"), hargaUsd: 395, hari: 2, selam: 4, alat: true, tampil: true, lokasi: { en: "", id: "" }, pembayaran: "" },
+    ],
     tampil: true,
     label: { en: "Dive course", id: "Kursus selam" },
     judul: { en: "Your next step\n*starts underwater.*", id: "Langkah berikutnya\n*di bawah laut.*" },

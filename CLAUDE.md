@@ -84,3 +84,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 ## Pengujian
 
 - Dari lingkungan ini hanya Chromium Linux yang bisa dijalankan. Katakan terus terang bahwa Safari, iPhone, Android, Windows, dan Mac belum diperiksa.
+
+- Dive Course memiliki halaman `/[locale]/dive-course`. Empat kursus dan harga USD berasal dari gambar daftar pemilik (US$363, US$445, US$442,22, US$395), disimpan di `diveCourse.kursus`. Semua kartu dapat diedit melalui Beranda, termasuk harga desimal, foto, durasi, jumlah selam, lokasi, dan tautan pembayaran HTTPS. WhatsApp memakai Kontak dan pesan sesuai nama kursus. Tombol bayar nonaktif selama tautan kosong, tombol WhatsApp nonaktif selama nomor asli belum diisi. Belum ada integrasi API atau webhook Xendit.

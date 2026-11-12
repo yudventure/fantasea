@@ -137,5 +137,18 @@
   "liveaboard": {
     "lihatSemua": "See all liveaboards",
     "semua": "All liveaboards"
+  },
+  "course": {
+    "label": "Dive course",
+    "explore": "Explore dive courses",
+    "days": "{n} days",
+    "dives": "{n} dives",
+    "gear": "Gear included",
+    "perPerson": "Price per person",
+    "pay": "Pay now",
+    "ask": "Ask about this dive course",
+    "paymentPending": "Online payment coming soon.",
+    "whatsappPending": "WhatsApp contact coming soon.",
+    "message": "Hi Fantasea, I would like to ask about this dive course\n{course}"
   }
 }

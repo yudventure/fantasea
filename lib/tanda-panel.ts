@@ -30,7 +30,7 @@ const NAMA_KOLOM: Record<string, string> = {
   sorotan: "sorotan", wilayah: "wilayah", arus: "arus", catatan: "catatan", tentang: "tentang", alamat: "alamat", butir: "butir",
   kepala: "pembuka", edukasi: "edukasi", seo: "Google", kontak: "kontak", asal: "asal",
 };
-const LEWATI = new Set(["foto", "slug", "id", "warna", "tripId", "mulai", "selesai", "peta", "video", "instagram", "facebook", "tiktok", "youtube", "email", "whatsapp", "versiKontak", "tag", "kedalaman"]);
+const LEWATI = new Set(["foto", "slug", "id", "warna", "tripId", "mulai", "selesai", "peta", "video", "instagram", "facebook", "tiktok", "youtube", "email", "whatsapp", "versiKontak", "tag", "kedalaman", "pembayaran"]);
 
 /** Nama item daftar untuk letak, mis. nama trip, kalau ada. */
 function namaItem(v: unknown): string {
