@@ -135,6 +135,31 @@ export const KONTEN_BAWAAN: Konten = {
       lead: { en: "", id: "" },
     },
   },
+  about: {
+    label: { en: "About Fantasea", id: "Tentang Fantasea" },
+    judul: { en: "Live the *Fantasea.*", id: "Live the *Fantasea.*" },
+    lead: { en: "A personal approach to discovering Raja Ampat.", id: "Pendekatan personal untuk mengenal Raja Ampat." },
+    paragraf: {
+      en: ["Fantasea is a brand operated by Ekowisata Bahari Raja Ampat, an Indonesian registered company.", "Based in Waisai, Southwest Papua, we operate as a small dive travel agency offering scuba diving experiences with an emphasis on quality, consistency, and a personal approach.", "At Fantasea, we treat our guests like family, creating a relaxed, well-organized experience both in and out of the water, whether you’re diving Raja Ampat or exploring the local culture and excursions."],
+      id: ["Fantasea adalah merek yang dioperasikan oleh Ekowisata Bahari Raja Ampat, perusahaan yang terdaftar di Indonesia.", "Berbasis di Waisai, Papua Barat Daya, kami adalah agen perjalanan selam kecil yang menawarkan pengalaman scuba diving dengan mengutamakan kualitas, konsistensi, dan pendekatan personal.", "Di Fantasea, kami memperlakukan tamu seperti keluarga. Kami menciptakan pengalaman yang santai dan tertata, baik di dalam maupun di luar air, saat menyelam di Raja Ampat atau menjelajahi budaya lokal dan wisata sekitarnya."],
+    },
+    badan: "Ekowisata Bahari Raja Ampat", nib: "2510250035066",
+    registrasi: { en: "Indonesia", id: "Indonesia" },
+    lokasi: { en: "Raja Ampat, Southwest Papua, Indonesia", id: "Raja Ampat, Papua Barat Daya, Indonesia" },
+    kegiatan: { en: "Scuba diving courses & trips, marine excursions, adventure activities and accommodation in Raja Ampat", id: "Kursus dan trip scuba diving, wisata bahari, aktivitas petualangan, dan akomodasi di Raja Ampat" },
+  },
+  rute: {
+    label: { en: "Getting to Waisai", id: "Menuju Waisai" },
+    judul: { en: "How to\n*get here.*", id: "Cara menuju\n*Waisai.*" },
+    lead: { en: "Fantasea is based in Waisai, Raja Ampat. Fly to Sorong, then cross to Waisai by ferry and coordinate your arrival with our team.", id: "Fantasea berbasis di Waisai, Raja Ampat. Terbang ke Sorong, lanjutkan dengan feri ke Waisai, lalu koordinasikan kedatanganmu dengan tim kami." },
+    langkah: [
+      { judul: { en: "Fly to Sorong", id: "Terbang ke Sorong" }, isi: { en: "Arrive at Domine Eduard Osok Airport (SOQ), then continue to the ferry harbour in Sorong.", id: "Tiba di Bandara Domine Eduard Osok (SOQ), lalu lanjutkan ke pelabuhan feri di Sorong." } },
+      { judul: { en: "Ferry to Waisai", id: "Feri ke Waisai" }, isi: { en: "Take the Sorong–Waisai ferry across the Dampier Strait. Check the current schedule before making travel arrangements.", id: "Naik feri Sorong–Waisai melintasi Selat Dampier. Periksa jadwal terbaru sebelum menyusun perjalanan." } },
+      { judul: { en: "Meet us in Waisai", id: "Bertemu di Waisai" }, isi: { en: "Share your arrival details with our team so we can confirm the meeting point and your onward arrangements.", id: "Kabari detail kedatanganmu agar tim kami dapat memastikan titik pertemuan dan pengaturan perjalanan berikutnya." } },
+    ],
+    catatan: { en: "Ferry schedules and travel times can change with weather and local operations. Confirm your plans with our team before travelling.", id: "Jadwal feri dan waktu perjalanan dapat berubah sesuai cuaca dan operasional setempat. Konfirmasikan rencanamu dengan tim kami sebelum berangkat." },
+    tombol: { en: "Ask about the route on WhatsApp", id: "Tanyakan rute melalui WhatsApp" },
+  },
   ajakan: {
     judul: { en: "Live the *Fantasea.*", id: "Live the *Fantasea.*" },
     lead: { en: "Tell us your dates and we will plan the rest.", id: "Kabari tanggalmu, sisanya kami yang atur." },

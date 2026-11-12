@@ -154,5 +154,19 @@
   "activity": {
     "all": "Lihat semua aktivitas",
     "empty": "Hubungi kami untuk menanyakan ketersediaan dan pilihan aktivitas ini."
+  },
+  "about": {
+    "company": "Informasi perusahaan",
+    "legalEntity": "Badan usaha",
+    "registration": "Pendaftaran usaha",
+    "nib": "NIB",
+    "location": "Lokasi usaha",
+    "activities": "Kegiatan usaha",
+    "mapTitle": "Rute Sorong ke Waisai",
+    "mapDescription": "Ilustrasi rute Sorong ke Waisai melintasi Selat Dampier.",
+    "mapNote": "ILUSTRASI · TIDAK BERSKALA",
+    "waigeo": "Pulau Waigeo",
+    "strait": "Selat Dampier",
+    "routeMessage": "Halo Fantasea, saya ingin bertanya tentang perjalanan dari Sorong ke Waisai."
   }
 }

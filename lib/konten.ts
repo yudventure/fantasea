@@ -129,6 +129,8 @@ export interface Konten {
   jelajah: KepalaBagian & { kartu: Kartu[] };
   gerbang: KepalaBagian & { foto: FotoBerketerangan[]; video: string; tag: string; warna: WarnaTag };
   bagian: { trip: KepalaBagian; jadwal: KepalaBagian; titik: KepalaBagian; ulasan: KepalaBagian; faq: KepalaBagian };
+  about: KepalaBagian & { paragraf: DaftarTeks; badan: string; nib: string; registrasi: Teks; lokasi: Teks; kegiatan: Teks };
+  rute: KepalaBagian & { langkah: { judul: Teks; isi: Teks }[]; catatan: Teks; tombol: Teks };
   ajakan: { judul: Teks; lead: Teks; tombol: Teks };
   /**
    * Bagian Liveaboard di beranda, di antara open trip dan FAQ (permintaan
@@ -298,6 +300,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   gantiLama(kepalaLama, "judul", { en: "Every trip,\n*every reef.*", id: "Semua trip,\n*semua karang.*" }, b.halamanTrip.kepala.judul);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
+  const about = obj(o.about), rute = obj(o.rute);
   const diveCourse = obj(o.diveCourse);
   const liveaboard = obj(o.liveaboard);
   const halamanTrip = obj(o.halamanTrip), edukasi = obj(halamanTrip.edukasi), halamanHomestay = obj(o.halamanHomestay);
@@ -430,6 +433,12 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       trip: kepala(obj(bagian.trip), b.bagian.trip), jadwal: kepala(obj(bagian.jadwal), b.bagian.jadwal), titik: kepala(obj(bagian.titik), b.bagian.titik),
       ulasan: kepala(obj(bagian.ulasan), b.bagian.ulasan), faq: kepala(obj(bagian.faq), b.bagian.faq),
     },
+    about: { ...kepala(about, b.about), paragraf: "paragraf" in about ? daftarTeks(about.paragraf) : b.about.paragraf,
+      badan: "badan" in about ? str(about.badan, 180) : b.about.badan, nib: "nib" in about ? str(about.nib, 40) : b.about.nib,
+      registrasi: teks(about.registrasi, b.about.registrasi, 200), lokasi: teks(about.lokasi, b.about.lokasi, 300), kegiatan: teks(about.kegiatan, b.about.kegiatan, 600) },
+    rute: { ...kepala(rute, b.rute),
+      langkah: ("langkah" in rute ? arr(rute.langkah) : b.rute.langkah).slice(0, 3).map((v) => { const x = obj(v); return { judul: teks(x.judul, undefined, 120), isi: teks(x.isi, undefined, 600) }; }),
+      catatan: teks(rute.catatan, b.rute.catatan, 600), tombol: teks(rute.tombol, b.rute.tombol, 60) },
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
     diveCourse: {
       ...kepala(diveCourse, b.diveCourse),

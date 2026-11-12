@@ -6,8 +6,9 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Jelajah from "@/components/Jelajah";
 import Gerbang from "@/components/Gerbang";
+import { AboutFantasea, RuteWaisai } from "@/components/AboutFantasea";
 import Footer from "@/components/Footer";
-import { Ajakan, DaftarFaq, DaftarHomestay, KisiKategori, DaftarUlasan } from "@/components/Bagian";
+import { DaftarFaq, DaftarHomestay, KisiKategori, DaftarUlasan } from "@/components/Bagian";
 
 /**
  * Beranda. Tiga bagian pertama mengikuti referensi desain (hero kartu
@@ -20,8 +21,7 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const l: Locale = locale;
-  const { k, t, menu, pesan, waUmum } = await muatSitus(l);
-  const hrefTanya = waUmum || `/${l}#trip`;
+  const { k, menu, pesan } = await muatSitus(l);
 
   return (
     <>
@@ -39,7 +39,8 @@ export default async function Beranda({ params }: { params: Promise<{ locale: st
         <KisiKategori b={k.bagian.trip} kategori={k.kategori} l={l} adaLiveaboard={k.liveaboard.tampil} adaKursus={k.diveCourse.tampil} beranda />
         <DaftarUlasan b={k.bagian.ulasan} ulasan={k.ulasan} l={l} />
         <DaftarFaq b={k.bagian.faq} faq={k.faq} l={l} />
-        <Ajakan judul={tx(k.ajakan.judul, l)} lead={tx(k.ajakan.lead, l)} tombol={waUmum ? tx(k.ajakan.tombol, l) : t("ajakan.permintaan")} href={hrefTanya} l={l} />
+        <AboutFantasea k={k} l={l} />
+        <RuteWaisai k={k} l={l} />
       </main>
       <Footer k={k} l={l} menu={menu} />
     </>
