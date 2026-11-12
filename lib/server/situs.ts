@@ -16,8 +16,8 @@ export async function muatSitus(l: Locale) {
   // Empat menu utama, sama untuk header desktop, ponsel, dan footer.
   const menu: TautanMenu[] = [
     { href: awal, label: tx(k.menu.beranda, l) },
-    { href: `${awal}/homestay`, label: tx(k.menu.homestay, l) },
-    { href: `${awal}/activities`, label: tx(k.menu.trip, l) },
+    { href: `${awal}#homestay`, label: tx(k.menu.homestay, l) },
+    { href: `${awal}#trip`, label: tx(k.menu.trip, l) },
     { href: `${awal}/about`, label: tx(k.menu.about, l) },
   ];
   const pesan: TautanMenu = { href: `${awal}#trip`, label: tx(k.menu.pesan, l) };
