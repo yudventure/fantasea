@@ -42,10 +42,12 @@ export const KONTEN_BAWAAN: Konten = {
     },
   },
   menu: {
+    beranda: { en: "Home", id: "Beranda" },
+    about: { en: "About", id: "About" },
     trip: { en: "Activities", id: "Aktivitas" },
     liveaboard: { en: "Liveaboard", id: "Liveaboard" },
     jadwal: { en: "Open trips", id: "Open trip" },
-    homestay: { en: "Homestays", id: "Homestay" },
+    homestay: { en: "Accommodation", id: "Akomodasi" },
     titik: { en: "Dive sites", id: "Titik selam" },
     ulasan: { en: "Stories", id: "Cerita" },
     faq: { en: "FAQ", id: "FAQ" },
