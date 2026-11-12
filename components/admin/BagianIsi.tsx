@@ -101,14 +101,27 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
         ))}
       </KartuPanel>
 
-      <KartuPanel judul="Ajakan di bawah" keterangan="Panel navy sebelum footer. Tombolnya membuka WhatsApp bila nomor sudah diisi, kalau belum menuju daftar trip."
-        lipat ringkas={`Judul ${ringkasTeks(k.ajakan.judul)}, tombol ${ringkasTeks(k.ajakan.tombol, 30)}`}>
-        <KolomDua label="Judul" hint={HINT_JUDUL} value={k.ajakan.judul} onChange={(v) => ubah((d) => { d.ajakan.judul = v; })} maks={200} />
-        <KolomDua label="Kalimat" value={k.ajakan.lead} onChange={(v) => ubah((d) => { d.ajakan.lead = v; })} panjang maks={400} />
-        <KolomDua label="Tombol" value={k.ajakan.tombol} onChange={(v) => ubah((d) => { d.ajakan.tombol = v; })} maks={40} />
+      <KartuPanel id="about" judul="About Fantasea" keterangan="Profil dan informasi perusahaan di seksi About beranda serta halaman About.">
+        <KepalaEditor b={k.about} set={(f) => ubah((d) => f(d.about))} />
+        <KolomDaftar label="Paragraf profil" value={k.about.paragraf} onChange={(v) => ubah((d) => { d.about.paragraf = v; })} />
+        <KolomTeks label="Badan usaha" value={k.about.badan} onChange={(v) => ubah((d) => { d.about.badan = v; })} maks={180} />
+        <KolomTeks label="NIB" value={k.about.nib} onChange={(v) => ubah((d) => { d.about.nib = v; })} maks={40} />
+        <KolomDua label="Pendaftaran usaha" value={k.about.registrasi} onChange={(v) => ubah((d) => { d.about.registrasi = v; })} maks={200} />
+        <KolomDua label="Lokasi usaha" value={k.about.lokasi} onChange={(v) => ubah((d) => { d.about.lokasi = v; })} maks={300} />
+        <KolomDua label="Kegiatan usaha" value={k.about.kegiatan} onChange={(v) => ubah((d) => { d.about.kegiatan = v; })} panjang maks={600} />
       </KartuPanel>
 
-      <KartuPanel judul="Menu dan footer" keterangan="Empat menu utama di header dan footer. Kalimat tentang Fantasea dipakai di footer dan halaman About."
+      <KartuPanel id="lokasi" judul="Peta dan cara menuju Waisai" keterangan="Peta ilustrasi Sorong ke Waisai dan tiga langkah perjalanan. Tombol pertanyaan memakai nomor WhatsApp di panel Kontak.">
+        <KepalaEditor b={k.rute} set={(f) => ubah((d) => f(d.rute))} />
+        {k.rute.langkah.map((x, i) => <div key={i} className="grid gap-4 rounded-card border border-line bg-soft p-4">
+          <KolomDua label={`Judul langkah ${i + 1}`} value={x.judul} onChange={(v) => ubah((d) => { d.rute.langkah[i].judul = v; })} maks={120} />
+          <KolomDua label={`Isi langkah ${i + 1}`} value={x.isi} onChange={(v) => ubah((d) => { d.rute.langkah[i].isi = v; })} panjang maks={600} />
+        </div>)}
+        <KolomDua label="Catatan perjalanan" value={k.rute.catatan} onChange={(v) => ubah((d) => { d.rute.catatan = v; })} panjang maks={600} />
+        <KolomDua label="Tombol WhatsApp rute" value={k.rute.tombol} onChange={(v) => ubah((d) => { d.rute.tombol = v; })} maks={60} />
+      </KartuPanel>
+
+      <KartuPanel judul="Menu dan footer" keterangan="Empat menu utama di header dan footer. Kalimat tentang Fantasea di bawah dipakai di footer. Profil lengkap diatur pada kartu About Fantasea."
         lipat ringkas={`Menu ${[k.menu.beranda, k.menu.homestay, k.menu.trip, k.menu.about].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
           {([["beranda", "Menu beranda"], ["homestay", "Menu akomodasi"], ["trip", "Menu aktivitas"], ["about", "Menu About"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (

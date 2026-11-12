@@ -33,7 +33,7 @@ const KUNCI_TAB: Partial<Record<IdTab, (keyof Konten)[]>> = {
   jadwal: ["jadwal"],
   homestay: ["homestay", "halamanHomestay"],
   titik: ["titik"],
-  beranda: ["diveCourse", "hero", "jelajah", "gerbang", "bagian", "ajakan", "menu", "footer"],
+  beranda: ["about", "rute", "diveCourse", "hero", "jelajah", "gerbang", "bagian", "ajakan", "menu", "footer"],
   ulasan: ["ulasan", "faq"],
   kontak: ["situs"],
 };

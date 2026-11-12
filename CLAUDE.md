@@ -94,3 +94,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Menu utama hanya Beranda, Akomodasi, Aktivitas, dan About, konsisten di desktop, ponsel, dan footer. Label Inggris Home, Accommodation, Activities, About. Tujuan `/[locale]`, `/homestay`, `/activities`, `/about`. Label diatur di Beranda, Menu dan footer. Halaman About memakai teks tentang Fantasea dari footer, foto pertama galeri, dan FAQ yang sudah ada agar tidak menambah klaim bisnis.
 
 - Menu Akomodasi dan Aktivitas menuju seksi beranda, masing-masing `/[locale]#homestay` dan `/[locale]#trip`, termasuk dari halaman lain. Berlaku untuk header desktop, menu ponsel, dan footer. Halaman katalog tetap diakses melalui kartu dan tombol lihat semua.
+
+- Panel Live the Fantasea di beranda diganti seksi About (`about`), profil dan data legal diberikan pemilik, NIB 2510250035066. Menu About menuju `/[locale]#about`. Peta rute (`rute`) adalah ilustrasi Sorong–Waisai, bukan peta navigasi, tanpa jadwal pasti atau klaim antar jemput. Profil, legal, dan teks rute dapat diubah di Beranda dan dipakai bersama halaman `/about`. Teks ajakan lama tetap tersedia untuk halaman lain.

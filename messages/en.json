@@ -154,5 +154,19 @@
   "activity": {
     "all": "See all activities",
     "empty": "Contact us to ask about availability and options for this activity."
+  },
+  "about": {
+    "company": "Company details",
+    "legalEntity": "Legal entity",
+    "registration": "Business registration",
+    "nib": "NIB",
+    "location": "Business location",
+    "activities": "Business activities",
+    "mapTitle": "Sorong to Waisai route",
+    "mapDescription": "Illustrated route from Sorong to Waisai across the Dampier Strait.",
+    "mapNote": "ILLUSTRATION · NOT TO SCALE",
+    "waigeo": "Waigeo Island",
+    "strait": "Dampier Strait",
+    "routeMessage": "Hi Fantasea, I would like to ask about travelling from Sorong to Waisai."
   }
 }

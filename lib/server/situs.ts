@@ -18,7 +18,7 @@ export async function muatSitus(l: Locale) {
     { href: awal, label: tx(k.menu.beranda, l) },
     { href: `${awal}#homestay`, label: tx(k.menu.homestay, l) },
     { href: `${awal}#trip`, label: tx(k.menu.trip, l) },
-    { href: `${awal}/about`, label: tx(k.menu.about, l) },
+    { href: `${awal}#about`, label: tx(k.menu.about, l) },
   ];
   const pesan: TautanMenu = { href: `${awal}#trip`, label: tx(k.menu.pesan, l) };
   // Nomor contoh tidak dipakai tombol ajakan, supaya tamu tidak diarahkan ke nomor yang tidak ada.
