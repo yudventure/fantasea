@@ -72,14 +72,15 @@ export function HargaTrip({ trip, l, besar = false, sempit = false, tengah = fal
  * keterangan, lalu harga per orang. Seluruh kartu bisa diketuk. `lebar` untuk
  * kartu yang melebar mendatar, `sempit` untuk kartu dua kolom di ponsel.
  */
-function KartuFoto({ href, sampul, pil, nama, meta, sorot, harga, lebar = false, sempit = false }: {
-  href: string; sampul?: string; pil?: React.ReactNode; nama: string; meta: React.ReactNode[]; sorot?: string; harga: React.ReactNode; lebar?: boolean; sempit?: boolean;
+function KartuFoto({ href, sampul, pil, nama, meta, sorot, harga, lebar = false, sempit = false, sampulKosong }: {
+  href: string; sampul?: string; pil?: React.ReactNode; nama: string; meta: React.ReactNode[]; sorot?: string; harga: React.ReactNode; lebar?: boolean; sempit?: boolean; sampulKosong?: React.ReactNode;
 }) {
   const hp = (kelas: string) => (sempit ? kelas : "");
   return (
     <article className={`group relative flex h-full overflow-hidden rounded-card bg-white shadow-card transition hover:-translate-y-1 hover:shadow-lift ${lebar ? "flex-col md:flex-row" : "flex-col"}`}>
       <div className={`relative flex-none overflow-hidden bg-kabut ${lebar ? "aspect-[16/10] md:aspect-auto md:min-h-[300px] md:w-1/2" : `aspect-[16/10] ${hp("max-sm:aspect-[4/3]")}`}`}>
         {sampul && <Image src={sampul} alt="" fill sizes={sempit ? "(max-width: 640px) 50vw, 420px" : "(max-width: 768px) 100vw, 480px"} unoptimized={unopt(sampul)} className="object-cover transition duration-700 group-hover:scale-[1.04]" />}
+        {!sampul && sampulKosong}
         {pil && <span className={`pill pill-terang absolute left-3 top-3 max-w-[calc(100%-24px)] bg-white/95 ${hp("max-sm:hidden")}`}>{pil}</span>}
       </div>
       <div className={`flex flex-1 flex-col items-center px-5 pb-6 pt-5 text-center sm:px-6 ${lebar ? "md:justify-center md:px-10" : ""} ${hp("max-sm:px-3 max-sm:pb-4 max-sm:pt-3.5")}`}>
@@ -256,16 +257,22 @@ export function DaftarEdukasi({ b, butir, l }: { b: KepalaBagian; butir: Edukasi
 
 export function HargaHomestay({ h, l, besar = false, sempit = false, tengah = false }: { h: Homestay; l: Locale; besar?: boolean; sempit?: boolean; tengah?: boolean }) {
   const t = buatT(getMessages(l));
-  return <HargaMulai harga={h.hargaMulai} l={l} besar={besar} sempit={sempit} tengah={tengah} label={{ dari: t("homestay.dari"), per: t("homestay.perMalam"), tanya: t("homestay.tanyaHarga") }} />;
+  if (!h.hargaMulai) return <span className="font-display text-[24px] text-navy">{t("homestay.tanyaHarga")}</span>;
+  const montant = new Intl.NumberFormat(l === "id" ? "id-ID" : "en-US", { style: "currency", currency: h.mataUang ?? "IDR", currencyDisplay: "code", maximumFractionDigits: h.mataUang === "USD" ? 2 : 0 }).format(h.hargaMulai);
+  return <span className={`grid leading-none ${tengah ? "justify-items-center text-center" : ""}`}>
+    <span className={`font-display text-navy ${besar ? "text-[36px]" : "text-[26px]"} ${sempit ? "max-sm:text-[20px]" : ""}`}>{montant}</span>
+    <span className="mt-2 text-[12.5px] font-semibold text-ink2">{t("homestay.priceBasis", { n: h.hargaUntuk ?? 1 })}</span>
+  </span>;
 }
 
 /** Kartu homestay, rupanya sama dengan kartu trip (permintaan pemilik, November 2026). */
 export function KartuHomestay({ h, l, lebar = false, sempit = false }: { h: Homestay; l: Locale; lebar?: boolean; sempit?: boolean }) {
+  const t = buatT(getMessages(l));
   const lokasi = tx(h.lokasi, l);
   const fasilitas = txDaftar(h.fasilitas, l).slice(0, 3).join(" · ");
   return (
-    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)}
-      meta={lokasi ? [<Meta key="l" ikon={<IkonPin size={16} className="flex-none text-tanda" />} teks={lokasi} />] : []} sorot={fasilitas}
+    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)} sampulKosong={<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-buih p-5"><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className="h-auto w-28 opacity-70" /><span className="text-center text-xs font-semibold text-ink2">{t("homestay.photoPending")}</span></div>}
+      meta={lokasi ? [<Meta key="l" ikon={<IkonPin size={16} className="flex-none text-tanda" />} teks={lokasi} />] : []} sorot={[h.kapasitas ? t("homestay.capacity", { n: h.kapasitas }) : "", fasilitas].filter(Boolean).join(" · ")}
       harga={<HargaHomestay h={h} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
 }
@@ -282,7 +289,7 @@ export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Home
           <TombolSemua href={`/${l}/homestay`} label={t("homestay.lihatSemua")} />
         </div>
       )}
-      <KisiKartu semuaUkuran={beranda} kelas={KISI_TIGA} {...kisi(tampil, (h, p) => <KartuHomestay h={h} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+      <KisiKartu semuaUkuran={beranda} kelas="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" kartu={tampil.map((h) => <KartuHomestay key={h.id} h={h} l={l} />)} kelasKartu={tampil.map(() => "")} />
     </div>
   );
 }

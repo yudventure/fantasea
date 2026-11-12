@@ -55,7 +55,10 @@
     "fasilitas": "What you get",
     "lainnya": "Other homestays",
     "catatanContoh": "Room type, special needs, dive plans",
-    "lihatSemua": "See all homestays"
+    "lihatSemua": "See all homestays",
+    "priceBasis": "Price for 1 night / {n} guests",
+    "capacity": "Max occupancy {n} guests",
+    "photoPending": "Property photo coming soon"
   },
   "titik": {
     "kedalaman": "Depth",

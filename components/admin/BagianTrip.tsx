@@ -230,7 +230,7 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-2 text-[16px] font-extrabold text-navy">{tx(h.nama, "id") || "Tanpa nama"}<TandaContoh ada={h.contoh} />{!h.tampil && <span className="rounded-pill bg-[#F1F3F5] px-2 py-0.5 text-[11.5px] font-extrabold text-ink2">Disembunyikan</span>}</p>
-                <p className="text-[13px] text-ink2">{tx(h.lokasi, "id") || "Lokasi belum diisi"} · {h.hargaMulai ? `mulai ${rupiah(h.hargaMulai, "id")} per malam` : "tanya harga"} · /homestay/{h.slug}</p>
+                <p className="text-[13px] text-ink2">{tx(h.lokasi, "id") || "Lokasi belum diisi"} · {h.hargaMulai ? `${new Intl.NumberFormat("id-ID", { style: "currency", currency: h.mataUang ?? "IDR" }).format(h.hargaMulai)} per malam / ${h.hargaUntuk ?? 1} tamu` : "tanya harga"} · /homestay/{h.slug}</p>
               </div>
               <Geser i={i} n={k.homestay.length} onGeser={(a) => ubah((d) => geserDaftar(d.homestay, i, a))} />
               <button type="button" onClick={() => setBuka(buka === h.id ? null : h.id)} aria-expanded={buka === h.id} className="rounded-pill bg-buih px-4 py-2 text-[13.5px] font-bold text-navy hover:bg-line">{buka === h.id ? "Tutup" : "Ubah"}</button>
@@ -241,7 +241,12 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
                 <KolomDua label="Nama homestay" value={h.nama} onChange={(v) => ubahH(h.id, (x) => { x.nama = v; })} maks={120} />
                 <div className="grid gap-4 md:grid-cols-2">
                   <KolomTeks label="Alamat halaman" value={h.slug} onChange={(v) => ubahH(h.id, (x) => { x.slug = slugDari(v) || x.slug; })} hint={`Tampil sebagai /en/homestay/${h.slug}`} jenis="tautan" maks={60} />
-                  <KolomAngka label="Harga mulai per orang per malam" hint="Rupiah. Isi 0 untuk menampilkan Tanya harga." awalan="Rp" value={h.hargaMulai} onChange={(v) => ubahH(h.id, (x) => { x.hargaMulai = v; })} />
+                  <label className="grid gap-2 text-sm font-bold text-navy">Harga per malam
+                    <input className="kolom" type="number" min="0" max="100000000000" step="0.01" value={h.hargaMulai} onChange={(e) => { const n = Number(e.target.value); ubahH(h.id, (x) => { x.hargaMulai = Math.max(0, n); }); }} />
+                  </label>
+                  <Dropdown label="Mata uang" kosong="Pilih mata uang" value={h.mataUang ?? "IDR"} onChange={(v) => ubahH(h.id, (x) => { x.mataUang = v === "USD" ? "USD" : "IDR"; })} pilihan={[{ nilai: "IDR", label: "IDR, Rupiah" }, { nilai: "USD", label: "USD, Dolar AS" }]} />
+                  <KolomAngka label="Harga untuk jumlah tamu" min={1} maks={100} value={h.hargaUntuk ?? 1} onChange={(v) => ubahH(h.id, (x) => { x.hargaUntuk = v; })} />
+                  <KolomAngka label="Kapasitas maksimal penginapan" hint="Kapasitas keseluruhan, bukan informasi ketersediaan kamar." maks={10000} value={h.kapasitas ?? 0} onChange={(v) => ubahH(h.id, (x) => { x.kapasitas = v; })} />
                 </div>
                 <KolomDua label="Lokasi" hint="Pulau atau kampung, contoh Pulau Kri, Selat Dampier." value={h.lokasi} onChange={(v) => ubahH(h.id, (x) => { x.lokasi = v; })} maks={120} />
                 <KolomDua label="Ringkasan di kartu" value={h.ringkas} onChange={(v) => ubahH(h.id, (x) => { x.ringkas = v; })} panjang maks={300} />

@@ -71,8 +71,11 @@ export interface Homestay {
   /** Paragraf dipisah baris kosong. */
   deskripsi: Teks;
   fasilitas: DaftarTeks;
-  /** Harga mulai per orang per malam dalam rupiah. 0 berarti tanya harga. */
+  /** Harga per malam untuk hargaUntuk tamu, dalam mataUang. Kolom lama default IDR / 1 tamu. */
   hargaMulai: number;
+  mataUang?: "IDR" | "USD";
+  hargaUntuk?: number;
+  kapasitas?: number;
   /** Foto pertama jadi sampul. */
   foto: string[];
   tampil: boolean;
@@ -358,7 +361,15 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   }
   const idTrip = new Set(trip.map((t) => t.id));
 
-  const homestay: Homestay[] = ("homestay" in o ? arr(o.homestay) : b.homestay).map((h) => {
+  let sumberHomestay = "homestay" in o ? arr(o.homestay) : b.homestay;
+  const contohLama = new Set(["h-kri", "h-arborek", "h-mansuar"]);
+  if (sumberHomestay.some((h) => obj(h).contoh === true && contohLama.has(str(obj(h).id)))) {
+    sumberHomestay = sumberHomestay.filter((h) => !(obj(h).contoh === true && contohLama.has(str(obj(h).id))));
+    const ada = new Set(sumberHomestay.map((h) => str(obj(h).id)));
+    const alamat = new Set(sumberHomestay.map((h) => str(obj(h).slug)));
+    sumberHomestay = [...sumberHomestay, ...b.homestay.filter((h) => !ada.has(h.id) && !alamat.has(h.slug))];
+  }
+  const homestay: Homestay[] = sumberHomestay.map((h) => {
     const x = obj(h);
     const nama = teks(x.nama, undefined, 120);
     return {
@@ -369,7 +380,8 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ringkas: teks(x.ringkas, undefined, 300),
       deskripsi: teks(x.deskripsi, undefined, 6000),
       fasilitas: daftarTeks(x.fasilitas),
-      hargaMulai: num(x.hargaMulai, 0, 1e11),
+      hargaMulai: Math.round(Math.min(1e11, Math.max(0, Number(x.hargaMulai) || 0)) * 100) / 100,
+      mataUang: x.mataUang === "USD" ? "USD" : "IDR", hargaUntuk: num(x.hargaUntuk, 1, 100), kapasitas: num(x.kapasitas, 0, 10000),
       foto: arr(x.foto).map(fotoSah).filter(Boolean).slice(0, MAKS_FOTO_TRIP),
       tampil: bool(x.tampil),
       ...(x.contoh === true ? { contoh: true } : {}),

@@ -497,75 +497,22 @@ export const KONTEN_BAWAAN: Konten = {
     { id: "j-4", tripId: "t-escape", mulai: "2027-01-16", selesai: "2027-01-19", kursi: 8, terisi: 2, catatan: { en: "", id: "" }, contoh: true },
     { id: "j-5", tripId: "t-piaynemo", mulai: "2027-02-06", selesai: "2027-02-11", kursi: 8, terisi: 3, catatan: { en: "", id: "" }, contoh: true },
   ],
-  // Homestay contoh, tanpa harga (Tanya harga). Nama dan isinya umum, bukan
-  // homestay tertentu, dan fotonya ilustrasi. Ganti dengan homestay mitra asli.
+  // Daftar, kapasitas, dan harga USD per malam untuk dua orang dari gambar pemilik.
+  // Foto asli ditambahkan melalui panel Homestay, tanpa memakai ilustrasi sebagai foto properti.
   homestay: [
-    {
-      id: "h-kri",
-      slug: "homestay-pulau-kri",
-      nama: { en: "Kri Island homestay", id: "Homestay Pulau Kri" },
-      lokasi: { en: "Kri Island, Dampier Strait", id: "Pulau Kri, Selat Dampier" },
-      ringkas: {
-        en: "Wooden bungalows on a white sand beach, a short boat ride from the Dampier Strait dive sites.",
-        id: "Bungalo kayu di pantai pasir putih, dekat dengan titik selam Selat Dampier.",
-      },
-      deskripsi: {
-        en: "Simple wooden bungalows a few steps from the water, run by a local family. Wake up to the sound of the reef and snorkel straight from the beach.\n\nMeals are cooked by the family and served together. We arrange the boat transfer from Waisai and plan your dives around your stay.",
-        id: "Bungalo kayu sederhana beberapa langkah dari air, dikelola keluarga setempat. Bangun dengan suara ombak dan snorkeling langsung dari pantai.\n\nMakanan dimasak keluarga pemilik dan disantap bersama. Kami atur kapal dari Waisai dan merencanakan titik selam sesuai masa menginapmu.",
-      },
-      fasilitas: {
-        en: ["Beachfront bungalow", "Three meals a day", "Mosquito net", "Snorkeling from the beach"],
-        id: ["Bungalo tepi pantai", "Makan tiga kali sehari", "Kelambu", "Snorkeling dari pantai"],
-      },
-      hargaMulai: 0,
-      foto: [F("pantai-karst"), F("snorkel-laguna"), F("penyu-karang")],
-      tampil: true,
-      contoh: true,
-    },
-    {
-      id: "h-arborek",
-      slug: "homestay-kampung-arborek",
-      nama: { en: "Arborek village homestay", id: "Homestay Kampung Arborek" },
-      lokasi: { en: "Arborek Village, Dampier Strait", id: "Kampung Arborek, Selat Dampier" },
-      ringkas: {
-        en: "Stay with a local family in a small island village, with the reef right below the jetty.",
-        id: "Menginap bersama keluarga setempat di kampung pulau kecil, karangnya tepat di bawah dermaga.",
-      },
-      deskripsi: {
-        en: "A homestay inside a small island village, where days follow the rhythm of the community. Children play on the jetty and fish circle the pillars below.\n\nYour stay supports the family directly. Ask us about joining village life, from cooking to weaving.",
-        id: "Homestay di dalam kampung pulau kecil, hari berjalan mengikuti irama warga. Anak-anak bermain di dermaga dan ikan berputar di tiang di bawahnya.\n\nMenginap di sini langsung membantu keluarga pemilik. Tanyakan kepada kami untuk ikut kegiatan kampung, dari memasak sampai menganyam.",
-      },
-      fasilitas: {
-        en: ["Village stay", "Three meals a day", "Mosquito net", "Reef by the jetty"],
-        id: ["Menginap di kampung", "Makan tiga kali sehari", "Kelambu", "Karang di dekat dermaga"],
-      },
-      hargaMulai: 0,
-      foto: [F("speedboat-laguna"), F("ikan-badut"), F("snorkel-karst")],
-      tampil: true,
-      contoh: true,
-    },
-    {
-      id: "h-mansuar",
-      slug: "homestay-pulau-mansuar",
-      nama: { en: "Mansuar Island homestay", id: "Homestay Pulau Mansuar" },
-      lokasi: { en: "Mansuar Island, Dampier Strait", id: "Pulau Mansuar, Selat Dampier" },
-      ringkas: {
-        en: "Quiet bungalows at the edge of the water, with sunsets behind the karst islands.",
-        id: "Bungalo tenang di tepi air, dengan matahari terbenam di balik pulau karst.",
-      },
-      deskripsi: {
-        en: "Bungalows on stilts over the shallow reef, away from the busier islands. Evenings are for sunsets and stars, mornings for the first dive.\n\nElectricity usually runs in the evening from a generator. Bring a power bank and leave the rest to the island.",
-        id: "Bungalo panggung di atas karang dangkal, jauh dari pulau yang lebih ramai. Sore untuk matahari terbenam dan bintang, pagi untuk selam pertama.\n\nListrik biasanya menyala malam hari dari genset. Bawa power bank, sisanya serahkan kepada pulau.",
-      },
-      fasilitas: {
-        en: ["Bungalow over the water", "Three meals a day", "Evening electricity", "Sunset view"],
-        id: ["Bungalo di atas air", "Makan tiga kali sehari", "Listrik malam hari", "Pemandangan senja"],
-      },
-      hargaMulai: 0,
-      foto: [F("senja-karst"), F("snorkel-karst"), F("pantai-karst")],
-      tampil: true,
-      contoh: true,
-    },
+    {"id": "h-corepen", "slug": "corepen", "nama": {"en": "Corepen Dive Homestay", "id": "Corepen Dive Homestay"}, "lokasi": {"en": "Gam Island", "id": "Pulau Gam"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 72, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 14, "foto": [], "tampil": true},
+    {"id": "h-dapunlol", "slug": "dapunlol", "nama": {"en": "Dapunlol Homestay", "id": "Dapunlol Homestay"}, "lokasi": {"en": "Misool", "id": "Misool"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 192, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 10, "foto": [], "tampil": true},
+    {"id": "h-kalma", "slug": "kalma", "nama": {"en": "Kalma Homestay", "id": "Kalma Homestay"}, "lokasi": {"en": "Mansuar Island", "id": "Pulau Mansuar"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 90, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 8, "foto": [], "tampil": true},
+    {"id": "h-korain", "slug": "korain", "nama": {"en": "Korain Homestay", "id": "Korain Homestay"}, "lokasi": {"en": "Friwen Island", "id": "Pulau Friwen"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 56, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 6, "foto": [], "tampil": true},
+    {"id": "h-kordiris", "slug": "kordiris", "nama": {"en": "Kordiris Dive Homestay", "id": "Kordiris Dive Homestay"}, "lokasi": {"en": "Gam Island", "id": "Pulau Gam"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 50, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 22, "foto": [], "tampil": true},
+    {"id": "h-lumba-lumba", "slug": "lumba-lumba", "nama": {"en": "Lumba-Lumba Homestay", "id": "Lumba-Lumba Homestay"}, "lokasi": {"en": "Kri Island", "id": "Pulau Kri"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 74, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 8, "foto": [], "tampil": true},
+    {"id": "h-mandum", "slug": "mandum", "nama": {"en": "Mandum Homestay", "id": "Mandum Homestay"}, "lokasi": {"en": "Saporkren", "id": "Saporkren"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 56, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 10, "foto": [], "tampil": true},
+    {"id": "h-nut-tonton", "slug": "nut-tonton", "nama": {"en": "Nut Tonton Homestay", "id": "Nut Tonton Homestay"}, "lokasi": {"en": "Misool", "id": "Misool"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 190, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 12, "foto": [], "tampil": true},
+    {"id": "h-panun", "slug": "panun", "nama": {"en": "Panun Private Island", "id": "Panun Private Island"}, "lokasi": {"en": "Misool", "id": "Misool"}, "ringkas": {"en": "Bungalow room with attached bathroom, 24-hour AC and Starlink WiFi.", "id": "Kamar bungalo dengan kamar mandi dalam, AC 24 jam, dan WiFi Starlink."}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": ["Attached bathroom", "24-hour AC", "Starlink WiFi"], "id": ["Kamar mandi dalam", "AC 24 jam", "WiFi Starlink"]}, "hargaMulai": 200, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 20, "foto": [], "tampil": true},
+    {"id": "h-pesona-papua", "slug": "pesona-papua", "nama": {"en": "Pesona Papua Homestay", "id": "Pesona Papua Homestay"}, "lokasi": {"en": "Sawinggrai", "id": "Sawinggrai"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 60, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 6, "foto": [], "tampil": true},
+    {"id": "h-wainay", "slug": "wainay", "nama": {"en": "Wainay Homestay", "id": "Wainay Homestay"}, "lokasi": {"en": "Gam Island", "id": "Pulau Gam"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 56, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 12, "foto": [], "tampil": true},
+    {"id": "h-warahnus", "slug": "warahnus", "nama": {"en": "Warahnus Dive Homestay", "id": "Warahnus Dive Homestay"}, "lokasi": {"en": "Kri Island", "id": "Pulau Kri"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 106, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 12, "foto": [], "tampil": true},
+    {"id": "h-yenwar", "slug": "yenwar", "nama": {"en": "Yenwar Homestay", "id": "Yenwar Homestay"}, "lokasi": {"en": "Gam Island", "id": "Pulau Gam"}, "ringkas": {"en": "", "id": ""}, "deskripsi": {"en": "", "id": ""}, "fasilitas": {"en": [], "id": []}, "hargaMulai": 56, "mataUang": "USD", "hargaUntuk": 2, "kapasitas": 6, "foto": [], "tampil": true},
   ],
   titik: [
     {

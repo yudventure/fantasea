@@ -55,7 +55,10 @@
     "fasilitas": "Yang kamu dapat",
     "lainnya": "Homestay lainnya",
     "catatanContoh": "Jenis kamar, kebutuhan khusus, rencana selam",
-    "lihatSemua": "Lihat semua homestay"
+    "lihatSemua": "Lihat semua homestay",
+    "priceBasis": "Harga 1 malam / {n} tamu",
+    "capacity": "Kapasitas maksimal {n} tamu",
+    "photoPending": "Foto penginapan segera tersedia"
   },
   "titik": {
     "kedalaman": "Kedalaman",
