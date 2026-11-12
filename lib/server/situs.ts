@@ -20,6 +20,7 @@ export async function muatSitus(l: Locale) {
   const menu: TautanMenu[] = [
     ...(k.homestay.some((h) => h.tampil) ? [{ href: `${awal}/homestay`, label: tx(k.menu.homestay, l) }] : []),
     { href: `${awal}/trip`, label: tx(k.menu.trip, l) },
+    ...(k.diveCourse.tampil ? [{ href: `${awal}#dive-course`, label: tx(k.diveCourse.label, l) }] : []),
     ...(k.liveaboard.tampil ? [{ href: `${awal}/liveaboard`, label: tx(k.menu.liveaboard, l) }] : []),
     ...(adaUlasan ? [{ href: `${awal}#ulasan`, label: tx(k.menu.ulasan, l) }] : []),
     { href: `${awal}#faq`, label: tx(k.menu.faq, l) },

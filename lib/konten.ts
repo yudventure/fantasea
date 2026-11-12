@@ -131,6 +131,7 @@ export interface Konten {
    * pemilik, November 2026). Trip berkategori liveaboard tampil di sini
    * sebagai kartu, dan tidak diulang di daftar trip beranda.
    */
+  diveCourse: KepalaBagian & { tampil: boolean; foto: string; tombol: Teks };
   liveaboard: KepalaBagian & { tampil: boolean; foto: string; tag: string; warna: WarnaTag; butir: DaftarTeks; tombol: Teks };
   /**
    * Halaman sendiri untuk trip dan homestay (permintaan pemilik, November
@@ -281,6 +282,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const o = obj(v);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
+  const diveCourse = obj(o.diveCourse);
   const liveaboard = obj(o.liveaboard);
   const halamanTrip = obj(o.halamanTrip), edukasi = obj(halamanTrip.edukasi), halamanHomestay = obj(o.halamanHomestay);
   const halamanLiveaboard = obj(o.halamanLiveaboard), edukasiLa = obj(halamanLiveaboard.edukasi);
@@ -412,6 +414,12 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ulasan: kepala(obj(bagian.ulasan), b.bagian.ulasan), faq: kepala(obj(bagian.faq), b.bagian.faq),
     },
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
+    diveCourse: {
+      ...kepala(diveCourse, b.diveCourse),
+      tampil: bool(diveCourse.tampil, b.diveCourse.tampil),
+      foto: "foto" in diveCourse ? fotoSah(diveCourse.foto) : b.diveCourse.foto,
+      tombol: teks(diveCourse.tombol, b.diveCourse.tombol, 40),
+    },
     liveaboard: {
       ...kepala(liveaboard, b.liveaboard),
       tampil: bool(liveaboard.tampil, b.liveaboard.tampil),

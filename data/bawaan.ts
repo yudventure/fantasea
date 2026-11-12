@@ -139,6 +139,14 @@ export const KONTEN_BAWAAN: Konten = {
     tombol: { en: "Chat on WhatsApp", id: "Chat lewat WhatsApp" },
   },
   // Bagian Liveaboard di beranda (permintaan pemilik, November 2026).
+  diveCourse: {
+    tampil: true,
+    label: { en: "Dive course", id: "Kursus selam" },
+    judul: { en: "Your next step\n*starts underwater.*", id: "Langkah berikutnya\n*di bawah laut.*" },
+    lead: { en: "New to diving or ready to keep learning? Tell us about your experience and what you would like to learn. Explore diving courses and specialty courses for your next step.", id: "Baru mulai menyelam atau ingin belajar lebih jauh? Ceritakan pengalamanmu dan apa yang ingin kamu pelajari. Jelajahi kursus selam dan kursus spesialti untuk langkah berikutnya." },
+    foto: F("penyelam-ok"),
+    tombol: { en: "Ask about dive courses", id: "Tanya kursus selam" },
+  },
   liveaboard: {
     tampil: true,
     label: { en: "Liveaboard", id: "Liveaboard" },
