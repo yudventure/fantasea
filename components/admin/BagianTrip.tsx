@@ -218,7 +218,7 @@ export function BagianHomestay({ k, ubah }: { k: Konten; ubah: Ubah }) {
 
   return (
     <div className="grid gap-6">
-    <KartuPanel judul="Halaman Homestay" keterangan="Pembuka halaman /homestay yang memuat semua homestay. Di beranda homestay tampil paling banyak 6 dengan tombol Lihat semua homestay di atasnya."
+    <KartuPanel judul="Halaman Homestay" keterangan="Pembuka halaman /homestay yang memuat semua homestay. Di beranda homestay tampil paling banyak 4 kartu, dua kolom di ponsel, dengan tombol Lihat semua homestay di atasnya."
       lipat ringkas={`Judul ${ringkasTeks(k.halamanHomestay.kepala.judul)}`}>
       <KepalaEditor b={k.halamanHomestay.kepala} set={(f) => ubah((d) => f(d.halamanHomestay.kepala))} />
     </KartuPanel>

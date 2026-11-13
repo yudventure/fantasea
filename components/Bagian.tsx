@@ -272,7 +272,7 @@ export function KartuHomestay({ h, l, lebar = false, sempit = false }: { h: Home
   const lokasi = tx(h.lokasi, l);
   const fasilitas = txDaftar(h.fasilitas, l).slice(0, 3).join(" · ");
   return (
-    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)} sampulKosong={<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-buih p-5"><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className="h-auto w-28 opacity-70" /><span className="text-center text-xs font-semibold text-ink2">{t("homestay.photoPending")}</span></div>}
+    <KartuFoto href={`/${l}/homestay/${h.slug}`} sampul={h.foto[0]} nama={tx(h.nama, l)} sampulKosong={<div className={`absolute inset-0 flex flex-col items-center justify-center bg-buih ${sempit ? "gap-1 p-2 sm:gap-3 sm:p-5" : "gap-3 p-5"}`}><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className={`h-auto opacity-70 ${sempit ? "w-16 sm:w-28" : "w-28"}`} /><span className={`text-center font-semibold leading-tight text-ink2 ${sempit ? "text-[10px] sm:text-xs" : "text-xs"}`}>{t("homestay.photoPending")}</span></div>}
       meta={lokasi ? [<Meta key="l" ikon={<IkonPin size={16} className="flex-none text-tanda" />} teks={lokasi} />] : []} sorot={[h.kapasitas ? t("homestay.capacity", { n: h.kapasitas }) : "", fasilitas].filter(Boolean).join(" · ")}
       harga={<HargaHomestay h={h} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
@@ -281,7 +281,8 @@ export function KartuHomestay({ h, l, lebar = false, sempit = false }: { h: Home
 /** Kisi kartu homestay di bawah bagian kartu bertumpuk. */
 export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Homestay[]; l: Locale; beranda?: boolean }) {
   const t = buatT(getMessages(l));
-  const tampil = homestay.filter((h) => h.tampil);
+  const semua = homestay.filter((h) => h.tampil);
+  const tampil = beranda ? semua.slice(0, 4) : semua;
   if (!tampil.length) return null;
   return (
     <div className={`wrap ${beranda ? "mt-12 sm:mt-16" : ""}`}>
@@ -290,7 +291,11 @@ export function DaftarHomestay({ homestay, l, beranda = true }: { homestay: Home
           <TombolSemua href={`/${l}/homestay`} label={t("homestay.lihatSemua")} />
         </div>
       )}
-      <KisiKartu semuaUkuran={beranda} kelas="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" kartu={tampil.map((h) => <KartuHomestay key={h.id} h={h} l={l} />)} kelasKartu={tampil.map(() => "")} />
+      {beranda ? (
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">{tampil.map((h) => <KartuHomestay key={h.id} h={h} l={l} sempit />)}</div>
+      ) : (
+        <KisiKartu kelas="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" kartu={tampil.map((h) => <KartuHomestay key={h.id} h={h} l={l} />)} kelasKartu={tampil.map(() => "")} />
+      )}
     </div>
   );
 }
