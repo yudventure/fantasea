@@ -142,7 +142,7 @@ export interface Konten {
    * pemilik, November 2026). Trip berkategori liveaboard tampil di sini
    * sebagai kartu, dan tidak diulang di daftar trip beranda.
    */
-  diveCourse: KepalaBagian & { tampil: boolean; foto: string; tombol: Teks; kursus: KursusSelam[] };
+  diveCourse: KepalaBagian & { versiHarga?: number; tampil: boolean; foto: string; tombol: Teks; kursus: KursusSelam[] };
   liveaboard: KepalaBagian & { tampil: boolean; foto: string; tag: string; warna: WarnaTag; butir: DaftarTeks; tombol: Teks };
   /**
    * Halaman sendiri untuk trip dan homestay (permintaan pemilik, November
@@ -465,13 +465,18 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     ajakan: { judul: teks(ajakan.judul, b.ajakan.judul, 200), lead: teks(ajakan.lead, b.ajakan.lead, 400), tombol: teks(ajakan.tombol, b.ajakan.tombol, 40) },
     diveCourse: {
       ...kepala(diveCourse, b.diveCourse),
+      versiHarga: Math.max(1, num(diveCourse.versiHarga, 0, 99)),
       kursus: ("kursus" in diveCourse ? arr(diveCourse.kursus) : b.diveCourse.kursus).slice(0, 50).map((v) => {
         const x = obj(v);
+        const lama = num(diveCourse.versiHarga) < 1 && x.id === "padi-tanpa-elearning";
+        const hargaLama = lama && Number(x.hargaUsd) === 442.22;
+        let lokasi = teks(x.lokasi, undefined, 160);
+        if (lama && lokasi.en === "Gam Island, Central Raja Ampat" && lokasi.id === "Pulau Gam, Raja Ampat Tengah") lokasi = { en: "", id: "" };
         return { id: id(x.id, "kursus"), nama: teks(x.nama, undefined, 160), foto: fotoSah(x.foto),
-          hargaUsd: Math.round(Math.min(1000000, Math.max(0, Number(x.hargaUsd) || 0)) * 100) / 100,
+          hargaUsd: hargaLama ? 440.33 : Math.round(Math.min(1000000, Math.max(0, Number(x.hargaUsd) || 0)) * 100) / 100,
           hari: Math.min(365, Math.max(1, Math.floor(Number(x.hari) || 1))),
           selam: Math.min(1000, Math.max(0, Math.floor(Number(x.selam) || 0))),
-          alat: bool(x.alat, false), tampil: bool(x.tampil, true), lokasi: teks(x.lokasi, undefined, 160), pembayaran: tautan(x.pembayaran) };
+          alat: bool(x.alat, false), tampil: bool(x.tampil, true), lokasi, pembayaran: hargaLama ? "" : tautan(x.pembayaran) };
       }),
       tampil: bool(diveCourse.tampil, b.diveCourse.tampil),
       foto: "foto" in diveCourse ? fotoSah(diveCourse.foto) : b.diveCourse.foto,
