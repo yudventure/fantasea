@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { tx, type Konten } from "@/lib/konten";
 import Gelembung from "./Gelembung";
@@ -7,7 +6,7 @@ import { Judul } from "./Judul";
 
 /**
  * Hero ala referensi: judul besar di tengah, lima kartu foto mengipas
- * dengan gelembung tag, kalimat pendek, dan dua tombol.
+ * dengan gelembung tag dan kalimat pendek, tanpa tombol.
  *
  * Permintaan pemilik, November 2026:
  * - Hero selalu tepat satu layar penuh di semua ukuran layar, jadi bagian
@@ -67,7 +66,7 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
   return (
     <section className="relative flex min-h-[100vh] flex-col overflow-hidden bg-gradient-to-b from-[#EAF2F7] via-[#F6FAFC] to-white pb-[3vh] pt-[84px] supports-[height:100svh]:min-h-[100svh] sm:pt-[100px]">
       <HiasanHero />
-      <div className="relative flex flex-1 flex-col justify-center">
+      <div className="relative flex flex-1 translate-y-[clamp(12px,2.5vh,32px)] flex-col justify-center">
         <div className="wrap hero-masuk text-center">
           <Judul as="h1" teks={tx(h.judul, l)} className="mx-auto max-w-[26ch] text-balance text-[clamp(28px,min(9.6vw,9vh),96px)] leading-[0.95]" />
         </div>
@@ -94,10 +93,6 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
 
         <div className="wrap hero-masuk mt-[4.5vh] text-center" style={{ "--tunda": "620ms" } as React.CSSProperties}>
           {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
-          <div className="mt-[2.6vh] flex flex-wrap items-center justify-center gap-3">
-            {tx(h.tombol1, l) && <Link href={`/${l}#trip`} className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
-            {tx(h.tombol2, l) && <Link href={`/${l}/activities#titik`} className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
-          </div>
         </div>
       </div>
     </section>
