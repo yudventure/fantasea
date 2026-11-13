@@ -180,6 +180,7 @@ export function BagianTrip({ k, ubah }: { k: Konten; ubah: Ubah }) {
                   </label>
                   <Dropdown label="Mata uang" kosong="Pilih mata uang" value={t.mataUang ?? "IDR"} onChange={(v) => ubahTrip(t.id, (x) => { x.mataUang = v === "USD" ? "USD" : "IDR"; })} pilihan={[{ nilai: "IDR", label: "IDR, Rupiah" }, { nilai: "USD", label: "USD, Dolar AS" }]} />
                   <KolomAngka label="Jumlah selam" hint="Isi 0 untuk trip tanpa selam." value={t.selam} maks={99} onChange={(v) => ubahTrip(t.id, (x) => { x.selam = v; })} />
+                  <KolomAngka label="Jumlah sesi" hint="Untuk snorkeling atau aktivitas tanpa selam." value={t.sesi ?? 0} maks={99} onChange={(v) => ubahTrip(t.id, (x) => { x.sesi = v; })} />
                 </div>
                 <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
                   <KolomDua label="Keterangan di kartu" hint="Satu baris pendek di bawah durasi, misalnya All-included atau nama pulau." value={t.sorot} onChange={(v) => ubahTrip(t.id, (x) => { x.sorot = v; })} maks={60} />

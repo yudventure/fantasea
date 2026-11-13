@@ -103,10 +103,11 @@ export function KartuTrip({ trip, l, kategori, lebar = false, sempit = false }: 
   const meta = [
     tx(trip.durasi, l) && <Meta key="d" ikon={<IkonJam size={16} className={ik} />} teks={tx(trip.durasi, l)} />,
     trip.selam > 0 && <Meta key="s" ikon={<IkonMasker size={16} className={ik} />} teks={t("trip.selam", { n: trip.selam })} />,
+    !!trip.sesi && <Meta key="sesi" ikon={<IkonMasker size={16} className={ik} />} teks={t("trip.sesi", { n: trip.sesi })} />,
     trip.alat && <Meta key="a" ikon={<IkonCentang size={16} className={ik} />} teks={t("trip.alat")} />,
   ].filter(Boolean) as React.ReactNode[];
   return (
-    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} sampulKosong={<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-buih p-5"><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className="h-auto w-28 opacity-70" /><span className="text-center text-xs font-semibold text-ink2">{t("homestay.photoPending")}</span></div>} pil={kategori} nama={tx(trip.nama, l)} meta={meta} sorot={tx(trip.sorot, l)}
+    <KartuFoto href={`/${l}/trip/${trip.slug}`} sampul={trip.foto[0]} sampulKosong={<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-buih p-5"><Image src="/brand/logo/fantasea-logo-utama.png" alt="" width={160} height={100} className="h-auto w-28 opacity-70" /><span className="text-center text-xs font-semibold text-ink2">{t("homestay.photoPending")}</span></div>} pil={kategori} nama={tx(trip.nama, l)} meta={meta} sorot={tx(trip.sorot, l) || tx(trip.ringkas, l)}
       harga={<HargaTrip trip={trip} l={l} sempit={sempit} tengah />} lebar={lebar} sempit={sempit} />
   );
 }
@@ -175,7 +176,7 @@ export const kategoriTampil = (kategori: KategoriAktivitas[], trip: Trip[], adaL
 
 /** Kisi kategori Activities, kartu besar dengan baris terakhir yang seimbang. */
 export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, beranda = false }: { b: KepalaBagian; kategori: KategoriAktivitas[]; trip?: Trip[]; l: Locale; adaLiveaboard: boolean; adaKursus?: boolean; beranda?: boolean }) {
-  const daftar = kategori.filter((k) => k.tampil);
+  const daftar = kategori.filter((k) => k.tampil && (k.id !== ID_LIVEABOARD || adaLiveaboard) && (k.id !== "kursus" || adaKursus));
   if (!daftar.length) return null;
   const t = buatT(getMessages(l));
   return (
@@ -190,7 +191,7 @@ export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, 
             const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard`
               : k.id === "kursus" && adaKursus ? `/${l}/dive-course`
               : k.id === "homestay-selam" ? `/${l}/dive-homestay`
-              : `${beranda ? `/${l}/activities` : ""}#kategori-${k.id}`;
+              : `/${l}/activities/${k.id}`;
             return (
               <Link key={k.id} href={href} className={`group relative block aspect-[16/10] overflow-hidden rounded-[24px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda xl:aspect-auto xl:h-[280px] ${daftar.length % 3 === 2 && i >= daftar.length - 2 ? "xl:col-span-3" : daftar.length % 3 === 1 && i === daftar.length - 1 ? "xl:col-span-6" : "xl:col-span-2"}`}>
                 {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 600px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
@@ -226,7 +227,7 @@ export function KatalogTrip({ kategori, trip, l, adaLiveaboard, kosong = false }
               {k.id === ID_LIVEABOARD && adaLiveaboard && <TombolSemua href={`/${l}/liveaboard`} label={t("liveaboard.lihatSemua")} />}
             </div>
             {!isi.length && <p className="mt-6 text-ink2">{t("activity.empty")}</p>}
-            <KisiKartu kelas={`mt-8 ${KISI_TIGA}`} {...kisi(isi, (x, p) => <KartuTrip trip={x} l={l} lebar={p.lebar} sempit={p.sempit} />)} />
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{isi.map((x) => <KartuTrip key={x.id} trip={x} l={l} />)}</div>
           </div>
         </section>
       ))}

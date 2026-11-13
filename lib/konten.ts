@@ -40,6 +40,7 @@ export interface Trip {
   durasi: Teks;
   /** Jumlah selam dalam satu trip. 0 untuk trip tanpa selam. */
   selam: number;
+  sesi?: number;
   /** Alat selam termasuk, tampil sebagai Gear included di kartu. */
   alat: boolean;
   /** Satu baris pendek di kartu di bawah durasi, mis. All-included atau nama pulau. */
@@ -121,6 +122,7 @@ export interface KursusSelam {
 
 export interface Konten {
   versiDiveHomestay?: number;
+  versiAktivitasReferensi?: number;
   situs: {
     /** Penanda simpanan. Di bawah VERSI_KONTAK berarti disimpan sebelum kontak contoh ada. */
     versiKontak: number;
@@ -295,6 +297,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     const nilai = obj(sumber[kunci]);
     for (const l of ["en", "id"] as const) if (nilai[l] === lama[l]) nilai[l] = baru[l];
   };
+  gantiLama(obj(o.hero), "tombol1", { en: "See open trips", id: "Lihat open trip" }, b.hero.tombol1);
   gantiLama(obj(o.menu), "trip", { en: "Trips", id: "Trip" }, b.menu.trip);
   gantiLama(obj(o.menu), "homestay", { en: "Homestays", id: "Homestay" }, b.menu.homestay);
   const bagianLama = obj(obj(o.bagian).trip);
@@ -337,6 +340,17 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     sumberTrip = [...sumberTrip, ...b.trip.filter((t) => t.kategori === "homestay-selam" && !ada.has(t.id) && !alamat.has(t.slug))];
     if (!kategori.some((kt) => kt.id === "homestay-selam")) kategori.push(structuredClone(b.kategori.find((kt) => kt.id === "homestay-selam")!));
   }
+  if (num(o.versiAktivitasReferensi) < 1 && sumberTrip.length) {
+    const contohLama = new Set(["t-escape", "t-snorkel", "t-piaynemo", "t-private"]);
+    sumberTrip = sumberTrip.filter((t) => !(obj(t).contoh === true && contohLama.has(str(obj(t).id))));
+    const ada = new Set(sumberTrip.map((t) => str(obj(t).id)));
+    const alamat = new Set(sumberTrip.map((t) => str(obj(t).slug)));
+    const baru = b.trip.filter((t) => t.id.startsWith("t-ref-") && !ada.has(t.id) && !alamat.has(t.slug));
+    sumberTrip = [...sumberTrip, ...baru];
+    for (const kat of new Set(baru.map((t) => t.kategori))) {
+      if (!kategori.some((k) => k.id === kat)) kategori.push(structuredClone(b.kategori.find((k) => k.id === kat)!));
+    }
+  }
   const trip: Trip[] = sumberTrip.map((t) => {
     const x = obj(t);
     const nama = teks(x.nama, undefined, 120);
@@ -348,7 +362,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ringkas: teks(x.ringkas, undefined, 300),
       deskripsi: teks(x.deskripsi, undefined, 6000),
       durasi: teks(x.durasi, undefined, 60),
-      selam: num(x.selam, 0, 99),
+      selam: num(x.selam, 0, 99), sesi: num(x.sesi, 0, 99),
       alat: bool(x.alat, false),
       sorot: teks(x.sorot, undefined, 60),
       level: teks(x.level, undefined, 80),
@@ -417,6 +431,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
 
   return {
     versiDiveHomestay: 1,
+    versiAktivitasReferensi: Math.max(1, num(o.versiAktivitasReferensi, 0, 99)),
     situs: {
       versiKontak: VERSI_KONTAK,
       kontak: {

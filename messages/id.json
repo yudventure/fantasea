@@ -34,7 +34,9 @@
     "tanpaJadwal": "Belum ada tanggal open trip untuk trip ini. Pilih tanggal sendiri di formulir.",
     "lainnya": "Trip lainnya",
     "lihatSemua": "Lihat semua trip",
-    "alat": "Alat termasuk"
+    "alat": "Alat termasuk",
+    "sesi": "{n} sesi",
+    "jumlahSesi": "Jumlah sesi"
   },
   "jadwal": {
     "sisa": "Sisa {n} kursi",
