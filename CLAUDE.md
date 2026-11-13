@@ -112,3 +112,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Hero tidak lagi menampilkan tombol Explore activities dan Explore dive sites. Kelompok judul, kartu foto, dan kalimat digeser sedikit ke bawah, tetap satu layar. Isian tombol hero lama dipertahankan dalam data untuk kompatibilitas, tetapi tidak lagi ditampilkan di situs atau editor hero.
 
 - Halaman Liveaboard tidak lagi memuat panel ajakan Live the Fantasea di bagian bawah (permintaan pemilik).
+
+- Kartu akomodasi beranda dibatasi empat item yang tampil sesuai urutan panel. Grid dua kolom di ponsel dan tablet, empat kolom desktop. Tidak ada Load more di beranda, daftar lengkap melalui See all homestays. Halaman katalog Homestay tetap menampilkan seluruh daftar.
