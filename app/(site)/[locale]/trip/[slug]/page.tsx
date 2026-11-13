@@ -70,6 +70,7 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
               {[
                 { ikon: IkonJam, k: t("trip.durasi"), v: tx(trip.durasi, l) },
                 ...(trip.selam > 0 ? [{ ikon: IkonMasker, k: t("trip.jumlahSelam"), v: String(trip.selam) }] : []),
+                ...(trip.sesi ? [{ ikon: IkonMasker, k: t("trip.jumlahSesi"), v: String(trip.sesi) }] : []),
                 { ikon: IkonLevel, k: t("trip.level"), v: tx(trip.level, l) },
               ].filter((d) => d.v).map(({ ikon: Ikon, k: label, v }) => (
                 <div key={label} className="rounded-[18px] bg-buih p-4">

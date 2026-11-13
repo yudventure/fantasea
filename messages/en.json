@@ -34,7 +34,9 @@
     "tanpaJadwal": "No open trip dates for this trip yet. Pick your own date in the form.",
     "lainnya": "Other trips",
     "lihatSemua": "See all trips",
-    "alat": "Gear included"
+    "alat": "Gear included",
+    "sesi": "{n} session",
+    "jumlahSesi": "Sessions"
   },
   "jadwal": {
     "sisa": "{n} seats left",
