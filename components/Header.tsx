@@ -15,12 +15,12 @@ export interface TautanMenu { href: string; label: string }
  * dengan nama terpisah), di puncak halaman header tanpa latar, latar putih
  * tembus pandang baru muncul saat halaman digulir dan logonya mengecil.
  * Permintaan berikutnya: logo di puncak tidak terlalu besar, dan tanpa tombol
- * Pesan trip di pojok kanan atas (tombol pesan tetap ada di menu ponsel, hero,
+ * Pesan trip di pojok kanan atas (tombol pesan ada di hero,
  * dan halaman trip). Header melayang (fixed) di atas hero, jadi bagian pertama
  * tiap halaman memberi ruang di atasnya.
  * `jalur` adalah alamat halaman tanpa kode bahasa, untuk tombol EN / ID.
  */
-export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pesan: TautanMenu; jalur: string }) {
+export default function Header({ menu, jalur }: { menu: TautanMenu[]; pesan: TautanMenu; jalur: string }) {
   const { t, locale } = useI18n();
   const [buka, setBuka] = useState(false);
   const [gulir, setGulir] = useState(false);
@@ -95,7 +95,6 @@ export default function Header({ menu, pesan, jalur }: { menu: TautanMenu[]; pes
                   </Link>
                 ))}
               </div>
-              <Link href={pesan.href} onClick={() => setBuka(false)} className="btn btn-navy flex-1">{pesan.label}</Link>
             </div>
           </div>
         </div>

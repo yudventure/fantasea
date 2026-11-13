@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { tx, type Konten } from "@/lib/konten";
 import Gelembung from "./Gelembung";
@@ -6,7 +7,7 @@ import { Judul } from "./Judul";
 
 /**
  * Hero ala referensi: judul besar di tengah, lima kartu foto mengipas
- * dengan gelembung tag dan kalimat pendek, tanpa tombol.
+ * dengan gelembung tag, kalimat pendek, dan satu tombol Book di bawahnya.
  *
  * Permintaan pemilik, November 2026:
  * - Hero selalu tepat satu layar penuh di semua ukuran layar, jadi bagian
@@ -93,6 +94,7 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
 
         <div className="wrap hero-masuk mt-[4.5vh] text-center" style={{ "--tunda": "620ms" } as React.CSSProperties}>
           {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
+          {tx(k.menu.pesan, l) && <Link href={`/${l}#trip`} className="btn btn-navy mt-[2.6vh]">{tx(k.menu.pesan, l)}</Link>}
         </div>
       </div>
     </section>

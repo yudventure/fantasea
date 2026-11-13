@@ -21,9 +21,10 @@ export function KepalaEditor({ b, set, tanpaLead = false }: { b: KepalaBagian; s
 export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
   return (
     <div className="grid gap-6">
-      <KartuPanel id="hero" judul="Bagian atas (hero)" keterangan="Judul besar di tengah, lima kartu foto mengipas, dan kalimat pendek. Hero tanpa tombol, dengan judul dan foto sedikit lebih ke bawah.">
+      <KartuPanel id="hero" judul="Bagian atas (hero)" keterangan="Judul besar di tengah, lima kartu foto mengipas, dan kalimat pendek. Satu tombol Book tampil di bawah kalimat, di luar menu.">
         <KolomDua label="Judul" hint={HINT_JUDUL} value={k.hero.judul} onChange={(v) => ubah((d) => { d.hero.judul = v; })} panjang maks={200} />
         <KolomDua label="Kalimat pendek" value={k.hero.lead} onChange={(v) => ubah((d) => { d.hero.lead = v; })} panjang maks={400} />
+        <KolomDua label="Tombol Book di bawah hero" value={k.menu.pesan} onChange={(v) => ubah((d) => { d.menu.pesan = v; })} maks={30} />
         <EditorKartu judul="Kartu foto" kartu={k.hero.kartu} set={(i, f) => ubah((d) => f(d.hero.kartu[i]))} keterangan="Kartu 1 dan 5 tidak tampil di ponsel. Kartu tengah paling besar." />
       </KartuPanel>
 
@@ -120,7 +121,7 @@ export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
       <KartuPanel judul="Menu dan footer" keterangan="Empat menu utama di header dan footer. Kalimat tentang Fantasea di bawah dipakai di footer. Profil lengkap diatur pada kartu About Fantasea."
         lipat ringkas={`Menu ${[k.menu.beranda, k.menu.homestay, k.menu.trip, k.menu.about].map((x) => ringkasTeks(x, 24)).join(", ")}`}>
         <div className="grid gap-4 md:grid-cols-2">
-          {([["beranda", "Menu beranda"], ["homestay", "Menu akomodasi"], ["trip", "Menu aktivitas"], ["about", "Menu About"], ["pesan", "Tombol pesan di menu ponsel"]] as const).map(([kunci, nama]) => (
+          {([["beranda", "Menu beranda"], ["homestay", "Menu akomodasi"], ["trip", "Menu aktivitas"], ["about", "Menu About"]] as const).map(([kunci, nama]) => (
             <KolomDua key={kunci} label={nama} value={k.menu[kunci]} onChange={(v) => ubah((d) => { d.menu[kunci] = v; })} maks={30} />
           ))}
         </div>

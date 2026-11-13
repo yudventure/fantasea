@@ -114,3 +114,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Halaman Liveaboard tidak lagi memuat panel ajakan Live the Fantasea di bagian bawah (permintaan pemilik).
 
 - Kartu akomodasi beranda dibatasi empat item yang tampil sesuai urutan panel. Grid dua kolom di ponsel dan tablet, empat kolom desktop. Tidak ada Load more di beranda, daftar lengkap melalui See all homestays. Halaman katalog Homestay tetap menampilkan seluruh daftar.
+
+- Tombol Book dipindahkan dari menu ponsel ke bawah kalimat hero, memakai label `menu.pesan` dan menuju kategori aktivitas beranda `#trip`. Editor label tersedia di bagian Hero. Tombol Explore lama tetap dihapus. Pilihan bahasa lengkap menggunakan English dan Bahasa.

@@ -12,7 +12,7 @@ export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "en";
 
 /** Nama bahasa dalam bahasa itu sendiri. */
-export const LOCALE_LABEL: Record<Locale, string> = { en: "English", id: "Bahasa Indonesia" };
+export const LOCALE_LABEL: Record<Locale, string> = { en: "English", id: "Bahasa" };
 export const LOCALE_PENDEK: Record<Locale, string> = { en: "EN", id: "ID" };
 /** Nama bahasa dalam bahasa Indonesia, untuk panel. */
 export const NAMA_BAHASA_ID: Record<Locale, string> = { en: "Inggris", id: "Indonesia" };
