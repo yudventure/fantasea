@@ -7,7 +7,7 @@ import { muatSitus } from "@/lib/server/situs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { polos } from "@/components/Judul";
-import { Ajakan, DaftarEdukasi, JadwalOpenTrip, KatalogTrip, KepalaHalaman, Liveaboard } from "@/components/Bagian";
+import { DaftarEdukasi, JadwalOpenTrip, KatalogTrip, KepalaHalaman, Liveaboard } from "@/components/Bagian";
 
 /**
  * Halaman Liveaboard sendiri seperti halaman Trip (permintaan pemilik,
@@ -35,7 +35,7 @@ export default async function HalamanLiveaboard({ params }: Params) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const l: Locale = locale;
-  const { k, t, menu, pesan, waUmum, jadwal } = await muatSitus(l);
+  const { k, menu, pesan, waUmum, jadwal } = await muatSitus(l);
   if (!k.liveaboard.tampil) notFound();
   const kapal = k.trip.filter((x) => x.tampil && x.kategori === ID_LIVEABOARD);
   const jadwalKapal = jadwal.filter((j) => kapal.some((x) => x.id === j.tripId));
@@ -52,7 +52,6 @@ export default async function HalamanLiveaboard({ params }: Params) {
         <Liveaboard b={k.liveaboard} trip={k.trip} l={l} href={hrefTanya} kartu={false} beranda={false} />
         {jadwalKapal.length > 0 && <JadwalOpenTrip b={k.bagian.jadwal} jadwal={jadwalKapal} trip={kapal} l={l} hrefTanya={hrefTanya} />}
         <DaftarEdukasi b={e} butir={e.butir} l={l} />
-        <Ajakan judul={tx(k.ajakan.judul, l)} lead={tx(k.ajakan.lead, l)} tombol={waUmum ? tx(k.liveaboard.tombol, l) || tx(k.ajakan.tombol, l) : t("ajakan.permintaan")} href={hrefTanya} l={l} />
       </main>
       <Footer k={k} l={l} menu={menu} />
     </>
