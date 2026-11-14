@@ -158,7 +158,16 @@
   },
   "activity": {
     "all": "Lihat semua aktivitas",
-    "empty": "Hubungi kami untuk menanyakan ketersediaan dan pilihan aktivitas ini."
+    "empty": "Hubungi kami untuk menanyakan ketersediaan dan pilihan aktivitas ini.",
+    "search": "Cari aktivitas",
+    "searchHint": "Cari nama, lokasi, atau kata kunci",
+    "category": "Kategori",
+    "allCategories": "Semua kategori",
+    "results": "{n} aktivitas",
+    "resultOne": "{n} aktivitas",
+    "reset": "Hapus filter",
+    "noResults": "Aktivitas tidak ditemukan",
+    "trySearch": "Coba kata kunci lain atau pilih kategori berbeda."
   },
   "about": {
     "company": "Informasi perusahaan",
