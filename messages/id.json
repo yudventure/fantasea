@@ -182,5 +182,17 @@
     "waigeo": "Pulau Waigeo",
     "strait": "Selat Dampier",
     "routeMessage": "Halo Fantasea, saya ingin bertanya tentang perjalanan dari Sorong ke Waisai."
+  },
+  "homestayCatalog": {
+    "search": "Cari homestay",
+    "searchHint": "Cari nama, pulau, atau fasilitas",
+    "category": "Lokasi",
+    "allCategories": "Semua lokasi",
+    "results": "{n} homestay",
+    "resultOne": "{n} homestay",
+    "reset": "Hapus filter",
+    "noResults": "Homestay tidak ditemukan",
+    "trySearch": "Coba kata kunci lain atau pilih lokasi berbeda.",
+    "unknown": "Lokasi belum diisi"
   }
 }
