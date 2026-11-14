@@ -21,10 +21,13 @@ export function KepalaEditor({ b, set, tanpaLead = false }: { b: KepalaBagian; s
 export function BagianBeranda({ k, ubah }: { k: Konten; ubah: Ubah }) {
   return (
     <div className="grid gap-6">
-      <KartuPanel id="hero" judul="Bagian atas (hero)" keterangan="Judul besar di tengah, lima kartu foto mengipas, dan kalimat pendek. Satu tombol Book tampil di bawah kalimat, di luar menu.">
+      <KartuPanel id="hero" judul="Bagian atas (hero)" keterangan="Judul besar di tengah, lima kartu foto mengipas, dan kalimat pendek. Dua tombol Explore tampil di bawah kalimat dan membuka katalog akomodasi serta aktivitas.">
         <KolomDua label="Judul" hint={HINT_JUDUL} value={k.hero.judul} onChange={(v) => ubah((d) => { d.hero.judul = v; })} panjang maks={200} />
         <KolomDua label="Kalimat pendek" value={k.hero.lead} onChange={(v) => ubah((d) => { d.hero.lead = v; })} panjang maks={400} />
-        <KolomDua label="Tombol Book di bawah hero" value={k.menu.pesan} onChange={(v) => ubah((d) => { d.menu.pesan = v; })} maks={30} />
+        <div className="grid gap-4 md:grid-cols-2">
+          <KolomDua label="Tombol Explore Accommodation" value={k.hero.tombol1} onChange={(v) => ubah((d) => { d.hero.tombol1 = v; })} maks={40} />
+          <KolomDua label="Tombol Explore Activities" value={k.hero.tombol2} onChange={(v) => ubah((d) => { d.hero.tombol2 = v; })} maks={40} />
+        </div>
         <EditorKartu judul="Kartu foto" kartu={k.hero.kartu} set={(i, f) => ubah((d) => f(d.hero.kartu[i]))} keterangan="Kartu 1 dan 5 tidak tampil di ponsel. Kartu tengah paling besar." />
       </KartuPanel>
 

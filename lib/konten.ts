@@ -131,7 +131,7 @@ export interface Konten {
     seo: { judul: Teks; deskripsi: Teks };
   };
   menu: { beranda: Teks; about: Teks; trip: Teks; liveaboard: Teks; jadwal: Teks; homestay: Teks; titik: Teks; ulasan: Teks; faq: Teks; pesan: Teks };
-  hero: { judul: Teks; lead: Teks; tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
+  hero: { versiTombol?: number; judul: Teks; lead: Teks; tombol1: Teks; tombol2: Teks; kartu: Kartu[] };
   /** Bagian kartu bertumpuk, sekarang pembuka homestay. Kartu homestay tampil di bawahnya. */
   jelajah: KepalaBagian & { kartu: Kartu[] };
   gerbang: KepalaBagian & { foto: FotoBerketerangan[]; video: string; tag: string; warna: WarnaTag };
@@ -297,7 +297,6 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
     const nilai = obj(sumber[kunci]);
     for (const l of ["en", "id"] as const) if (nilai[l] === lama[l]) nilai[l] = baru[l];
   };
-  gantiLama(obj(o.hero), "tombol1", { en: "See open trips", id: "Lihat open trip" }, b.hero.tombol1);
   gantiLama(obj(o.menu), "trip", { en: "Trips", id: "Trip" }, b.menu.trip);
   gantiLama(obj(o.menu), "homestay", { en: "Homestays", id: "Homestay" }, b.menu.homestay);
   const bagianLama = obj(obj(o.bagian).trip);
@@ -308,6 +307,10 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   gantiLama(kepalaLama, "judul", { en: "Every trip,\n*every reef.*", id: "Semua trip,\n*semua karang.*" }, b.halamanTrip.kepala.judul);
   const situs = obj(o.situs), kontak = obj(situs.kontak), sosial = obj(situs.sosial), seo = obj(situs.seo);
   const menu = obj(o.menu), hero = obj(o.hero), jelajah = obj(o.jelajah), gerbang = obj(o.gerbang), bagian = obj(o.bagian), ajakan = obj(o.ajakan), footer = obj(o.footer);
+  if (num(hero.versiTombol) < 1) {
+    hero.tombol1 = structuredClone(b.hero.tombol1);
+    hero.tombol2 = structuredClone(b.hero.tombol2);
+  }
   const about = obj(o.about), rute = obj(o.rute);
   const diveCourse = obj(o.diveCourse);
   const liveaboard = obj(o.liveaboard);
@@ -449,6 +452,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       ulasan: teks(menu.ulasan, b.menu.ulasan, 30), faq: teks(menu.faq, b.menu.faq, 30), pesan: teks(menu.pesan, b.menu.pesan, 30),
     },
     hero: {
+      versiTombol: Math.max(1, num(hero.versiTombol, 0, 99)),
       judul: teks(hero.judul, b.hero.judul, 200), lead: teks(hero.lead, b.hero.lead, 400),
       tombol1: teks(hero.tombol1, b.hero.tombol1, 40), tombol2: teks(hero.tombol2, b.hero.tombol2, 40),
       kartu: kartuList(hero.kartu, JUMLAH_KARTU_HERO, b.hero.kartu),

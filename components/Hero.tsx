@@ -7,7 +7,7 @@ import { Judul } from "./Judul";
 
 /**
  * Hero ala referensi: judul besar di tengah, lima kartu foto mengipas
- * dengan gelembung tag, kalimat pendek, dan satu tombol Book di bawahnya.
+ * dengan gelembung tag, kalimat pendek, dan dua tombol Explore di bawahnya.
  *
  * Permintaan pemilik, November 2026:
  * - Hero selalu tepat satu layar penuh di semua ukuran layar, jadi bagian
@@ -94,7 +94,10 @@ export default function Hero({ k, l }: { k: Konten; l: Locale }) {
 
         <div className="wrap hero-masuk mt-[4.5vh] text-center" style={{ "--tunda": "620ms" } as React.CSSProperties}>
           {tx(h.lead, l) && <p className="mx-auto max-w-[52ch] text-[clamp(15px,1.9vh,18px)] text-ink2">{tx(h.lead, l)}</p>}
-          {tx(k.menu.pesan, l) && <Link href={`/${l}#trip`} className="btn btn-navy mt-[2.6vh]">{tx(k.menu.pesan, l)}</Link>}
+          <div className="mt-[2.6vh] flex flex-wrap items-center justify-center gap-3">
+            {tx(h.tombol1, l) && <Link href={`/${l}/homestay`} className="btn btn-navy">{tx(h.tombol1, l)}</Link>}
+            {tx(h.tombol2, l) && <Link href={`/${l}/activities`} className="btn btn-terang">{tx(h.tombol2, l)}</Link>}
+          </div>
         </div>
       </div>
     </section>

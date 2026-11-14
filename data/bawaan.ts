@@ -54,13 +54,14 @@ export const KONTEN_BAWAAN: Konten = {
     pesan: { en: "Book a trip", id: "Pesan trip" },
   },
   hero: {
+    versiTombol: 1,
     judul: { en: "Your next dive trip\nstarts in *Raja Ampat.*", id: "Trip selam berikutnya\ndimulai di *Raja Ampat.*" },
     lead: {
       en: "Dive trips, snorkel days and island hopping, planned from Sorong airport to the last dive site.",
       id: "Trip selam, snorkeling, dan jelajah pulau, kami atur dari Bandara Sorong sampai titik selam terakhir.",
     },
-    tombol1: { en: "Explore activities", id: "Jelajahi aktivitas" },
-    tombol2: { en: "Explore dive sites", id: "Jelajahi titik selam" },
+    tombol1: { en: "Explore Accommodation", id: "Jelajahi akomodasi" },
+    tombol2: { en: "Explore Activities", id: "Jelajahi aktivitas" },
     kartu: [
       { foto: F("snorkel-karst"), tag: "", warna: "tanda" },
       { foto: F("speedboat-laguna"), tag: "@arborek", warna: "tanda" },
