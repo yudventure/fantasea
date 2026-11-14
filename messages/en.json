@@ -158,7 +158,16 @@
   },
   "activity": {
     "all": "See all activities",
-    "empty": "Contact us to ask about availability and options for this activity."
+    "empty": "Contact us to ask about availability and options for this activity.",
+    "search": "Search activities",
+    "searchHint": "Search by name, location or keyword",
+    "category": "Category",
+    "allCategories": "All categories",
+    "results": "{n} activities",
+    "resultOne": "{n} activity",
+    "reset": "Clear filters",
+    "noResults": "No activities found",
+    "trySearch": "Try another keyword or choose a different category."
   },
   "about": {
     "company": "Company details",

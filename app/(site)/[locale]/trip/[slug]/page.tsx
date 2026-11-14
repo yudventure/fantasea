@@ -53,7 +53,7 @@ export default async function HalamanTrip({ params, searchParams }: Params) {
       <main id="isi" className="pb-8">
         <section className="bg-gradient-to-b from-[#EAF2F7] to-white pb-10 pt-[92px] sm:pt-[112px]">
           <div className="wrap">
-            <Link href={keLiveaboard ? `/${l}/liveaboard` : `/${l}/trip#kategori-${trip.kategori}`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
+            <Link href={keLiveaboard ? `/${l}/liveaboard` : trip.kategori === "homestay-selam" ? `/${l}/dive-homestay` : `/${l}/activities/${trip.kategori}`} className="inline-flex items-center gap-1.5 rounded-pill bg-white px-3.5 py-2 text-[14px] font-bold text-navy shadow-card hover:bg-buih">
               <IkonPanahKiri size={16} />{keLiveaboard ? t("liveaboard.semua") : t("trip.semua")}
             </Link>
             {kategori && <p className="aksen mt-6">{tx(kategori.nama, l)}</p>}
