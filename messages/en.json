@@ -182,5 +182,17 @@
     "waigeo": "Waigeo Island",
     "strait": "Dampier Strait",
     "routeMessage": "Hi Fantasea, I would like to ask about travelling from Sorong to Waisai."
+  },
+  "homestayCatalog": {
+    "search": "Search homestays",
+    "searchHint": "Search by name, island or facilities",
+    "category": "Location",
+    "allCategories": "All locations",
+    "results": "{n} homestays",
+    "resultOne": "{n} homestay",
+    "reset": "Clear filters",
+    "noResults": "No homestays found",
+    "trySearch": "Try another keyword or choose a different location.",
+    "unknown": "Location not specified"
   }
 }

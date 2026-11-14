@@ -118,3 +118,5 @@ Pola panel DAMPIER (permintaan pemilik, November 2026, "terapkan yang bisa di te
 - Tombol Book dipindahkan dari menu ponsel ke bawah kalimat hero, memakai label `menu.pesan` dan menuju kategori aktivitas beranda `#trip`. Editor label tersedia di bagian Hero. Tombol Explore lama tetap dihapus. Pilihan bahasa lengkap menggunakan English dan Bahasa.
 
 - See all activities membuka `/activities` sebagai katalog langsung, tanpa hero, kisi kategori, atau bagian edukasi lama. Gabungkan aktivitas Trip dan Diving Courses yang tampil, tetap hormati saklar dan kategori panel. Pencarian nama, lokasi/keterangan, dan kata kunci bekerja bersama filter kategori; tersedia jumlah hasil, keadaan kosong, dan reset. Kartu kategori beranda tetap tersedia. Tautan kembali detail menuju halaman kategori, bukan jangkar katalog lama.
+
+- Halaman See all homestays memiliki pencarian nama, pulau/lokasi, dan fasilitas serta filter lokasi yang dibentuk dari homestay yang tampil. Tersedia jumlah hasil, hasil kosong, dan reset, memakai perilaku katalog bersama Activities. Beranda tetap dibatasi empat kartu. Filter lokasi bukan pemeriksaan ketersediaan kamar.

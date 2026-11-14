@@ -6,8 +6,9 @@ import { bacaKonten } from "@/lib/server/konten";
 import { muatSitus } from "@/lib/server/situs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import KatalogAktivitas, { type ItemKatalogAktivitas } from "@/components/KatalogAktivitas";
 import { polos } from "@/components/Judul";
-import { DaftarHomestay, KepalaHalaman } from "@/components/Bagian";
+import { KartuHomestay, KepalaHalaman } from "@/components/Bagian";
 
 /**
  * Halaman Homestay (permintaan pemilik, November 2026): semua homestay yang
@@ -32,15 +33,29 @@ export default async function HalamanDaftarHomestay({ params }: Params) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const l: Locale = locale;
-  const { k, menu, pesan } = await muatSitus(l);
-  if (!k.homestay.some((h) => h.tampil)) notFound();
+  const { k, t, menu, pesan } = await muatSitus(l);
+  const tampil = k.homestay.filter((h) => h.tampil);
+  if (!tampil.length) notFound();
+  const lokasi = new Map<string, string>();
+  const item: ItemKatalogAktivitas[] = tampil.map((h) => {
+    const namaLokasi = tx(h.lokasi, l).trim();
+    const nilai = namaLokasi.toLocaleLowerCase() || "__unknown";
+    lokasi.set(nilai, namaLokasi || t("homestayCatalog.unknown"));
+    return { id: h.id, kategori: nilai,
+      pencarian: [h.nama.en, h.nama.id, h.lokasi.en, h.lokasi.id, h.ringkas.en, h.ringkas.id, h.deskripsi.en, h.deskripsi.id, ...h.fasilitas.en, ...h.fasilitas.id].join(" "),
+      kartu: <KartuHomestay h={h} l={l} />,
+    };
+  });
+  const filterLokasi = Array.from(lokasi, ([nilai, label]) => ({ nilai, label })).sort((a, b) => a.label.localeCompare(b.label, l));
 
   return (
     <>
       <Header menu={menu} pesan={pesan} jalur="/homestay" />
       <main id="isi" className="pb-16 sm:pb-24">
         <KepalaHalaman b={k.halamanHomestay.kepala} l={l} />
-        <DaftarHomestay homestay={k.homestay} l={l} beranda={false} />
+        <div className="wrap">
+          <KatalogAktivitas item={item} kategori={filterLokasi} labelPrefix="homestayCatalog" />
+        </div>
       </main>
       <Footer k={k} l={l} menu={menu} />
     </>
