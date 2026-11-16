@@ -28,6 +28,7 @@ export const IkonGelombang = svg(<path d="M2 12c1.7 0 1.7-1.5 3.3-1.5S7 12 8.7 1
 export const IkonLevel = svg(<><path d="M4 20V14M10 20V10M16 20V6M22 20H2" /></>);
 export const IkonWhatsapp = svg(<><path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z" /><path d="M9.2 8.6c.2-.5.6-.5.9-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.2 0 .5-.1.6l-.5.6c-.1.1-.1.3 0 .5.5.9 1.3 1.7 2.3 2.2.2.1.4.1.5 0l.6-.6c.2-.2.4-.2.6-.1l1.6.7c.3.1.4.3.4.5v.5c0 .3-.1.7-.5.9-.6.3-1.6.5-3-.1-1.8-.7-3.6-2.5-4.3-4.3-.5-1.3-.4-2.3-.2-2.9z" /></>);
 export const IkonSurel = svg(<><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="M3.5 7l8.5 6 8.5-6" /></>);
+export const IkonKasur = svg(<path d="M3 19v-8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8M3 15h18M7 9V7.5A1.5 1.5 0 0 1 8.5 6h2A1.5 1.5 0 0 1 12 7.5V9" />);
 export const IkonPin = svg(<><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" /><circle cx="12" cy="10" r="2.4" /></>);
 export const IkonInstagram = svg(<><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" /></>);
 export const IkonFacebook = svg(<path d="M14 21v-7.5h2.6l.4-3H14V8.7c0-.9.3-1.5 1.5-1.5H17V4.5c-.3 0-1.2-.1-2.3-.1-2.3 0-3.7 1.4-3.7 3.9v2.2H8.5v3H11V21" />);

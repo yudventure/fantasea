@@ -54,13 +54,18 @@
     "label": "Homestay",
     "lokasi": "Location",
     "harga": "Price",
-    "fasilitas": "What you get",
+    "fasilitas": "Facilities",
     "lainnya": "Other homestays",
     "catatanContoh": "Room type, special needs, dive plans",
     "lihatSemua": "See all homestays",
     "priceBasis": "Price for 1 night / {n} guests",
     "capacity": "Max occupancy {n} guests",
-    "photoPending": "Property photo coming soon"
+    "photoPending": "Property photo coming soon",
+    "kamar": "Rooms and beds",
+    "termasuk": "Included in your stay",
+    "kegiatan": "Things to do nearby",
+    "perjalanan": "Getting there",
+    "catatan": "Good to know"
   },
   "titik": {
     "kedalaman": "Depth",

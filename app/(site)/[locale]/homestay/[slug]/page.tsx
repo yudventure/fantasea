@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import GaleriTrip from "@/components/GaleriTrip";
 import FormPermintaan from "@/components/FormPermintaan";
 import { DaftarCentang, HargaHomestay, KartuHomestay } from "@/components/Bagian";
-import { IkonPanahKiri, IkonPin } from "@/components/Ikon";
+import { IkonKapal, IkonKasur, IkonPanahKiri, IkonPin } from "@/components/Ikon";
 
 /**
  * Halaman satu homestay (permintaan pemilik, November 2026): galeri,
@@ -46,6 +46,11 @@ export default async function HalamanHomestay({ params }: Params) {
   const lokasi = tx(h.lokasi, l);
   const paragraf = tx(h.deskripsi, l).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
   const fasilitas = txDaftar(h.fasilitas, l);
+  const kamar = txDaftar(h.kamar, l);
+  const termasuk = txDaftar(h.termasuk, l);
+  const kegiatan = txDaftar(h.kegiatan, l);
+  const catatan = txDaftar(h.catatan, l);
+  const perjalanan = tx(h.perjalanan, l).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
   const lainnya = k.homestay.filter((x) => x.tampil && x.id !== h.id).slice(0, 2);
 
   return (
@@ -89,10 +94,54 @@ export default async function HalamanHomestay({ params }: Params) {
               </div>
             )}
 
+            {kamar.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-[34px]">{t("homestay.kamar")}</h2>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {kamar.map((s, i) => (
+                    <li key={i} className={`flex items-start gap-3 rounded-[18px] bg-buih p-4 text-[15.5px] text-navy ${kamar.length % 2 === 1 && i === kamar.length - 1 ? "sm:col-span-2" : ""}`}>
+                      <IkonKasur size={22} className="mt-0.5 flex-none text-tanda" />{s}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {termasuk.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-[34px]">{t("homestay.termasuk")}</h2>
+                <div className="mt-4"><DaftarCentang isi={termasuk} centang /></div>
+              </div>
+            )}
+
             {fasilitas.length > 0 && (
               <div className="mt-10">
                 <h2 className="text-[34px]">{t("homestay.fasilitas")}</h2>
                 <div className="mt-4"><DaftarCentang isi={fasilitas} centang /></div>
+              </div>
+            )}
+
+            {kegiatan.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-[34px]">{t("homestay.kegiatan")}</h2>
+                <DaftarTitik isi={kegiatan} />
+              </div>
+            )}
+
+            {perjalanan.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-[34px]">{t("homestay.perjalanan")}</h2>
+                <div className="mt-4 flex items-start gap-3 rounded-[18px] bg-soft p-5 text-[15.5px] leading-relaxed text-navy">
+                  <IkonKapal size={22} className="mt-0.5 flex-none text-tanda" />
+                  <div className="grid gap-3">{perjalanan.map((p, i) => <p key={i}>{p}</p>)}</div>
+                </div>
+              </div>
+            )}
+
+            {catatan.length > 0 && (
+              <div className="mt-10">
+                <h2 className="text-[34px]">{t("homestay.catatan")}</h2>
+                <DaftarTitik isi={catatan} />
               </div>
             )}
           </div>
@@ -121,5 +170,18 @@ export default async function HalamanHomestay({ params }: Params) {
       </main>
       <Footer k={k} l={l} menu={menu} />
     </>
+  );
+}
+
+/** Daftar keterangan tanpa centang, untuk kegiatan dan hal yang perlu diketahui. */
+function DaftarTitik({ isi }: { isi: string[] }) {
+  return (
+    <ul className="mt-4 grid gap-2.5">
+      {isi.map((s, i) => (
+        <li key={i} className="flex items-start gap-3 text-[15.5px] leading-relaxed text-navy">
+          <span aria-hidden className="mt-[9px] h-2 w-2 flex-none rounded-full bg-tanda" />{s}
+        </li>
+      ))}
+    </ul>
   );
 }

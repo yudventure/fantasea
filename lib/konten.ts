@@ -73,6 +73,17 @@ export interface Homestay {
   /** Paragraf dipisah baris kosong. */
   deskripsi: Teks;
   fasilitas: DaftarTeks;
+  /**
+   * Detail halaman homestay (permintaan pemilik, November 2026, "deskripsi
+   * lengkap hingga fiturnya", diisi dari panel atau berkas .md). Kamar dan
+   * tempat tidur, yang sudah termasuk di harga, kegiatan di sekitar, cara ke
+   * sana, dan hal yang perlu diketahui. Kosong berarti bagiannya tidak tampil.
+   */
+  kamar: DaftarTeks;
+  termasuk: DaftarTeks;
+  kegiatan: DaftarTeks;
+  perjalanan: Teks;
+  catatan: DaftarTeks;
   /** Harga per malam untuk hargaUntuk tamu, dalam mataUang. Kolom lama default IDR / 1 tamu. */
   hargaMulai: number;
   mataUang?: "IDR" | "USD";
@@ -197,6 +208,8 @@ export const JUMLAH_KARTU_JELAJAH = 4;
 export const MAKS_FOTO_GERBANG = 6;
 export const MAKS_FOTO_TRIP = 8;
 export const MAKS_DAFTAR = 60;
+/** Batas teks homestay, dipakai normalkanKonten dan pembaca berkas .md (lib/homestay-md.ts). */
+export const MAKS_RINGKAS_HOMESTAY = 300, MAKS_DESKRIPSI_HOMESTAY = 6000, MAKS_PERJALANAN = 2000, MAKS_BUTIR = 300, MAKS_BUTIR_DAFTAR = 30;
 
 // ---------------------------------------------------------------------------
 // Membaca teks dua bahasa
@@ -261,7 +274,7 @@ export function teks(v: unknown, bawaan?: Teks, maks = 4000): Teks {
 }
 function daftarTeks(v: unknown): DaftarTeks {
   const o = obj(v);
-  const satu = (x: unknown) => arr(x).map((s) => str(s, 300).trim()).filter(Boolean).slice(0, 30);
+  const satu = (x: unknown) => arr(x).map((s) => str(s, MAKS_BUTIR).trim()).filter(Boolean).slice(0, MAKS_BUTIR_DAFTAR);
   return { en: satu(o.en), id: satu(o.id) };
 }
 /** Alamat foto yang boleh disimpan: aset merek, unggahan, atau https. */
@@ -407,9 +420,11 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
       slug: slugDari(str(x.slug, 80) || nama.en || nama.id || "homestay"),
       nama,
       lokasi: teks(x.lokasi, undefined, 120),
-      ringkas: teks(x.ringkas, undefined, 300),
-      deskripsi: teks(x.deskripsi, undefined, 6000),
+      ringkas: teks(x.ringkas, undefined, MAKS_RINGKAS_HOMESTAY),
+      deskripsi: teks(x.deskripsi, undefined, MAKS_DESKRIPSI_HOMESTAY),
       fasilitas: daftarTeks(x.fasilitas),
+      kamar: daftarTeks(x.kamar), termasuk: daftarTeks(x.termasuk), kegiatan: daftarTeks(x.kegiatan),
+      perjalanan: teks(x.perjalanan, undefined, MAKS_PERJALANAN), catatan: daftarTeks(x.catatan),
       hargaMulai: Math.round(Math.min(1e11, Math.max(0, Number(x.hargaMulai) || 0)) * 100) / 100,
       mataUang: x.mataUang === "USD" ? "USD" : "IDR", hargaUntuk: num(x.hargaUntuk, 1, 100), kapasitas: num(x.kapasitas, 0, 10000),
       foto: arr(x.foto).map(fotoSah).filter(Boolean).slice(0, MAKS_FOTO_TRIP),
