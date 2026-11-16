@@ -190,10 +190,9 @@ export function KisiKategori({ b, kategori, l, adaLiveaboard, adaKursus = true, 
           {daftar.map((k, i) => {
             const href = k.id === ID_LIVEABOARD && adaLiveaboard ? `/${l}/liveaboard`
               : k.id === "kursus" && adaKursus ? `/${l}/dive-course`
-              : k.id === "homestay-selam" ? `/${l}/dive-homestay`
               : `/${l}/activities/${k.id}`;
             return (
-              <Link key={k.id} href={href} className={`group relative block aspect-[16/10] overflow-hidden rounded-[24px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda xl:aspect-auto xl:h-[280px] ${daftar.length % 3 === 2 && i >= daftar.length - 2 ? "xl:col-span-3" : daftar.length % 3 === 1 && i === daftar.length - 1 ? "xl:col-span-6" : "xl:col-span-2"}`}>
+              <Link key={k.id} href={href} className={`group relative block aspect-[16/10] overflow-hidden rounded-[24px] bg-navy shadow-card focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tanda xl:aspect-auto xl:h-[280px] ${daftar.length % 2 === 1 && i === daftar.length - 1 ? "sm:col-span-2 sm:aspect-[32/10]" : ""} ${daftar.length % 3 === 2 && i >= daftar.length - 2 ? "xl:col-span-3" : daftar.length % 3 === 1 && i === daftar.length - 1 ? "xl:col-span-6" : "xl:col-span-2"}`}>
                 {k.foto && <Image src={k.foto} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1279px) 50vw, 600px" unoptimized={unopt(k.foto)} className="object-cover transition duration-700 group-hover:scale-[1.06]" />}
                 <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-malam/90 via-malam/10 to-transparent" />
                 <span className="absolute inset-x-5 bottom-5 text-center font-body text-[20px] font-extrabold leading-tight text-white sm:bottom-6 sm:text-[23px]">{tx(k.nama, l)}</span>

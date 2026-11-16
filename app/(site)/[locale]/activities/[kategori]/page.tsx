@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import { KepalaHalaman, KartuTrip } from "@/components/Bagian";
 
 type Params = { params: Promise<{ locale: string; kategori: string }> };
-const khusus: Record<string, string> = { "homestay-selam": "dive-homestay", kursus: "dive-course", liveaboard: "liveaboard" };
+const khusus: Record<string, string> = { kursus: "dive-course", liveaboard: "liveaboard" };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { locale: l, kategori: id } = await params;
   if (!isLocale(l)) return {};

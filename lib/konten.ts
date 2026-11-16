@@ -327,12 +327,16 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const kategori: KategoriAktivitas[] = ("kategori" in o ? arr(o.kategori) : b.kategori).map((kt) => {
     const x = obj(kt);
     return { id: slugDari(str(x.id, 40)) || idBaru("k"), nama: teks(x.nama, undefined, 60), ringkas: teks(x.ringkas, undefined, 300), foto: fotoSah(x.foto), tampil: bool(x.tampil, true) };
-  }).filter((kt, i, semua) => (kt.nama.en || kt.nama.id) && semua.findIndex((y) => y.id === kt.id) === i).slice(0, MAKS_KATEGORI);
+  }).filter((kt, i, semua) => (kt.nama.en || kt.nama.id) && semua.findIndex((y) => y.id === kt.id) === i)
+    // Kategori Dive Homestay dihapus sekali (permintaan pemilik, November 2026,
+    // semua homestay satu kategori di Akomodasi). Paketnya pindah ke Fun diving.
+    .filter((kt) => num(o.versiDiveHomestay) >= 2 || kt.id !== "homestay-selam")
+    .slice(0, MAKS_KATEGORI);
   // Kategori liveaboard selalu ada, karena punya halaman sendiri.
   if (!kategori.some((kt) => kt.id === ID_LIVEABOARD)) kategori.push(structuredClone(b.kategori.find((kt) => kt.id === ID_LIVEABOARD)!));
   // Simpanan lama memakai jenis tetap. "privat" menjadi Fun diving.
   const kategoriTrip = (v: unknown) => {
-    const s = str(v, 40) === "privat" ? "selam" : str(v, 40);
+    const s = str(v, 40) === "privat" || (str(v, 40) === "homestay-selam" && num(o.versiDiveHomestay) < 2) ? "selam" : str(v, 40);
     return kategori.some((kt) => kt.id === s) ? s : kategori.find((kt) => kt.id === "selam")?.id ?? kategori[0].id;
   };
 
@@ -340,8 +344,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   if (num(o.versiDiveHomestay) < 1 && sumberTrip.length) {
     const ada = new Set(sumberTrip.map((t) => str(obj(t).id)));
     const alamat = new Set(sumberTrip.map((t) => str(obj(t).slug)));
-    sumberTrip = [...sumberTrip, ...b.trip.filter((t) => t.kategori === "homestay-selam" && !ada.has(t.id) && !alamat.has(t.slug))];
-    if (!kategori.some((kt) => kt.id === "homestay-selam")) kategori.push(structuredClone(b.kategori.find((kt) => kt.id === "homestay-selam")!));
+    sumberTrip = [...sumberTrip, ...b.trip.filter((t) => t.id.startsWith("t-dh-") && !ada.has(t.id) && !alamat.has(t.slug))];
   }
   if (num(o.versiAktivitasReferensi) < 1 && sumberTrip.length) {
     const contohLama = new Set(["t-escape", "t-snorkel", "t-piaynemo", "t-private"]);
@@ -433,7 +436,7 @@ export function normalkanKonten(v: unknown, b: Konten): Konten {
   const emailMentah = str(kontak.email, 120).trim();
 
   return {
-    versiDiveHomestay: 1,
+    versiDiveHomestay: 2,
     versiAktivitasReferensi: Math.max(1, num(o.versiAktivitasReferensi, 0, 99)),
     situs: {
       versiKontak: VERSI_KONTAK,
