@@ -54,13 +54,18 @@
     "label": "Homestay",
     "lokasi": "Lokasi",
     "harga": "Harga",
-    "fasilitas": "Yang kamu dapat",
+    "fasilitas": "Fasilitas",
     "lainnya": "Homestay lainnya",
     "catatanContoh": "Jenis kamar, kebutuhan khusus, rencana selam",
     "lihatSemua": "Lihat semua homestay",
     "priceBasis": "Harga 1 malam / {n} tamu",
     "capacity": "Kapasitas maksimal {n} tamu",
-    "photoPending": "Foto penginapan segera tersedia"
+    "photoPending": "Foto penginapan segera tersedia",
+    "kamar": "Kamar dan tempat tidur",
+    "termasuk": "Sudah termasuk",
+    "kegiatan": "Kegiatan di sekitar",
+    "perjalanan": "Cara ke sana",
+    "catatan": "Perlu diketahui"
   },
   "titik": {
     "kedalaman": "Kedalaman",

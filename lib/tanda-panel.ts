@@ -28,7 +28,7 @@ const NAMA_KOLOM: Record<string, string> = {
   tombol1: "tombol pertama", tombol2: "tombol kedua", keterangan: "keterangan", isi: "isi", tanya: "pertanyaan", jawab: "jawaban",
   teks: "teks", lokasi: "lokasi", fasilitas: "fasilitas", termasuk: "termasuk", belum: "belum termasuk", durasi: "durasi", level: "level",
   sorotan: "sorotan", wilayah: "wilayah", arus: "arus", catatan: "catatan", tentang: "tentang", alamat: "alamat", butir: "butir",
-  kepala: "pembuka", edukasi: "edukasi", seo: "Google", kontak: "kontak", asal: "asal",
+  kepala: "pembuka", edukasi: "edukasi", kamar: "kamar", kegiatan: "kegiatan", perjalanan: "cara ke sana", seo: "Google", kontak: "kontak", asal: "asal",
 };
 const LEWATI = new Set(["foto", "slug", "id", "warna", "tripId", "mulai", "selesai", "peta", "video", "instagram", "facebook", "tiktok", "youtube", "email", "whatsapp", "versiKontak", "tag", "kedalaman", "pembayaran"]);
 
