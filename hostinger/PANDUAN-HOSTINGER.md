@@ -63,7 +63,7 @@ Kunci penyiapan bukan kata sandi masuk dan jangan dikirim lewat chat. Setelah me
 1. Buka `https://domainanda.com/admin`.
 2. Karena belum ada akun, tampil **Siapkan akun pemilik**. Isi kunci penyiapan (nilai `FANTASEA_KUNCI`), nama, email, dan kata sandi paling sedikit 10 huruf.
 3. Setelah masuk, buka **Ringkasan**. Daftar **Yang perlu dilengkapi sebelum promosi** menunjukkan isi contoh yang masih tampil, misalnya nomor WhatsApp, trip, harga, jadwal, titik selam, dan foto ilustrasi.
-4. Anggota tim ditambahkan dari menu **Akun dan peran**. Perannya **Developer** atau **Pemilik** (akses penuh), **Admin** (semua isi situs, permintaan, dan kalender mitra), **Tim** (isi situs dan menjawab permintaan), atau **Meja permintaan** (hanya menjawab permintaan tamu). Peran sendiri bisa dipindah antara Developer dan Pemilik di daftar yang sama.
+4. Anggota tim ditambahkan dari menu **Akun dan peran**. Perannya **Admin** (semua isi situs, permintaan, dan kalender mitra), **Tim** (isi situs dan menjawab permintaan), atau **Meja permintaan** (hanya menjawab permintaan tamu). Peran tidak bisa diubah setelah akun dibuat. Kalau salah, hapus anggotanya lalu buat lagi. **Developer** dan **Pemilik** adalah akun utama dengan akses penuh. Keduanya tidak bisa dibuat, dihapus, atau diberi sandi sementara dari panel, dan hanya diubah developer lewat `akun.json` di folder data (lihat Folder data).
 
 ## Deploy otomatis dari GitHub
 
@@ -112,7 +112,8 @@ Cadangkan folder ini sesekali lewat File Manager hPanel (unduh sebagai ZIP).
 | `/api/health` menjawab `"data":"tidak bisa ditulis"` | isi `FANTASEA_DATA_DIR` dengan folder yang bisa ditulis, mis. `/home/u123456789/fantasea-data`, lalu deploy ulang |
 | Panel menampilkan "Isi dulu FANTASEA_KUNCI di hPanel" | kunci belum diisi atau masih "-". Isi, lalu deploy ulang |
 | Sitemap berisi localhost | `SITE_URL` belum diisi |
-| Lupa kata sandi pemilik | hapus `akun.json` di folder data lewat File Manager, lalu siapkan akun pemilik lagi dengan kunci penyiapan. Isi situs tidak ikut terhapus |
+| Lupa kata sandi pemilik | pakai Lupa kata sandi di halaman masuk. Kalau email sistem belum dipasang, pakai kunci penyiapan. Jalan terakhir, hapus `akun.json` di folder data lewat File Manager, lalu siapkan akun pemilik lagi dengan kunci penyiapan. Isi situs tidak ikut terhapus |
+| Mengganti atau menghapus akun Developer atau Pemilik | hanya developer. Sunting `akun.json` di folder data lewat File Manager, hapus entri akun itu atau ganti nilai `peran`-nya, lalu simpan. Akun itu langsung ikut aturan barunya |
 
 ## Membuat ulang ZIP
 

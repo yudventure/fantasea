@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { tanggalPanjang } from "@/lib/format";
-import { META_PERAN, PERAN, aksesPenuh, type Peran } from "@/lib/peran";
+import { META_PERAN, PERAN_ANGGOTA, aksesPenuh, akunUtama, type Peran } from "@/lib/peran";
 import { IkonSampah } from "@/components/Ikon";
 import Dropdown from "@/components/Dropdown";
 import { KartuPanel, KolomTeks } from "./Kolom";
@@ -10,9 +10,8 @@ import type { Sesi } from "./Panel";
 interface AkunTim { email: string; nama: string; peran: Peran; dibuat: string }
 type StatusEmail = { aktif: true; host: string; port: number; dari: string } | { aktif: false };
 
-const PILIH_PERAN = PERAN.map((p) => ({ nilai: p, label: META_PERAN[p].label }));
-/** Peran sendiri hanya bisa pindah di antara akses penuh, supaya selalu ada yang bisa mengatur akun. */
-const PILIH_PERAN_SENDIRI = PILIH_PERAN.filter((p) => aksesPenuh(p.nilai));
+/** Anggota baru hanya Admin, Tim, atau Meja permintaan. Developer dan pemilik dibuat lewat kode. */
+const PILIH_PERAN = PERAN_ANGGOTA.map((p) => ({ nilai: p, label: META_PERAN[p].label }));
 
 /** Key hPanel untuk email sistem. Nilainya diisi pemilik sendiri di hPanel, tidak pernah di panel ini. */
 const KEY_EMAIL = [
@@ -33,9 +32,11 @@ async function kirim<T>(method: string, isi: unknown): Promise<T> {
 
 /**
  * Akun dan peran (pola DAMPIER). Semua peran mengganti sandinya sendiri.
- * Pemilik juga menambah anggota, memilih perannya (Tim atau Meja
- * permintaan), memberi sandi sementara, dan melihat status email sistem
- * untuk Lupa kata sandi.
+ * Developer dan pemilik juga menambah anggota (Admin, Tim, atau Meja
+ * permintaan), memberi sandi sementara anggota, menghapus anggota, dan
+ * melihat status email sistem untuk Lupa kata sandi. Peran tidak bisa diubah
+ * setelah akun dibuat, dan akun Developer serta Pemilik tidak bisa dihapus
+ * atau diberi sandi sementara dari panel (permintaan pemilik, November 2026).
  */
 export default function BagianAkun({ sesi }: { sesi: Sesi }) {
   const [lama, setLama] = useState("");
@@ -73,16 +74,6 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
       setPesanTim("Anggota ditambahkan. Kirim email dan kata sandi sementaranya lewat jalur pribadi, lalu minta ia menggantinya di menu Akun.");
     } catch (err) { setPesanTim((err as Error).message); }
   }
-  async function gantiPeran(e: string, p: Peran) {
-    setPesanTim("");
-    try {
-      const o = await kirim<{ akun: AkunTim[] }>("PUT", { email: e, peran: p });
-      // Peran sendiri berubah, jadi panel dimuat ulang supaya sesi dan menunya ikut.
-      if (e === sesi.email) { location.reload(); return; }
-      setTim(o.akun); setPesanTim(`Peran ${e} sekarang ${META_PERAN[p].label}. Ia perlu masuk lagi.`);
-    }
-    catch (err) { setPesanTim((err as Error).message); }
-  }
   async function aturSandi(ev: React.FormEvent) {
     ev.preventDefault();
     if (!atur) return;
@@ -115,7 +106,7 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
       </KartuPanel>
 
       {pemilik && (
-        <KartuPanel judul="Tim dan peran" keterangan="Developer dan Pemilik punya akses penuh, termasuk mengatur akun dan peran. Admin mengelola semua isi situs, permintaan, dan kalender mitra. Tim mengubah isi situs dan menjawab permintaan. Meja permintaan hanya menjawab permintaan tamu.">
+        <KartuPanel judul="Tim dan peran" keterangan="Developer dan Pemilik adalah akun utama dengan akses penuh, dan tidak bisa dihapus dari panel. Admin mengelola semua isi situs, permintaan, dan kalender mitra. Tim mengubah isi situs dan menjawab permintaan. Meja permintaan hanya menjawab permintaan tamu. Peran tidak bisa diubah setelah akun dibuat.">
           <ul className="grid gap-2">
             {tim.map((a) => (
               <li key={a.email} className="grid gap-3 rounded-in bg-soft px-4 py-3">
@@ -126,11 +117,8 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
                     <span className="block text-[12.5px] text-ink2">{META_PERAN[a.peran].ket}</span>
                   </span>
                   <div className="flex flex-wrap items-center gap-2">
-                    <div className="w-[210px]">
-                      <Dropdown label={a.email === sesi.email ? "Peran saya" : `Peran ${a.nama}`} value={a.peran} onChange={(v) => v !== a.peran && gantiPeran(a.email, v as Peran)}
-                        pilihan={a.email === sesi.email ? PILIH_PERAN_SENDIRI : PILIH_PERAN} kosong="Pilih peran" />
-                    </div>
-                    {a.email !== sesi.email && (
+                    <span className={`rounded-pill px-3 py-1.5 text-[13px] font-extrabold ${akunUtama(a.peran) ? "bg-navy text-white" : "bg-white text-navy"}`}>{META_PERAN[a.peran].label}</span>
+                    {a.email !== sesi.email && !akunUtama(a.peran) && (
                       <>
                         <button type="button" onClick={() => setAtur(atur?.email === a.email ? null : { email: a.email, sandi: "" })} className="rounded-pill bg-white px-3 py-2 text-[13px] font-bold text-navy hover:bg-buih">Sandi sementara</button>
                         <button type="button" onClick={() => hapus(a.email)} className="grid h-9 w-9 place-items-center rounded-full text-[#A63A22] hover:bg-[#FBE4DD]" aria-label={`Hapus ${a.email}`}><IkonSampah size={17} /></button>
@@ -157,7 +145,10 @@ export default function BagianAkun({ sesi }: { sesi: Sesi }) {
               <label htmlFor="a-sementara" className="kolom-label">Kata sandi sementara</label>
               <input id="a-sementara" type="text" className="kolom" value={sandi} onChange={(e) => setSandi(e.target.value)} autoComplete="off" />
             </div>
-            <Dropdown label="Peran" value={peran} onChange={(v) => setPeran(v as Peran)} pilihan={PILIH_PERAN} kosong="Pilih peran" />
+            <div>
+              <Dropdown label="Peran" value={peran} onChange={(v) => setPeran(v as Peran)} pilihan={PILIH_PERAN} kosong="Pilih peran" />
+              <p className="mt-1 text-[12.5px] text-ink2">Peran tidak bisa diubah setelah akun dibuat. Kalau salah, hapus anggotanya lalu buat lagi.</p>
+            </div>
             {pesanTim && <p className="text-[13.5px] font-semibold text-navy md:col-span-2" role="status">{pesanTim}</p>}
             <button type="submit" className="btn btn-navy w-fit md:col-span-2">Tambah anggota</button>
           </form>
