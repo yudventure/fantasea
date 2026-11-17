@@ -77,7 +77,7 @@ export const jsonTanpaCache = (isi: unknown, init: ResponseInit = {}) =>
 export async function wajib(req: Request, izin: (s: Sesi) => boolean = () => true): Promise<Sesi | NextResponse> {
   const s = await sesiDari(req);
   if (!s) return jsonTanpaCache({ galat: "Belum masuk." }, { status: 401 });
-  if (!izin(s)) return jsonTanpaCache({ galat: "Peran akunmu belum boleh melakukan ini. Minta pemilik mengubah peranmu." }, { status: 403 });
+  if (!izin(s)) return jsonTanpaCache({ galat: "Peran akunmu belum boleh melakukan ini. Minta developer atau pemilik membuatkan akun dengan peran yang sesuai." }, { status: 403 });
   return s;
 }
 
